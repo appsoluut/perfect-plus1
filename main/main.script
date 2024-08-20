@@ -1,0 +1,167 @@
+local width, height = window.get_size()
+local tile_size = 16
+local zoom = 4
+
+local movement_speed = 128
+
+local tile_wall = 1
+local tile_floor = 2
+local tile_exit = 3
+local tile_player_start = 4
+
+local function init_tilemap_position(self)
+	tilemap.set_visible(msg.url(nil, "level", "tilemap"), "items", false)
+
+	self.tilemap_position = go.get(self.tilemap_url, "position")
+
+	self.tilemap_x, self.tilemap_y, self.tilemap_width, self.tilemap_height = tilemap.get_bounds(msg.url(nil, "level", "tilemap"))
+
+	self.tilemap_position.x = width / 2 - (self.tilemap_width * tile_size) / 2
+	self.tilemap_position.y = height / 2 - (self.tilemap_height * tile_size) / 2
+
+	go.set(self.tilemap_url, "position", self.tilemap_position)
+end
+
+local function init_tilemap_data(self)
+	self.tilemap_data = tilemap.get_tiles(msg.url(nil, "level", "tilemap"), "walls")
+	self.exit_tile_position = { x = 0, y = 0 }
+	self.player_start_tile_position = { x = 0, y = 0 }
+	local items = tilemap.get_tiles(msg.url(nil, "level", "tilemap"), "items")
+	for row = 1, #items do
+		for col = 1, #items[row] do
+			if items[row][col] == tile_exit then
+				self.exit_tile_position.x = col
+				self.exit_tile_position.y = row
+			elseif items[row][col] == tile_player_start then
+				self.player_start_tile_position.x = col
+				self.player_start_tile_position.y = row
+			end
+		end
+	end
+end
+
+local function init_player_position(self)
+	self.player_position = go.get(self.player_url, "position")
+	self.player_position.x = self.tilemap_position.x + (tile_size * self.player_start_tile_position.x - tile_size / 2)
+	self.player_position.y = self.tilemap_position.y + (tile_size * self.player_start_tile_position.y - tile_size / 2)
+	self.player_tile_position = {
+		x = self.player_start_tile_position.x,
+		y = self.player_start_tile_position.y
+	}
+	go.set(self.player_url, "position", self.player_position)
+end
+
+local function init_exit_position(self)
+	self.exit_position = go.get(self.exit_url, "position")
+	self.exit_position.x = self.tilemap_position.x + (tile_size * self.exit_tile_position.x - tile_size / 2)
+	self.exit_position.y = self.tilemap_position.y + (tile_size * self.exit_tile_position.y - tile_size / 2)
+	go.set(self.exit_url, "position", self.exit_position)
+end
+
+function init(self)
+	msg.post("@render:", "use_fixed_projection", { near = -1, far = 1, zoom = zoom })
+
+	self.tilemap_url = msg.url(nil, "level", nil)
+	self.exit_url = msg.url(nil, "exit", nil)
+	self.player_url = msg.url(nil, "player", nil)
+	self.player_sprite_url = msg.url(nil, "player", "sprite")
+	self.player_size = go.get(self.player_sprite_url, "size")
+
+	self.moves = 0
+	self.required_moves = 9
+
+	init_tilemap_position(self)
+	init_tilemap_data(self)
+	init_player_position(self)
+	init_exit_position(self)
+
+	msg.post(".", "acquire_input_focus")
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+local function check_solution(self)
+	print("Required moves: " .. self.required_moves)
+	print("Moves taken: " .. self.moves)
+	local solved = false
+	if self.player_tile_position.x == self.exit_tile_position.x and self.player_tile_position.y == self.exit_tile_position.y then
+		solved = true
+	end
+
+	if solved then
+		print("Solved?: (true)")
+	else
+		print("Solved?: (false)")
+	end
+end
+
+local function play_idle_animation(self)
+	sprite.play_flipbook(self.player_sprite_url, hash("idle"))
+end
+
+local function play_collision_animation(self)
+	if self.movement.x == 1 then
+		sprite.play_flipbook(self.player_sprite_url, "collision_right", play_idle_animation)
+	elseif self.movement.x == -1 then
+		sprite.play_flipbook(self.player_sprite_url, "collision_left", play_idle_animation)
+	elseif self.movement.y == 1 then
+		sprite.play_flipbook(self.player_sprite_url, "collision_up", play_idle_animation)
+	elseif self.movement.y == -1 then
+		sprite.play_flipbook(self.player_sprite_url, "collision_down", play_idle_animation)
+	end
+end
+
+local function check_bounds(self, player_position)
+	local px = math.floor((player_position.x + (self.movement.x * tile_size / 2) - self.tilemap_position.x) / tile_size) + 1
+	local py = math.floor((player_position.y + (self.movement.y * tile_size / 2) - self.tilemap_position.y) / tile_size) + 1
+
+	if self.tilemap_data[py][px] == tile_wall then
+		play_collision_animation(self)
+		self.player_tile_position.x = px - self.movement.x
+		self.player_tile_position.y = py - self.movement.y
+		player_position.x = self.tilemap_position.x + ((self.player_tile_position.x - 1) * tile_size) + tile_size / 2
+		player_position.y = self.tilemap_position.y + ((self.player_tile_position.y - 1) * tile_size) + tile_size / 2
+		self.moves = self.moves + 1
+		self.movement = nil
+		check_solution(self)
+	end
+	
+	return player_position
+end
+
+function update(self, dt)
+	if self.movement ~= nil then
+		local player_position = go.get(self.player_url, "position")
+		player_position = player_position + (self.movement * movement_speed * dt)
+		player_position = check_bounds(self, player_position)
+		go.set(self.player_url, "position", player_position)
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	-- Add message-handling code here
+	-- Learn more: https://defold.com/manuals/message-passing/
+	-- Remove this function if not needed
+end
+
+function on_input(self, action_id, action)
+	if self.movement ~= nil then return end
+
+	if action_id == hash("left") and action.pressed then
+		self.movement = vmath.vector3(-1, 0, 0)
+		sprite.play_flipbook(self.player_sprite_url, "move_left")
+	elseif action_id == hash("right") and action.pressed then
+		self.movement = vmath.vector3(1, 0, 0)
+		sprite.play_flipbook(self.player_sprite_url, "move_right")
+	elseif action_id == hash("up") and action.pressed then
+		self.movement = vmath.vector3(0, 1, 0)
+		sprite.play_flipbook(self.player_sprite_url, "move_up")
+	elseif action_id == hash("down") and action.pressed then
+		self.movement = vmath.vector3(0, -1, 0)
+		sprite.play_flipbook(self.player_sprite_url, "move_down")
+	end
+end

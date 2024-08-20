@@ -1,0 +1,93 @@
+image: "/main/player.png"
+tile_width: 16
+tile_height: 16
+animations {
+  id: "blink"
+  start_tile: 6
+  end_tile: 10
+  playback: PLAYBACK_LOOP_PINGPONG
+  fps: 6
+}
+animations {
+  id: "collision_down"
+  start_tile: 20
+  end_tile: 20
+  fps: 2
+}
+animations {
+  id: "collision_left"
+  start_tile: 17
+  end_tile: 17
+  fps: 2
+}
+animations {
+  id: "collision_right"
+  start_tile: 18
+  end_tile: 18
+  fps: 2
+}
+animations {
+  id: "collision_up"
+  start_tile: 19
+  end_tile: 19
+  fps: 2
+}
+animations {
+  id: "idle"
+  start_tile: 1
+  end_tile: 1
+  fps: 1
+}
+animations {
+  id: "idle_down"
+  start_tile: 5
+  end_tile: 5
+  fps: 1
+}
+animations {
+  id: "idle_left"
+  start_tile: 2
+  end_tile: 2
+  fps: 1
+}
+animations {
+  id: "idle_right"
+  start_tile: 3
+  end_tile: 3
+  fps: 1
+}
+animations {
+  id: "idle_up"
+  start_tile: 4
+  end_tile: 4
+  fps: 1
+}
+animations {
+  id: "move_down"
+  start_tile: 15
+  end_tile: 15
+  playback: PLAYBACK_NONE
+  fps: 1
+}
+animations {
+  id: "move_left"
+  start_tile: 12
+  end_tile: 12
+  playback: PLAYBACK_NONE
+  fps: 1
+}
+animations {
+  id: "move_right"
+  start_tile: 13
+  end_tile: 13
+  playback: PLAYBACK_NONE
+  fps: 1
+}
+animations {
+  id: "move_up"
+  start_tile: 14
+  end_tile: 14
+  playback: PLAYBACK_NONE
+  fps: 1
+}
+extrude_borders: 2
