@@ -60,3 +60,15 @@ embedded_instances {
     z: 0.9
   }
 }
+embedded_instances {
+  id: "sound"
+  data: "embedded_components {\n"
+  "  id: \"music\"\n"
+  "  type: \"sound\"\n"
+  "  data: \"sound: \\\"/main/theme.ogg\\\"\\n"
+  "looping: 1\\n"
+  "group: \\\"music\\\"\\n"
+  "\"\n"
+  "}\n"
+  ""
+}

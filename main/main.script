@@ -61,6 +61,8 @@ end
 function init(self)
 	msg.post("@render:", "use_fixed_projection", { near = -1, far = 1, zoom = zoom })
 
+	sound.play(msg.url(nil, "sound", "music"))
+
 	self.tilemap_url = msg.url(nil, "level", nil)
 	self.exit_url = msg.url(nil, "exit", nil)
 	self.player_url = msg.url(nil, "player", nil)
