@@ -1,0 +1,5 @@
+font: "/font/perfect-1.ttf"
+material: "/builtins/fonts/font.material"
+size: 5
+antialias: 0
+characters: " !\"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"

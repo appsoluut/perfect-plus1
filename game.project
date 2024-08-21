@@ -1,5 +1,6 @@
 [bootstrap]
 main_collection = /main/main.collectionc
+render = /render/pp1.renderc
 
 [script]
 shared_state = 1
@@ -7,6 +8,8 @@ shared_state = 1
 [display]
 width = 1280
 height = 720
+high_dpi = 1
+display_device_info = 0
 
 [android]
 input_method = HiddenInputField
@@ -28,4 +31,11 @@ bundle_name = Perfect+1
 [ios]
 bundle_identifier = eu.qhgames.perfect-plus1
 bundle_name = Perfect+1
+
+[html5]
+cssfile = /builtins/manifests/web/dark_theme.css
+scale_mode = no_scale
+
+[sprite]
+subpixels = 0
 

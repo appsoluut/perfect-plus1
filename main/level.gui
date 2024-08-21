@@ -1,0 +1,86 @@
+script: "/main/level.gui_script"
+fonts {
+  name: "perfect-1"
+  font: "/font/perfect-1.font"
+}
+nodes {
+  size {
+    x: 1280.0
+    y: 720.0
+  }
+  type: TYPE_BOX
+  id: "root"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    y: 720.0
+  }
+  size {
+    x: 16.0
+    y: 16.0
+  }
+  type: TYPE_BOX
+  id: "nw_anchor"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "root"
+  inherit_alpha: true
+  visible: false
+}
+nodes {
+  position {
+    x: 16.0
+    y: -16.0
+  }
+  size {
+    x: 400.0
+    y: 50.0
+  }
+  color {
+    x: 0.102
+    y: 0.2
+    z: 0.6
+  }
+  type: TYPE_BOX
+  id: "content"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "nw_anchor"
+  inherit_alpha: true
+  clipping_mode: CLIPPING_MODE_STENCIL
+  clipping_visible: false
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  scale {
+    x: 4.0
+    y: 4.0
+    z: 4.0
+  }
+  size {
+    x: 400.0
+    y: 5.0
+  }
+  type: TYPE_TEXT
+  text: "Moves taken: "
+  font: "perfect-1"
+  id: "text_moves"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_ZOOM
+  line_break: true
+  parent: "content"
+  inherit_alpha: true
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

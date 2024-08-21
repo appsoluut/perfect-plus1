@@ -2,12 +2,29 @@ local width, height = window.get_size()
 local tile_size = 16
 local zoom = 4
 
-local movement_speed = 128
+local lume = require "libraries.lume"
 
-local tile_wall = 1
-local tile_floor = 2
-local tile_exit = 3
-local tile_player_start = 4
+local acceleration = 4
+local max_movement_speed = 16
+
+local tile_wall = 2
+local tile_floor = 3
+local tile_exit = 4
+local tile_player_start = 5
+
+local idle_animations = {
+	[hash("idle")] = 4,
+	[hash("idle_left")] = 4,
+	[hash("idle_right")] = 4,
+	[hash("idle_up")] = 4,
+	[hash("idle_down")] = 4,
+	[hash("blink")] = 1
+}
+
+local function play_idle_animation(self)
+	local animation_to_play = lume.weightedchoice(idle_animations)
+	sprite.play_flipbook(self.player_sprite_url, animation_to_play, play_idle_animation)
+end
 
 local function init_tilemap_position(self)
 	tilemap.set_visible(msg.url(nil, "level", "tilemap"), "items", false)
@@ -69,6 +86,7 @@ function init(self)
 	self.player_sprite_url = msg.url(nil, "player", "sprite")
 	self.player_size = go.get(self.player_sprite_url, "size")
 
+	self.speed = 0
 	self.moves = 0
 	self.required_moves = 9
 
@@ -76,6 +94,8 @@ function init(self)
 	init_tilemap_data(self)
 	init_player_position(self)
 	init_exit_position(self)
+
+	play_idle_animation(self)
 
 	msg.post(".", "acquire_input_focus")
 end
@@ -101,11 +121,8 @@ local function check_solution(self)
 	end
 end
 
-local function play_idle_animation(self)
-	sprite.play_flipbook(self.player_sprite_url, hash("idle"))
-end
-
 local function play_collision_animation(self)
+	sound.play(msg.url(nil, "sound", "impact" .. math.random(1, 5)))
 	if self.movement.x == 1 then
 		sprite.play_flipbook(self.player_sprite_url, "collision_right", play_idle_animation)
 	elseif self.movement.x == -1 then
@@ -129,6 +146,8 @@ local function check_bounds(self, player_position)
 		player_position.y = self.tilemap_position.y + ((self.player_tile_position.y - 1) * tile_size) + tile_size / 2
 		self.moves = self.moves + 1
 		self.movement = nil
+		self.speed = 0
+		msg.post(msg.url(nil, "gui", "level"), hash("update_moves"), { moves = self.moves })
 		check_solution(self)
 	end
 	
@@ -137,8 +156,11 @@ end
 
 function update(self, dt)
 	if self.movement ~= nil then
+		self.speed = self.speed + acceleration * dt
+		self.speed = math.min(self.speed, max_movement_speed)
+		
 		local player_position = go.get(self.player_url, "position")
-		player_position = player_position + (self.movement * movement_speed * dt)
+		player_position = player_position + (self.movement * self.speed)
 		player_position = check_bounds(self, player_position)
 		go.set(self.player_url, "position", player_position)
 	end
