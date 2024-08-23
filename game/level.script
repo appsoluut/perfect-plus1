@@ -21,7 +21,7 @@ local idle_animations = {
 	[hash("idle_right")] = 4,
 	[hash("idle_up")] = 4,
 	[hash("idle_down")] = 4,
-	[hash("blink")] = 1
+	[hash("blink")] = 2
 }
 
 local function play_idle_animation(self)
