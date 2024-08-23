@@ -88,7 +88,7 @@ function init(self)
 
 	self.speed = 0
 	self.moves = 0
-	self.required_moves = 9
+	self.required_moves = 5
 
 	init_tilemap_position(self)
 	init_tilemap_data(self)
@@ -115,6 +115,9 @@ local function check_solution(self)
 	end
 
 	if solved then
+		if self.moves == self.required_moves then
+			sprite.play_flipbook(self.player_sprite_url, "portal")
+		end
 		print("Solved?: (true)")
 	else
 		print("Solved?: (false)")

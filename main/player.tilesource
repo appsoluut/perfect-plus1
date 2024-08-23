@@ -90,4 +90,10 @@ animations {
   playback: PLAYBACK_NONE
   fps: 1
 }
+animations {
+  id: "portal"
+  start_tile: 21
+  end_tile: 29
+  fps: 8
+}
 extrude_borders: 2

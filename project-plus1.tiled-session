@@ -3,8 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "tiled/level2.tmx",
     "expandedProjectPaths": [
+        ".",
+        "tiled"
     ],
     "fileStates": {
         "level2.tmx": {
@@ -25,7 +27,7 @@
         },
         "tiled/level2.tmx": {
             "scale": 3.503125,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
                 "x": 80.07136485280999,
                 "y": 79.92863514719
@@ -38,6 +40,10 @@
                 "x": 84.5,
                 "y": 110.66666666666666
             }
+        },
+        "tiled/tiles.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         }
     },
     "last.exportedFilePath": "/home/paul/Documents/Projects/Perfect +1/main",
@@ -50,11 +56,20 @@
     "map.tileWidth": 16,
     "map.width": 10,
     "openFiles": [
+        "tiled/tiles.tsx",
+        "tiled/spiral.tmx",
+        "level2.tmx",
+        "tiled/level1.tmx",
+        "tiled/level2.tmx"
     ],
     "project": "project-plus1.tiled-project",
     "property.type": "int",
     "recentFiles": [
-        "level2.tmx"
+        "tiled/tiles.tsx",
+        "tiled/spiral.tmx",
+        "level2.tmx",
+        "tiled/level1.tmx",
+        "tiled/level2.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
