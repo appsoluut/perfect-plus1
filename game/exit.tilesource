@@ -1,4 +1,4 @@
-image: "/main/exit_tile.png"
+image: "/game/exit_tile.png"
 tile_width: 16
 tile_height: 16
 animations {

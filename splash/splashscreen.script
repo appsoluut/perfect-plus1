@@ -1,0 +1,26 @@
+local width, height = window.get_size()
+local zoom = 4
+
+function init(self)
+	msg.post("@render:", "use_fixed_projection", { near = -1, far = 1, zoom = zoom })
+	
+	self.defold_logo_url = msg.url(nil, "defoldjam", "sprite")
+	self.qhg_logo_url = msg.url(nil, "qhg", "sprite")
+
+	self.defold_logo_size = go.get(self.defold_logo_url, "size")
+	self.qhg_logo_size = go.get(self.qhg_logo_url, "size")
+
+	local qhg_logo_position = vmath.vector3(width / 2 - self.qhg_logo_size.x / 2, height / 2 - self.qhg_logo_size.y / 2, 0)
+	go.set_position(qhg_logo_position, msg.url(nil, "qhg", nil))
+	go.set(self.qhg_logo_url, "tint.w", 0)
+
+	local defold_logo_position = vmath.vector3(width / 2 - self.defold_logo_size.x / 2, height / 2 - self.defold_logo_size.y / 2, 0)
+	go.set_position(defold_logo_position, msg.url(nil, "defoldjam", nil))
+	go.set(self.defold_logo_url, "tint.w", 0)
+
+	go.animate(self.qhg_logo_url, "tint.w", go.PLAYBACK_ONCE_PINGPONG, 1, go.EASING_OUTCIRC, 2.5, 0, function()
+		go.animate(self.defold_logo_url, "tint.w", go.PLAYBACK_ONCE_PINGPONG, 1, go.EASING_OUTCIRC, 2.5, 0.25, function()
+			msg.post(msg.url("proxy", "/loader", "script"), "show_level")
+		end)
+	end)
+end

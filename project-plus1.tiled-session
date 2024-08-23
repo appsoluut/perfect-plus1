@@ -3,10 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "tiled/level2.tmx",
+    "activeFile": "tiled/level1.tmx",
     "expandedProjectPaths": [
-        ".",
-        "tiled"
+        "tiled",
+        "."
     ],
     "fileStates": {
         "level2.tmx": {
@@ -18,19 +18,27 @@
             }
         },
         "tiled/level1.tmx": {
-            "scale": 3.503125,
-            "selectedLayer": 2,
+            "scale": 2,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 80.07136485280999,
-                "y": 79.92863514719
+                "x": 92.5,
+                "y": 58
             }
         },
         "tiled/level2.tmx": {
             "scale": 3.503125,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 80.07136485280999,
-                "y": 79.92863514719
+                "x": 63.37198929527209,
+                "y": 79.64317573595005
+            }
+        },
+        "tiled/level3.tmx": {
+            "scale": 4.7440625,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 67.66352677689217,
+                "y": 80.10012515644556
             }
         },
         "tiled/spiral.tmx": {
@@ -46,8 +54,8 @@
             "scaleInEditor": 1
         }
     },
-    "last.exportedFilePath": "/home/paul/Documents/Projects/Perfect +1/main",
-    "last.imagePath": "/home/paul/Documents/Projects/Perfect +1/main",
+    "last.exportedFilePath": "/home/paul/Documents/Projects/Perfect +1/game",
+    "last.imagePath": "/home/paul/Documents/Projects/Perfect +1/game",
     "map.height": 10,
     "map.lastUsedExportFilter": "Defold Tile Map (*.tilemap)",
     "map.lastUsedFormat": "tmx",
@@ -56,20 +64,19 @@
     "map.tileWidth": 16,
     "map.width": 10,
     "openFiles": [
+        "tiled/level2.tmx",
         "tiled/tiles.tsx",
-        "tiled/spiral.tmx",
-        "level2.tmx",
-        "tiled/level1.tmx",
-        "tiled/level2.tmx"
+        "tiled/level1.tmx"
     ],
     "project": "project-plus1.tiled-project",
     "property.type": "int",
     "recentFiles": [
-        "tiled/tiles.tsx",
-        "tiled/spiral.tmx",
-        "level2.tmx",
         "tiled/level1.tmx",
-        "tiled/level2.tmx"
+        "tiled/level2.tmx",
+        "tiled/tiles.tsx",
+        "tiled/level3.tmx",
+        "tiled/spiral.tmx",
+        "level2.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

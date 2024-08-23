@@ -1,4 +1,4 @@
-tile_set: "/main/tiles.tilesource"
+tile_set: "/game/tiles.tilesource"
 layers {
   id: "floor"
   z: 1.0E-4
@@ -40,17 +40,17 @@ layers {
   cell {
     x: 7
     y: 0
-    tile: 2
+    tile: 0
   }
   cell {
     x: 8
     y: 0
-    tile: 2
+    tile: 0
   }
   cell {
     x: 9
     y: 0
-    tile: 2
+    tile: 0
   }
   cell {
     x: 0
@@ -90,17 +90,17 @@ layers {
   cell {
     x: 7
     y: 1
-    tile: 2
+    tile: 0
   }
   cell {
     x: 8
     y: 1
-    tile: 2
+    tile: 0
   }
   cell {
     x: 9
     y: 1
-    tile: 2
+    tile: 0
   }
   cell {
     x: 0
@@ -140,17 +140,17 @@ layers {
   cell {
     x: 7
     y: 2
-    tile: 2
+    tile: 0
   }
   cell {
     x: 8
     y: 2
-    tile: 2
+    tile: 0
   }
   cell {
     x: 9
     y: 2
-    tile: 2
+    tile: 0
   }
   cell {
     x: 0
@@ -205,7 +205,7 @@ layers {
   cell {
     x: 0
     y: 4
-    tile: 1
+    tile: 2
   }
   cell {
     x: 1
@@ -440,17 +440,17 @@ layers {
   cell {
     x: 7
     y: 8
-    tile: 2
+    tile: 0
   }
   cell {
     x: 8
     y: 8
-    tile: 2
+    tile: 0
   }
   cell {
     x: 9
     y: 8
-    tile: 2
+    tile: 0
   }
   cell {
     x: 0
@@ -490,17 +490,17 @@ layers {
   cell {
     x: 7
     y: 9
-    tile: 2
+    tile: 0
   }
   cell {
     x: 8
     y: 9
-    tile: 2
+    tile: 0
   }
   cell {
     x: 9
     y: 9
-    tile: 2
+    tile: 0
   }
 }
 layers {
@@ -544,17 +544,17 @@ layers {
   cell {
     x: 7
     y: 0
-    tile: 1
+    tile: 0
   }
   cell {
     x: 8
     y: 0
-    tile: 1
+    tile: 0
   }
   cell {
     x: 9
     y: 0
-    tile: 1
+    tile: 0
   }
   cell {
     x: 0
@@ -562,9 +562,14 @@ layers {
     tile: 1
   }
   cell {
-    x: 9
+    x: 6
     y: 1
     tile: 1
+  }
+  cell {
+    x: 9
+    y: 1
+    tile: 0
   }
   cell {
     x: 0
@@ -574,50 +579,40 @@ layers {
   cell {
     x: 2
     y: 2
+    tile: 1
+  }
+  cell {
+    x: 6
+    y: 2
+    tile: 1
+  }
+  cell {
+    x: 9
+    y: 2
+    tile: 0
+  }
+  cell {
+    x: 0
+    y: 3
     tile: 1
   }
   cell {
     x: 3
-    y: 2
-    tile: 1
-  }
-  cell {
-    x: 4
-    y: 2
-    tile: 1
-  }
-  cell {
-    x: 5
-    y: 2
+    y: 3
     tile: 1
   }
   cell {
     x: 6
-    y: 2
-    tile: 1
-  }
-  cell {
-    x: 7
-    y: 2
-    tile: 1
-  }
-  cell {
-    x: 9
-    y: 2
-    tile: 1
-  }
-  cell {
-    x: 0
-    y: 3
-    tile: 1
-  }
-  cell {
-    x: 2
     y: 3
     tile: 1
   }
   cell {
     x: 7
+    y: 3
+    tile: 1
+  }
+  cell {
+    x: 8
     y: 3
     tile: 1
   }
@@ -629,66 +624,36 @@ layers {
   cell {
     x: 0
     y: 4
+    tile: 1
+  }
+  cell {
+    x: 9
+    y: 4
+    tile: 1
+  }
+  cell {
+    x: 0
+    y: 5
     tile: 1
   }
   cell {
     x: 1
-    y: 4
-    tile: 0
-  }
-  cell {
-    x: 2
-    y: 4
+    y: 5
     tile: 1
   }
   cell {
-    x: 4
-    y: 4
+    x: 2
+    y: 5
     tile: 1
   }
   cell {
     x: 5
-    y: 4
-    tile: 1
-  }
-  cell {
-    x: 7
-    y: 4
-    tile: 1
-  }
-  cell {
-    x: 9
-    y: 4
-    tile: 1
-  }
-  cell {
-    x: 0
-    y: 5
-    tile: 1
-  }
-  cell {
-    x: 1
-    y: 5
-    tile: 0
-  }
-  cell {
-    x: 2
-    y: 5
-    tile: 1
-  }
-  cell {
-    x: 4
     y: 5
     tile: 1
   }
   cell {
     x: 6
     y: 5
-    tile: 4
-  }
-  cell {
-    x: 7
-    y: 5
     tile: 1
   }
   cell {
@@ -702,11 +667,6 @@ layers {
     tile: 1
   }
   cell {
-    x: 1
-    y: 6
-    tile: 0
-  }
-  cell {
     x: 2
     y: 6
     tile: 1
@@ -717,9 +677,9 @@ layers {
     tile: 1
   }
   cell {
-    x: 7
+    x: 6
     y: 6
-    tile: 1
+    tile: 0
   }
   cell {
     x: 9
@@ -732,22 +692,12 @@ layers {
     tile: 1
   }
   cell {
-    x: 1
-    y: 7
-    tile: 0
-  }
-  cell {
     x: 2
     y: 7
     tile: 1
   }
   cell {
     x: 4
-    y: 7
-    tile: 1
-  }
-  cell {
-    x: 5
     y: 7
     tile: 1
   }
@@ -762,6 +712,11 @@ layers {
     tile: 1
   }
   cell {
+    x: 8
+    y: 7
+    tile: 1
+  }
+  cell {
     x: 9
     y: 7
     tile: 1
@@ -772,19 +727,29 @@ layers {
     tile: 1
   }
   cell {
-    x: 1
+    x: 4
+    y: 8
+    tile: 1
+  }
+  cell {
+    x: 6
+    y: 8
+    tile: 1
+  }
+  cell {
+    x: 7
     y: 8
     tile: 0
   }
   cell {
-    x: 2
+    x: 8
     y: 8
-    tile: 1
+    tile: 0
   }
   cell {
     x: 9
     y: 8
-    tile: 1
+    tile: 0
   }
   cell {
     x: 0
@@ -824,31 +789,56 @@ layers {
   cell {
     x: 7
     y: 9
-    tile: 1
+    tile: 0
   }
   cell {
     x: 8
     y: 9
-    tile: 1
+    tile: 0
   }
   cell {
     x: 9
     y: 9
-    tile: 1
+    tile: 0
   }
 }
 layers {
   id: "items"
   z: 3.0E-4
   cell {
-    x: 6
+    x: 5
+    y: 3
+    tile: 4
+  }
+  cell {
+    x: 7
+    y: 4
+    tile: 0
+  }
+  cell {
+    x: 7
     y: 5
+    tile: 0
+  }
+  cell {
+    x: 8
+    y: 5
+    tile: 0
+  }
+  cell {
+    x: 7
+    y: 6
+    tile: 0
+  }
+  cell {
+    x: 8
+    y: 6
     tile: 3
   }
   cell {
-    x: 1
-    y: 8
-    tile: 4
+    x: 7
+    y: 7
+    tile: 0
   }
 }
 material: "/builtins/materials/tile_map.material"

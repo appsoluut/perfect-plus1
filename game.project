@@ -19,6 +19,7 @@ package = eu.qhgames.perfect-plus1
 title = Perfect+1
 version = 1.0.0
 developer = Quarter Hour Games
+dependencies#0 = https://github.com/britzl/monarch/archive/refs/tags/5.1.1.zip
 
 [graphics]
 default_texture_min_filter = nearest
