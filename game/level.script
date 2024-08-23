@@ -1,3 +1,6 @@
+go.property("current_level", 1)
+go.property("max_levels", 4)
+
 local width, height = window.get_size()
 local tile_size = 16
 local zoom = 4
@@ -26,12 +29,30 @@ local function play_idle_animation(self)
 	sprite.play_flipbook(self.player_sprite_url, animation_to_play, play_idle_animation)
 end
 
+local function load_tilemap(self)
+	local data = sys.load_resource("/game/levels/level" .. self.current_level .. ".lua")
+	if data ~= nil then
+		local level_data = assert(loadstring(data))()
+		self.required_moves = level_data.properties.moves
+		msg.post(msg.url(nil, "gui", "level"), hash("update_required"), { required = self.required_moves })
+		for _, layer in ipairs(level_data.layers) do
+			for y = 1, layer.height do
+				for x = 1, layer.width do
+					tilemap.set_tile(self.tilemap_level_url, layer.name, x, layer.height + 1 - y, layer.data[(y - 1) * layer.width + x])
+				end
+			end
+		end
+	else
+		print("[ERROR] Level not found?")
+	end
+end
+
 local function init_tilemap_position(self)
-	tilemap.set_visible(msg.url(nil, "level", "tilemap"), "items", false)
+	tilemap.set_visible(self.tilemap_level_url, "items", false)
 
 	self.tilemap_position = go.get(self.tilemap_url, "position")
 
-	self.tilemap_x, self.tilemap_y, self.tilemap_width, self.tilemap_height = tilemap.get_bounds(msg.url(nil, "level", "tilemap"))
+	self.tilemap_x, self.tilemap_y, self.tilemap_width, self.tilemap_height = tilemap.get_bounds(self.tilemap_level_url)
 
 	self.tilemap_position.x = (width / 2) - (self.tilemap_width * tile_size) / 2
 	self.tilemap_position.y = height / 2 - (self.tilemap_height * tile_size) / 2
@@ -40,10 +61,10 @@ local function init_tilemap_position(self)
 end
 
 local function init_tilemap_data(self)
-	self.tilemap_data = tilemap.get_tiles(msg.url(nil, "level", "tilemap"), "walls")
+	self.tilemap_data = tilemap.get_tiles(self.tilemap_level_url, "walls")
 	self.exit_tile_position = { x = 0, y = 0 }
 	self.player_start_tile_position = { x = 0, y = 0 }
-	local items = tilemap.get_tiles(msg.url(nil, "level", "tilemap"), "items")
+	local items = tilemap.get_tiles(self.tilemap_level_url, "items")
 	for row = 1, #items do
 		for col = 1, #items[row] do
 			if items[row][col] == tile_exit then
@@ -81,6 +102,7 @@ function init(self)
 	sound.play(msg.url(nil, "sound", "music"))
 
 	self.tilemap_url = msg.url(nil, "level", nil)
+	self.tilemap_level_url = msg.url(nil, "level", "tilemap")
 	self.exit_url = msg.url(nil, "exit", nil)
 	self.player_url = msg.url(nil, "player", nil)
 	self.player_sprite_url = msg.url(nil, "player", "sprite")
@@ -88,8 +110,9 @@ function init(self)
 
 	self.speed = 0
 	self.moves = 0
-	self.required_moves = 4
+	self.required_moves = 7
 
+	load_tilemap(self)
 	init_tilemap_position(self)
 	init_tilemap_data(self)
 	init_player_position(self)
@@ -116,7 +139,18 @@ local function check_solution(self)
 
 	if solved then
 		if self.moves == self.required_moves then
-			sprite.play_flipbook(self.player_sprite_url, "portal")
+			sprite.play_flipbook(self.player_sprite_url, "portal", function()
+				self.current_level = math.min(self.max_levels, self.current_level + 1)
+				self.moves = 0
+				msg.post(msg.url(nil, "gui", "level"), hash("update_moves"), { moves = self.moves })
+				load_tilemap(self)
+				init_tilemap_position(self)
+				init_tilemap_data(self)
+				init_player_position(self)
+				init_exit_position(self)
+
+				play_idle_animation(self)
+			end)
 		end
 		print("Solved?: (true)")
 	else

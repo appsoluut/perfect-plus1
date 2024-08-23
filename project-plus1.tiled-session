@@ -3,10 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "tiled/level1.tmx",
+    "activeFile": "tiled/level4.tmx",
     "expandedProjectPaths": [
-        "tiled",
-        "."
+        ".",
+        "tiled"
     ],
     "fileStates": {
         "level2.tmx": {
@@ -41,6 +41,14 @@
                 "y": 80.10012515644556
             }
         },
+        "tiled/level4.tmx": {
+            "scale": 2,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 164.5,
+                "y": 138
+            }
+        },
         "tiled/spiral.tmx": {
             "scale": 3,
             "selectedLayer": 1,
@@ -54,27 +62,29 @@
             "scaleInEditor": 1
         }
     },
-    "last.exportedFilePath": "/home/paul/Documents/Projects/Perfect +1/game",
+    "last.exportedFilePath": "/home/paul/Documents/Projects/Perfect +1/game/levels",
     "last.imagePath": "/home/paul/Documents/Projects/Perfect +1/game",
     "map.height": 10,
-    "map.lastUsedExportFilter": "Defold Tile Map (*.tilemap)",
+    "map.lastUsedExportFilter": "Lua files (*.lua)",
     "map.lastUsedFormat": "tmx",
     "map.renderOrder": "3",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "map.width": 10,
     "openFiles": [
+        "tiled/level1.tmx",
+        "tiled/level4.tmx",
         "tiled/level2.tmx",
-        "tiled/tiles.tsx",
-        "tiled/level1.tmx"
+        "tiled/level3.tmx"
     ],
     "project": "project-plus1.tiled-project",
     "property.type": "int",
     "recentFiles": [
         "tiled/level1.tmx",
-        "tiled/level2.tmx",
-        "tiled/tiles.tsx",
         "tiled/level3.tmx",
+        "tiled/level2.tmx",
+        "tiled/level4.tmx",
+        "tiled/tiles.tsx",
         "tiled/spiral.tmx",
         "level2.tmx"
     ],

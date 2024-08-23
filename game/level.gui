@@ -82,5 +82,30 @@ nodes {
   parent: "content"
   inherit_alpha: true
 }
+nodes {
+  position {
+    y: -24.0
+  }
+  scale {
+    x: 4.0
+    y: 4.0
+    z: 4.0
+  }
+  size {
+    x: 400.0
+    y: 5.0
+  }
+  type: TYPE_TEXT
+  text: "Required: "
+  font: "perfect-1"
+  id: "text_required"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_ZOOM
+  line_break: true
+  parent: "content"
+  inherit_alpha: true
+}
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT
