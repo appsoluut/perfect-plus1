@@ -26,8 +26,8 @@ nodes {
     y: 720.0
   }
   size {
-    x: 16.0
-    y: 16.0
+    x: 32.0
+    y: 32.0
   }
   type: TYPE_BOX
   id: "n_anchor"
@@ -42,7 +42,7 @@ nodes {
 nodes {
   position {
     x: 16.0
-    y: -16.0
+    y: -32.0
   }
   size {
     x: 640.0

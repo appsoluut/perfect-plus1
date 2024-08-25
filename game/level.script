@@ -1,5 +1,5 @@
 go.property("current_level", 1)
-go.property("max_levels", 4)
+go.property("max_levels", 9)
 
 local width, height = window.get_size()
 local tile_size = 16
@@ -10,10 +10,15 @@ local lume = require "libraries.lume"
 local acceleration = 4
 local max_movement_speed = 16
 
+local tile_empty = 0
 local tile_wall = 2
 local tile_floor = 3
 local tile_exit = 4
 local tile_player_start = 5
+local tile_oneway_left = 6
+local tile_oneway_right = 7
+local tile_oneway_up = 8
+local tile_oneway_down = 9
 
 local idle_animations = {
 	[hash("idle")] = 4,
@@ -23,6 +28,15 @@ local idle_animations = {
 	[hash("idle_down")] = 4,
 	[hash("blink")] = 2
 }
+
+local function animate_background()
+	local size = go.get_scale("/scroll")
+
+	local scale = vmath.vector4(size.x / tile_size, size.y / tile_size, 0, 0)
+	go.set("/scroll#plane", "scale", scale)
+	go.set("/scroll#plane", "tint.w", 0.66)
+	go.animate("/scroll#plane", "animation_time.x", go.PLAYBACK_LOOP_FORWARD, scale.xy, go.EASING_LINEAR, 120 * scale.xy)
+end
 
 local function play_idle_animation(self)
 	local animation_to_play = lume.weightedchoice(idle_animations)
@@ -34,7 +48,9 @@ local function load_tilemap(self)
 	if data ~= nil then
 		local level_data = assert(loadstring(data))()
 		self.required_moves = level_data.properties.moves
+		self.level_name = level_data.properties.name
 		msg.post(msg.url(nil, "gui", "level"), hash("update_required"), { required = self.required_moves })
+		msg.post(msg.url(nil, "gui", "level"), hash("update_levelname"), { level_name = self.level_name })
 		for _, layer in ipairs(level_data.layers) do
 			for y = 1, layer.height do
 				for x = 1, layer.width do
@@ -48,8 +64,6 @@ local function load_tilemap(self)
 end
 
 local function init_tilemap_position(self)
-	tilemap.set_visible(self.tilemap_level_url, "items", false)
-
 	self.tilemap_position = go.get(self.tilemap_url, "position")
 
 	self.tilemap_x, self.tilemap_y, self.tilemap_width, self.tilemap_height = tilemap.get_bounds(self.tilemap_level_url)
@@ -64,15 +78,17 @@ local function init_tilemap_data(self)
 	self.tilemap_data = tilemap.get_tiles(self.tilemap_level_url, "walls")
 	self.exit_tile_position = { x = 0, y = 0 }
 	self.player_start_tile_position = { x = 0, y = 0 }
-	local items = tilemap.get_tiles(self.tilemap_level_url, "items")
-	for row = 1, #items do
-		for col = 1, #items[row] do
-			if items[row][col] == tile_exit then
+	self.tilemap_items = tilemap.get_tiles(self.tilemap_level_url, "items")
+	for row = 1, #self.tilemap_items do
+		for col = 1, #self.tilemap_items[row] do
+			if self.tilemap_items[row][col] == tile_exit then
 				self.exit_tile_position.x = col
 				self.exit_tile_position.y = row
-			elseif items[row][col] == tile_player_start then
+				tilemap.set_tile(self.tilemap_level_url, "items", col, row, tile_empty)
+			elseif self.tilemap_items[row][col] == tile_player_start then
 				self.player_start_tile_position.x = col
 				self.player_start_tile_position.y = row
+				tilemap.set_tile(self.tilemap_level_url, "items", col, row, tile_empty)
 			end
 		end
 	end
@@ -140,6 +156,7 @@ function init(self)
 	self.player_sprite_url = msg.url(nil, "player", "sprite")
 	self.player_size = go.get(self.player_sprite_url, "size")
 
+	animate_background()
 	load_level(self)
 
 	msg.post(".", "acquire_input_focus")
@@ -194,11 +211,32 @@ local function play_collision_animation(self)
 	end
 end
 
+local function check_collision_wall(self, x, y)
+	if self.tilemap_data[y][x] == tile_wall then
+		return true
+	end
+	
+	local item = self.tilemap_items[y][x]
+	local active_wall = nil
+
+	if self.movement.x == 1 then
+		active_wall = tile_oneway_left
+	elseif self.movement.x == -1 then
+		active_wall = tile_oneway_right
+	elseif self.movement.y == 1 then
+		active_wall = tile_oneway_down
+	elseif self.movement.y == -1 then
+		active_wall = tile_oneway_up
+	end
+
+	return item == active_wall
+end
+
 local function check_bounds(self, player_position)
 	local px = math.floor((player_position.x + (self.movement.x * tile_size / 2) - self.tilemap_position.x) / tile_size) + 1
 	local py = math.floor((player_position.y + (self.movement.y * tile_size / 2) - self.tilemap_position.y) / tile_size) + 1
 
-	if self.tilemap_data[py][px] == tile_wall then
+	if check_collision_wall(self, px, py) then
 		play_collision_animation(self)
 		self.player_tile_position.x = px - self.movement.x
 		self.player_tile_position.y = py - self.movement.y
@@ -212,7 +250,7 @@ local function check_bounds(self, player_position)
 			player_position = nil
 		end
 	end
-	
+
 	return player_position
 end
 
@@ -251,5 +289,7 @@ function on_input(self, action_id, action)
 	elseif action_id == hash("down") and action.pressed then
 		self.movement = vmath.vector3(0, -1, 0)
 		sprite.play_flipbook(self.player_sprite_url, "move_down")
+	elseif action_id == hash("key_r") and action.pressed then
+		reset_level(self)
 	end
 end

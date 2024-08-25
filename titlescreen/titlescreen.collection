@@ -7,6 +7,9 @@ embedded_instances {
   "  component: \"/titlescreen/titlescreen.gui\"\n"
   "}\n"
   ""
+  position {
+    z: 0.1
+  }
 }
 embedded_instances {
   id: "script"
@@ -15,4 +18,31 @@ embedded_instances {
   "  component: \"/titlescreen/titlescreen.script\"\n"
   "}\n"
   ""
+}
+embedded_instances {
+  id: "scroll"
+  data: "embedded_components {\n"
+  "  id: \"plane\"\n"
+  "  type: \"model\"\n"
+  "  data: \"mesh: \\\"/builtins/assets/meshes/quad.dae\\\"\\n"
+  "name: \\\"{{NAME}}\\\"\\n"
+  "materials {\\n"
+  "  name: \\\"default\\\"\\n"
+  "  material: \\\"/material/repeat_scroll.material\\\"\\n"
+  "  textures {\\n"
+  "    sampler: \\\"texture_sampler\\\"\\n"
+  "    texture: \\\"/game/bg.png\\\"\\n"
+  "  }\\n"
+  "}\\n"
+  "\"\n"
+  "}\n"
+  ""
+  position {
+    x: 640.0
+    y: 360.0
+  }
+  scale3 {
+    x: 1280.0
+    y: 720.0
+  }
 }

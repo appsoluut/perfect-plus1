@@ -5,6 +5,8 @@ function init(self)
 	self.required_node = gui.get_node("text_required")
 	self.required_text = gui.get_text(self.required_node)
 
+	self.levelname_node = gui.get_node("text_name")
+
 	gui.set_text(self.move_node, self.move_text .. "0")
 	gui.set_text(self.required_node, self.required_text .. "0")
 end
@@ -14,5 +16,7 @@ function on_message(self, message_id, message, sender)
 		gui.set_text(self.move_node, self.move_text .. message.moves)
 	elseif message_id == hash("update_required") then
 		gui.set_text(self.required_node, self.required_text .. (message.required - 1) .. "@#")
+	elseif message_id == hash("update_levelname") then
+		gui.set_text(self.levelname_node, message.level_name)
 	end
 end

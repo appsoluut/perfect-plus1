@@ -1,5 +1,20 @@
+local zoom = 4
+local sprite_size = 16
+
+local function animate_background()
+	local size = go.get_scale("/scroll")
+	
+	local scale = vmath.vector4(size.x / sprite_size, size.y / sprite_size, 0, 0)
+	go.set("/scroll#plane", "scale", scale)
+	go.set("/scroll#plane", "tint.w", 0.66)
+	go.animate("/scroll#plane", "animation_time.x", go.PLAYBACK_LOOP_FORWARD, scale.xy, go.EASING_LINEAR, 120 * scale.xy)
+end
+
 function init(self)
+	msg.post("@render:", "use_fixed_projection", { near = -1, far = 1, zoom = zoom })
 	msg.post(".", "acquire_input_focus")
+
+	animate_background()
 end
 
 function final(self)
