@@ -1,0 +1,18 @@
+name: "titlescreen"
+scale_along_z: 0
+embedded_instances {
+  id: "gui"
+  data: "components {\n"
+  "  id: \"titlescreen\"\n"
+  "  component: \"/titlescreen/titlescreen.gui\"\n"
+  "}\n"
+  ""
+}
+embedded_instances {
+  id: "script"
+  data: "components {\n"
+  "  id: \"titlescreen\"\n"
+  "  component: \"/titlescreen/titlescreen.script\"\n"
+  "}\n"
+  ""
+}

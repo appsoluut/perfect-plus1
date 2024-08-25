@@ -1,7 +1,11 @@
-script: "/game/level.gui_script"
+script: ""
 fonts {
   name: "perfect-1"
   font: "/font/perfect-1.font"
+}
+textures {
+  name: "titlescreen"
+  texture: "/titlescreen/titlescreen.atlas"
 }
 nodes {
   size {
@@ -18,6 +22,7 @@ nodes {
 }
 nodes {
   position {
+    x: 640.0
     y: 720.0
   }
   size {
@@ -25,10 +30,10 @@ nodes {
     y: 16.0
   }
   type: TYPE_BOX
-  id: "nw_anchor"
+  id: "n_anchor"
   xanchor: XANCHOR_LEFT
   yanchor: YANCHOR_TOP
-  pivot: PIVOT_NW
+  pivot: PIVOT_N
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "root"
   inherit_alpha: true
@@ -40,8 +45,8 @@ nodes {
     y: -16.0
   }
   size {
-    x: 400.0
-    y: 50.0
+    x: 640.0
+    y: 320.0
   }
   color {
     x: 0.102
@@ -52,9 +57,9 @@ nodes {
   id: "content"
   xanchor: XANCHOR_LEFT
   yanchor: YANCHOR_TOP
-  pivot: PIVOT_NW
+  pivot: PIVOT_N
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "nw_anchor"
+  parent: "n_anchor"
   inherit_alpha: true
   clipping_mode: CLIPPING_MODE_STENCIL
   clipping_visible: false
@@ -66,47 +71,13 @@ nodes {
     y: 2.0
     z: 2.0
   }
-  size {
-    x: 400.0
-    y: 10.0
-  }
-  type: TYPE_TEXT
-  text: "\n"
-  "MOVES TAKEN: "
-  font: "perfect-1"
-  id: "text_moves"
-  xanchor: XANCHOR_LEFT
-  yanchor: YANCHOR_TOP
-  pivot: PIVOT_NW
-  adjust_mode: ADJUST_MODE_ZOOM
+  type: TYPE_BOX
+  texture: "titlescreen/perfect+1_logo"
+  id: "logo"
+  pivot: PIVOT_N
   parent: "content"
   inherit_alpha: true
-}
-nodes {
-  position {
-    y: -24.0
-  }
-  scale {
-    x: 2.0
-    y: 2.0
-    z: 2.0
-  }
-  size {
-    x: 400.0
-    y: 10.0
-  }
-  type: TYPE_TEXT
-  text: "\n"
-  "REQUIRED: "
-  font: "perfect-1"
-  id: "text_required"
-  xanchor: XANCHOR_LEFT
-  yanchor: YANCHOR_TOP
-  pivot: PIVOT_NW
-  adjust_mode: ADJUST_MODE_ZOOM
-  line_break: true
-  parent: "content"
-  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

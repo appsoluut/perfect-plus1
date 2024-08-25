@@ -13,6 +13,6 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("update_moves") then
 		gui.set_text(self.move_node, self.move_text .. message.moves)
 	elseif message_id == hash("update_required") then
-		gui.set_text(self.required_node, self.required_text .. (message.required - 1) .. "+1")
+		gui.set_text(self.required_node, self.required_text .. (message.required - 1) .. "@#")
 	end
 end

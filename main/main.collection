@@ -46,3 +46,22 @@ embedded_instances {
   "}\n"
   ""
 }
+embedded_instances {
+  id: "titlescreen"
+  data: "components {\n"
+  "  id: \"screen\"\n"
+  "  component: \"/monarch/screen_proxy.script\"\n"
+  "  properties {\n"
+  "    id: \"screen_id\"\n"
+  "    value: \"titlescreen\"\n"
+  "    type: PROPERTY_TYPE_HASH\n"
+  "  }\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"collectionproxy\"\n"
+  "  type: \"collectionproxy\"\n"
+  "  data: \"collection: \\\"/titlescreen/titlescreen.collection\\\"\\n"
+  "\"\n"
+  "}\n"
+  ""
+}

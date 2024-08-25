@@ -1,5 +1,5 @@
 local width, height = window.get_size()
-local zoom = 4
+local zoom = 2
 
 function init(self)
 	msg.post("@render:", "use_fixed_projection", { near = -1, far = 1, zoom = zoom })
@@ -20,7 +20,7 @@ function init(self)
 
 	go.animate(self.qhg_logo_url, "tint.w", go.PLAYBACK_ONCE_PINGPONG, 1, go.EASING_OUTCIRC, 2.5, 0, function()
 		go.animate(self.defold_logo_url, "tint.w", go.PLAYBACK_ONCE_PINGPONG, 1, go.EASING_OUTCIRC, 2.5, 0.25, function()
-			msg.post(msg.url("proxy", "/loader", "script"), "show_level")
+			msg.post(msg.url("proxy", "/loader", "script"), "show_titlescreen")
 		end)
 	end)
 end
