@@ -25,6 +25,14 @@
                 "y": 58
             }
         },
+        "tiled/level10.tmx": {
+            "scale": 2,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 92.5,
+                "y": 58
+            }
+        },
         "tiled/level2.tmx": {
             "scale": 3.503125,
             "selectedLayer": 2,

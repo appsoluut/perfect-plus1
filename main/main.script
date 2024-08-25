@@ -8,7 +8,7 @@ local screens = {
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
-	msg.post("#", screens.show_titlescreen)
+	msg.post("#", screens.show_splashscreen)
 end
 
 function on_message(self, message_id, message, sender)

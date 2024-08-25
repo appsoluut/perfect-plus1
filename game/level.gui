@@ -121,6 +121,8 @@ nodes {
   }
   type: TYPE_BOX
   id: "se_anchor"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_BOTTOM
   pivot: PIVOT_SE
   parent: "root"
   inherit_alpha: true
@@ -172,6 +174,72 @@ nodes {
   pivot: PIVOT_SE
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "se_content"
+  inherit_alpha: true
+  text_tracking: 0.2
+}
+nodes {
+  size {
+    x: 16.0
+    y: 16.0
+  }
+  type: TYPE_BOX
+  id: "sw_anchor"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "root"
+  inherit_alpha: true
+  visible: false
+}
+nodes {
+  position {
+    x: 16.0
+    y: 16.0
+  }
+  size {
+    x: 400.0
+    y: 200.0
+  }
+  color {
+    x: 0.102
+    y: 0.2
+    z: 0.6
+  }
+  type: TYPE_BOX
+  id: "sw_content"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "sw_anchor"
+  inherit_alpha: true
+  clipping_mode: CLIPPING_MODE_STENCIL
+  clipping_visible: false
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  scale {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "$%^&: MOVE\n"
+  "WASD: MOVE\n"
+  "R: RESET"
+  font: "perfect-1"
+  id: "text_controls"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_ZOOM
+  line_break: true
+  parent: "sw_content"
   inherit_alpha: true
   text_tracking: 0.2
 }

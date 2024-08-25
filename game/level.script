@@ -1,5 +1,5 @@
 go.property("current_level", 1)
-go.property("max_levels", 9)
+go.property("max_levels", 11)
 
 local width, height = window.get_size()
 local tile_size = 16
@@ -169,8 +169,6 @@ function final(self)
 end
 
 local function check_solution(self)
-	print("Required moves: " .. self.required_moves)
-	print("Moves taken: " .. self.moves)
 	local solved = false
 	local reset = false
 	if self.player_tile_position.x == self.exit_tile_position.x and self.player_tile_position.y == self.exit_tile_position.y then
@@ -185,9 +183,6 @@ local function check_solution(self)
 				reset = true
 			end)
 		end
-		print("Solved?: (true)")
-	else
-		print("Solved?: (false)")
 	end
 
 	if self.moves > self.required_moves then
@@ -279,16 +274,32 @@ function on_input(self, action_id, action)
 
 	if action_id == hash("left") and action.pressed then
 		self.movement = vmath.vector3(-1, 0, 0)
-		sprite.play_flipbook(self.player_sprite_url, "move_left")
+		if not check_collision_wall(self, self.player_tile_position.x - 1, self.player_tile_position.y) then
+			sprite.play_flipbook(self.player_sprite_url, "move_left")
+		else
+			self.movement = nil
+		end
 	elseif action_id == hash("right") and action.pressed then
 		self.movement = vmath.vector3(1, 0, 0)
-		sprite.play_flipbook(self.player_sprite_url, "move_right")
+		if not check_collision_wall(self, self.player_tile_position.x + 1, self.player_tile_position.y) then
+			sprite.play_flipbook(self.player_sprite_url, "move_right")
+		else
+			self.movement = nil
+		end
 	elseif action_id == hash("up") and action.pressed then
 		self.movement = vmath.vector3(0, 1, 0)
-		sprite.play_flipbook(self.player_sprite_url, "move_up")
+		if not check_collision_wall(self, self.player_tile_position.x, self.player_tile_position.y + 1) then
+			sprite.play_flipbook(self.player_sprite_url, "move_up")
+		else
+			self.movement = nil
+		end
 	elseif action_id == hash("down") and action.pressed then
 		self.movement = vmath.vector3(0, -1, 0)
-		sprite.play_flipbook(self.player_sprite_url, "move_down")
+		if not check_collision_wall(self, self.player_tile_position.x, self.player_tile_position.y - 1) then
+			sprite.play_flipbook(self.player_sprite_url, "move_down")
+		else
+			self.movement = nil
+		end
 	elseif action_id == hash("key_r") and action.pressed then
 		reset_level(self)
 	end
