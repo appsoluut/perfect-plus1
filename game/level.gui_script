@@ -4,6 +4,7 @@ function init(self)
 
 	self.required_node = gui.get_node("text_required")
 	self.required_text = gui.get_text(self.required_node)
+	self.required_moves = 0
 
 	self.levelname_node = gui.get_node("text_name")
 
@@ -13,8 +14,13 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash("update_moves") then
-		gui.set_text(self.move_node, self.move_text .. message.moves)
+		local moves = message.moves
+		if moves > self.required_moves then
+			moves = (message.moves - 1) .. "@#"
+		end
+		gui.set_text(self.move_node, self.move_text .. moves)
 	elseif message_id == hash("update_required") then
+		self.required_moves = message.required - 1
 		gui.set_text(self.required_node, self.required_text .. (message.required - 1) .. "@#")
 	elseif message_id == hash("update_levelname") then
 		gui.set_text(self.levelname_node, message.level_name)

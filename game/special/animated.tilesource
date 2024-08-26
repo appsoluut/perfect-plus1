@@ -1,0 +1,25 @@
+image: "/game/special/animated_tiles.png"
+tile_width: 16
+tile_height: 16
+animations {
+  id: "exit"
+  start_tile: 1
+  end_tile: 4
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 3
+}
+animations {
+  id: "teleporter_green"
+  start_tile: 5
+  end_tile: 8
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 3
+}
+animations {
+  id: "teleporter_purple"
+  start_tile: 9
+  end_tile: 12
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 3
+}
+extrude_borders: 2

@@ -39,28 +39,6 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "exit"
-  data: "embedded_components {\n"
-  "  id: \"sprite\"\n"
-  "  type: \"sprite\"\n"
-  "  data: \"default_animation: \\\"anim\\\"\\n"
-  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "size {\\n"
-  "  x: 16.0\\n"
-  "  y: 16.0\\n"
-  "}\\n"
-  "textures {\\n"
-  "  sampler: \\\"texture_sampler\\\"\\n"
-  "  texture: \\\"/game/exit.tilesource\\\"\\n"
-  "}\\n"
-  "\"\n"
-  "}\n"
-  ""
-  position {
-    z: 0.9
-  }
-}
-embedded_instances {
   id: "sound"
   data: "embedded_components {\n"
   "  id: \"music\"\n"
@@ -145,4 +123,26 @@ embedded_instances {
     x: 1280.0
     y: 720.0
   }
+}
+embedded_instances {
+  id: "special"
+  data: "embedded_components {\n"
+  "  id: \"exit\"\n"
+  "  type: \"factory\"\n"
+  "  data: \"prototype: \\\"/game/special/exit_tile.go\\\"\\n"
+  "\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"teleporter_green\"\n"
+  "  type: \"factory\"\n"
+  "  data: \"prototype: \\\"/game/special/teleporter_green_tile.go\\\"\\n"
+  "\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"teleporter_purple\"\n"
+  "  type: \"factory\"\n"
+  "  data: \"prototype: \\\"/game/special/teleporter_purple_tile.go\\\"\\n"
+  "\"\n"
+  "}\n"
+  ""
 }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="left-up" width="10" height="10" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="1">
+ <editorsettings>
+  <export format="defold"/>
+ </editorsettings>
+ <properties>
+  <property name="moves" type="int" value="11"/>
+  <property name="name" value="FOUR CORNERS"/>
+ </properties>
+ <tileset firstgid="1" source="tiles.tsx"/>
+ <layer id="1" name="floor" width="10" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,3,3,0,3,3,0,3,3,0,
+0,3,3,0,3,3,0,3,3,0,
+0,0,0,3,3,3,3,0,0,0,
+0,3,3,3,3,3,3,3,3,0,
+0,3,3,3,3,3,3,3,3,0,
+0,0,0,3,3,3,3,0,0,0,
+0,3,3,0,3,3,0,3,3,0,
+0,3,3,0,3,3,0,3,3,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="2" name="walls" width="10" height="10">
+  <data encoding="csv">
+2,2,2,2,2,2,2,2,2,2,
+2,0,0,0,0,0,0,0,0,2,
+2,0,0,0,0,0,0,0,0,2,
+2,0,2,0,0,0,0,0,0,2,
+2,0,0,0,0,0,0,0,0,2,
+2,0,0,0,0,0,0,0,0,2,
+2,0,0,0,0,0,0,0,2,2,
+2,0,0,0,0,0,0,0,0,2,
+2,0,0,0,0,0,0,0,0,2,
+2,2,2,2,2,2,2,2,2,2
+</data>
+ </layer>
+ <layer id="3" name="items" width="10" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,6,0,0,7,0,0,0,
+0,0,4,7,0,0,6,0,0,0,
+0,9,0,0,0,0,0,9,8,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,9,8,0,0,0,0,8,0,0,
+0,0,0,7,0,0,7,0,0,0,
+0,5,0,6,0,0,7,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>

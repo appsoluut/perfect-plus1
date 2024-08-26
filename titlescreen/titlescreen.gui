@@ -45,8 +45,8 @@ nodes {
     y: -32.0
   }
   size {
-    x: 640.0
-    y: 320.0
+    x: 960.0
+    y: 640.0
   }
   color {
     x: 0.102
@@ -78,6 +78,32 @@ nodes {
   parent: "content"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: -96.0
+  }
+  scale {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+  }
+  size {
+    x: 480.0
+    y: 240.0
+  }
+  type: TYPE_TEXT
+  text: "PERFECT@# IS ABOUT FINDING THE SHORTEST PATH TO THE EXIT, AND THEN NOT TAKING IT. INSTEAD, FIND A PATH THAT REQUIRES JUST ONE MORE MOVE OVER PERFECTION.\n"
+  "\n"
+  "\n"
+  "CLICK ANYWHERE TO PLAY"
+  font: "perfect-1"
+  id: "text"
+  pivot: PIVOT_N
+  line_break: true
+  parent: "content"
+  inherit_alpha: true
+  text_tracking: 0.2
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

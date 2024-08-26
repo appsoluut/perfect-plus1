@@ -1,5 +1,5 @@
 go.property("current_level", 1)
-go.property("max_levels", 11)
+go.property("max_levels", 12)
 
 local width, height = window.get_size()
 local tile_size = 16
@@ -19,6 +19,8 @@ local tile_oneway_left = 6
 local tile_oneway_right = 7
 local tile_oneway_up = 8
 local tile_oneway_down = 9
+local tile_teleporter_green = 10
+local tile_teleporter_purple = 11
 
 local idle_animations = {
 	[hash("idle")] = 4,
@@ -43,12 +45,34 @@ local function play_idle_animation(self)
 	sprite.play_flipbook(self.player_sprite_url, animation_to_play, play_idle_animation)
 end
 
+local function spawn_special_tile(self, tile, x, y)
+	local spawn = nil
+
+	if tile == tile_teleporter_green then
+		spawn = "teleporter_green"
+		table.insert(self.teleporters.green, { x = x, y = y })
+	elseif tile == tile_teleporter_purple then
+		spawn = "teleporter_purple"
+		table.insert(self.teleporters.purple, { x = x, y = y })
+	end
+	
+	if spawn then
+		local position = vmath.vector3(0, 0, 0.1)
+		position.x = self.tilemap_position.x + (tile_size * x - tile_size / 2)
+		position.y = self.tilemap_position.y + (tile_size * y - tile_size / 2)
+
+		local id = factory.create(msg.url(nil, "special", spawn), position)
+		table.insert(self.special_tiles, id)
+	end
+end
+
 local function load_tilemap(self)
 	local data = sys.load_resource("/game/levels/level" .. self.current_level .. ".lua")
 	if data ~= nil then
 		local level_data = assert(loadstring(data))()
 		self.required_moves = level_data.properties.moves
 		self.level_name = level_data.properties.name
+		self.teleporters = { green = {}, purple = {} }
 		msg.post(msg.url(nil, "gui", "level"), hash("update_required"), { required = self.required_moves })
 		msg.post(msg.url(nil, "gui", "level"), hash("update_levelname"), { level_name = self.level_name })
 		for _, layer in ipairs(level_data.layers) do
@@ -84,10 +108,18 @@ local function init_tilemap_data(self)
 			if self.tilemap_items[row][col] == tile_exit then
 				self.exit_tile_position.x = col
 				self.exit_tile_position.y = row
-				tilemap.set_tile(self.tilemap_level_url, "items", col, row, tile_empty)
 			elseif self.tilemap_items[row][col] == tile_player_start then
 				self.player_start_tile_position.x = col
 				self.player_start_tile_position.y = row
+			elseif self.tilemap_items[row][col] == tile_teleporter_green
+			or self.tilemap_items[row][col] == tile_teleporter_purple then
+				spawn_special_tile(self, self.tilemap_items[row][col], col, row)
+			end
+
+			if self.tilemap_items[row][col] ~= tile_oneway_down
+			and self.tilemap_items[row][col] ~= tile_oneway_left
+			and self.tilemap_items[row][col] ~= tile_oneway_right
+			and self.tilemap_items[row][col] ~= tile_oneway_up then
 				tilemap.set_tile(self.tilemap_level_url, "items", col, row, tile_empty)
 			end
 		end
@@ -106,16 +138,23 @@ local function init_player_position(self)
 end
 
 local function init_exit_position(self)
-	self.exit_position = go.get(self.exit_url, "position")
+	self.exit_position = vmath.vector3(0, 0, 0.1)
 	self.exit_position.x = self.tilemap_position.x + (tile_size * self.exit_tile_position.x - tile_size / 2)
 	self.exit_position.y = self.tilemap_position.y + (tile_size * self.exit_tile_position.y - tile_size / 2)
-	go.set(self.exit_url, "position", self.exit_position)
+	local id = factory.create(msg.url(nil, "special", "exit"), self.exit_position)
+	table.insert(self.special_tiles, id)
 end
 
 local function load_level(self)
 	self.speed = 0
 	self.moves = 0
 	self.required_moves = 0
+
+	if self.special_tiles then
+		go.delete(self.special_tiles)
+		self.special_tiles = {}
+	end
+	self.special_tiles = {}
 
 	msg.post(msg.url(nil, "gui", "level"), hash("update_moves"), { moves = self.moves })
 
@@ -151,7 +190,6 @@ function init(self)
 
 	self.tilemap_url = msg.url(nil, "level", nil)
 	self.tilemap_level_url = msg.url(nil, "level", "tilemap")
-	self.exit_url = msg.url(nil, "exit", nil)
 	self.player_url = msg.url(nil, "player", nil)
 	self.player_sprite_url = msg.url(nil, "player", "sprite")
 	self.player_size = go.get(self.player_sprite_url, "size")
@@ -163,9 +201,24 @@ function init(self)
 end
 
 function final(self)
-	-- Add finalization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
+	msg.post(".", "release_input_focus")
+end
+
+local function check_teleport(self, tile)
+	if tile ~= tile_teleporter_green and tile ~= tile_teleporter_purple then
+		return false
+	end
+
+	local lookup = self.teleporters.green
+	if tile == tile_teleporter_purple then
+		lookup = self.teleporters.purple
+	end	
+
+	for index, coords in pairs(lookup) do
+		pprint(coords)
+	end
+
+	return false
 end
 
 local function check_solution(self)
@@ -177,7 +230,9 @@ local function check_solution(self)
 
 	if solved then
 		if self.moves == self.required_moves then
+			self.teleporting = true
 			sprite.play_flipbook(self.player_sprite_url, "portal", function()
+				self.teleporting = nil
 				self.current_level = math.min(self.max_levels, self.current_level + 1)
 				load_level(self)
 				reset = true
@@ -232,9 +287,11 @@ local function check_bounds(self, player_position)
 	local py = math.floor((player_position.y + (self.movement.y * tile_size / 2) - self.tilemap_position.y) / tile_size) + 1
 
 	if check_collision_wall(self, px, py) then
-		play_collision_animation(self)
 		self.player_tile_position.x = px - self.movement.x
 		self.player_tile_position.y = py - self.movement.y
+		if not check_teleport(self, self.tilemap_items[self.player_tile_position.y][self.player_tile_position.x]) then
+			play_collision_animation(self)
+		end
 		player_position.x = self.tilemap_position.x + ((self.player_tile_position.x - 1) * tile_size) + tile_size / 2
 		player_position.y = self.tilemap_position.y + ((self.player_tile_position.y - 1) * tile_size) + tile_size / 2
 		self.moves = self.moves + 1
@@ -263,14 +320,8 @@ function update(self, dt)
 	end
 end
 
-function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Learn more: https://defold.com/manuals/message-passing/
-	-- Remove this function if not needed
-end
-
 function on_input(self, action_id, action)
-	if self.movement ~= nil then return end
+	if self.movement ~= nil or self.teleporting ~= nil then return end
 
 	if action_id == hash("left") and action.pressed then
 		self.movement = vmath.vector3(-1, 0, 0)
