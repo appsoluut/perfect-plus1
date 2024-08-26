@@ -3,10 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "tiled/level10.tmx",
     "expandedProjectPaths": [
-        "tiled",
-        "."
+        ".",
+        "tiled"
     ],
     "fileStates": {
         "level2.tmx": {
@@ -19,7 +19,7 @@
         },
         "tiled/level1.tmx": {
             "scale": 2,
-            "selectedLayer": 0,
+            "selectedLayer": 2,
             "viewCenter": {
                 "x": 92.5,
                 "y": 58
@@ -136,6 +136,10 @@
     "map.tileWidth": 16,
     "map.width": 10,
     "openFiles": [
+        "tiled/level10.tmx",
+        "tiled/level1.tmx",
+        "tiled/level12.tmx",
+        "tiled/level11.tmx"
     ],
     "project": "project-plus1.tiled-project",
     "property.type": "int",
@@ -143,6 +147,7 @@
         "tiled/level11.tmx",
         "tiled/level12.tmx",
         "tiled/level1.tmx",
+        "tiled/level10.tmx",
         "tiled/level2.tmx",
         "tiled/level3.tmx",
         "tiled/level4.tmx",
@@ -150,8 +155,7 @@
         "tiled/level6.tmx",
         "tiled/level7.tmx",
         "tiled/level8.tmx",
-        "tiled/level9.tmx",
-        "tiled/tiles.tsx"
+        "tiled/level9.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

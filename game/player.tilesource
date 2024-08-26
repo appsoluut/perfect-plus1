@@ -91,7 +91,20 @@ animations {
   fps: 1
 }
 animations {
-  id: "portal"
+  id: "portal_in"
+  start_tile: 21
+  end_tile: 29
+  playback: PLAYBACK_ONCE_BACKWARD
+  fps: 16
+}
+animations {
+  id: "portal_out"
+  start_tile: 21
+  end_tile: 29
+  fps: 16
+}
+animations {
+  id: "victory"
   start_tile: 21
   end_tile: 29
   fps: 8

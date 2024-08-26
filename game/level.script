@@ -170,6 +170,7 @@ end
 local function reset_level(self)
 	self.moves = 0
 	self.movement = nil
+	self.teleporting = nil
 	msg.post(msg.url(nil, "gui", "level"), hash("update_moves"), { moves = self.moves })
 
 	self.player_position.x = self.tilemap_position.x + (tile_size * self.player_start_tile_position.x - tile_size / 2)
@@ -214,11 +215,36 @@ local function check_teleport(self, tile)
 		lookup = self.teleporters.purple
 	end	
 
+	local teleport_to = nil
 	for index, coords in pairs(lookup) do
-		pprint(coords)
+		if self.player_tile_position.x ~= coords.x and self.player_tile_position.y ~= coords.y then
+			teleport_to = coords
+			break
+		end
 	end
 
-	return false
+	if teleport_to ~= nil then
+		self.teleporting = true
+		sprite.play_flipbook(self.player_sprite_url, "portal_out", function()
+			self.player_tile_position = {
+				x = teleport_to.x,
+				y = teleport_to.y
+			}
+			self.player_position.x = self.tilemap_position.x + (tile_size * self.player_tile_position.x - tile_size / 2)
+			self.player_position.y = self.tilemap_position.y + (tile_size * self.player_tile_position.y - tile_size / 2)
+			go.set(self.player_url, "position", self.player_position)
+
+			sprite.play_flipbook(self.player_sprite_url, "portal_in", function()
+				play_idle_animation(self)
+				self.teleporting = nil
+				self.movement = nil
+			end)
+		end)
+	else
+		return false
+	end
+
+	return true
 end
 
 local function check_solution(self)
@@ -231,7 +257,7 @@ local function check_solution(self)
 	if solved then
 		if self.moves == self.required_moves then
 			self.teleporting = true
-			sprite.play_flipbook(self.player_sprite_url, "portal", function()
+			sprite.play_flipbook(self.player_sprite_url, "victory", function()
 				self.teleporting = nil
 				self.current_level = math.min(self.max_levels, self.current_level + 1)
 				load_level(self)
