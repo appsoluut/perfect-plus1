@@ -41,12 +41,11 @@ nodes {
 }
 nodes {
   position {
-    x: 16.0
     y: -32.0
   }
   size {
     x: 960.0
-    y: 640.0
+    y: 600.0
   }
   color {
     x: 0.102
@@ -102,6 +101,68 @@ nodes {
   pivot: PIVOT_N
   line_break: true
   parent: "content"
+  inherit_alpha: true
+  text_tracking: 0.2
+}
+nodes {
+  position {
+    x: 640.0
+  }
+  size {
+    x: 32.0
+    y: 32.0
+  }
+  type: TYPE_BOX
+  id: "s_anchor"
+  yanchor: YANCHOR_BOTTOM
+  pivot: PIVOT_S
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "root"
+  inherit_alpha: true
+  visible: false
+}
+nodes {
+  position {
+    y: 32.0
+  }
+  size {
+    x: 960.0
+    y: 50.0
+  }
+  color {
+    x: 0.102
+    y: 0.2
+    z: 0.6
+  }
+  type: TYPE_BOX
+  id: "s_content"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_S
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "s_anchor"
+  inherit_alpha: true
+  clipping_mode: CLIPPING_MODE_STENCIL
+  clipping_visible: false
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  scale {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+  }
+  size {
+    x: 480.0
+    y: 25.0
+  }
+  type: TYPE_TEXT
+  text: "(C) 2024 - QUARTER HOUR GAMES"
+  font: "perfect-1"
+  id: "text1"
+  pivot: PIVOT_S
+  line_break: true
+  parent: "s_content"
   inherit_alpha: true
   text_tracking: 0.2
 }

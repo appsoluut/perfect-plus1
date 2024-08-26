@@ -1,5 +1,5 @@
 go.property("current_level", 1)
-go.property("max_levels", 12)
+go.property("max_levels", 13)
 
 local width, height = window.get_size()
 local tile_size = 16
@@ -288,7 +288,7 @@ local function play_collision_animation(self)
 end
 
 local function check_collision_wall(self, x, y)
-	if self.tilemap_data[y][x] == tile_wall then
+	if self.tilemap_data[y][x] ~= tile_empty then
 		return true
 	end
 	
