@@ -1,4 +1,4 @@
-script: ""
+script: "/titlescreen/titlescreen.gui_script"
 fonts {
   name: "perfect-1"
   font: "/font/perfect-1.font"
@@ -6,6 +6,10 @@ fonts {
 textures {
   name: "titlescreen"
   texture: "/titlescreen/titlescreen.atlas"
+}
+textures {
+  name: "player"
+  texture: "/game/player.tilesource"
 }
 nodes {
   size {
@@ -89,13 +93,10 @@ nodes {
   }
   size {
     x: 480.0
-    y: 240.0
+    y: 100.0
   }
   type: TYPE_TEXT
-  text: "PERFECT@# IS ABOUT FINDING THE SHORTEST PATH TO THE EXIT, AND THEN NOT TAKING IT. INSTEAD, FIND A PATH THAT REQUIRES JUST ONE MORE MOVE OVER PERFECTION.\n"
-  "\n"
-  "\n"
-  "CLICK ANYWHERE TO PLAY"
+  text: "PERFECT@# IS ABOUT FINDING THE SHORTEST PATH TO THE EXIT, AND THEN NOT TAKING IT. INSTEAD, FIND A PATH THAT REQUIRES JUST ONE MORE MOVE OVER PERFECTION."
   font: "perfect-1"
   id: "text"
   pivot: PIVOT_N
@@ -103,6 +104,97 @@ nodes {
   parent: "content"
   inherit_alpha: true
   text_tracking: 0.2
+}
+nodes {
+  position {
+    x: -140.0
+    y: -316.0
+  }
+  type: TYPE_TEMPLATE
+  id: "menu_item_continue"
+  parent: "content"
+  inherit_alpha: true
+  template: "/titlescreen/menu_item.gui"
+}
+nodes {
+  type: TYPE_TEXT
+  text: "CONTINUE"
+  id: "menu_item_continue/title"
+  parent: "menu_item_continue"
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  position {
+    x: -140.0
+    y: -355.0
+  }
+  type: TYPE_TEMPLATE
+  id: "menu_item_newgame"
+  parent: "content"
+  inherit_alpha: true
+  template: "/titlescreen/menu_item.gui"
+}
+nodes {
+  type: TYPE_TEXT
+  id: "menu_item_newgame/title"
+  parent: "menu_item_newgame"
+  template_node_child: true
+}
+nodes {
+  position {
+    x: -140.0
+    y: -394.0
+  }
+  type: TYPE_TEMPLATE
+  id: "menu_item_levelselect"
+  parent: "content"
+  inherit_alpha: true
+  template: "/titlescreen/menu_item.gui"
+}
+nodes {
+  type: TYPE_TEXT
+  text: "LEVEL SELECT: 01"
+  id: "menu_item_levelselect/title"
+  parent: "menu_item_levelselect"
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  position {
+    x: -140.0
+    y: -435.0
+  }
+  type: TYPE_TEMPLATE
+  id: "menu_item_credits"
+  parent: "content"
+  inherit_alpha: true
+  template: "/titlescreen/menu_item.gui"
+}
+nodes {
+  type: TYPE_TEXT
+  text: "CREDITS"
+  id: "menu_item_credits/title"
+  parent: "menu_item_credits"
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  position {
+    x: -164.0
+    y: -313.0
+  }
+  scale {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+  }
+  type: TYPE_BOX
+  texture: "player/blink"
+  id: "select"
+  parent: "content"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
@@ -114,6 +206,7 @@ nodes {
   }
   type: TYPE_BOX
   id: "s_anchor"
+  xanchor: XANCHOR_LEFT
   yanchor: YANCHOR_BOTTOM
   pivot: PIVOT_S
   adjust_mode: ADJUST_MODE_ZOOM
@@ -137,7 +230,7 @@ nodes {
   type: TYPE_BOX
   id: "s_content"
   xanchor: XANCHOR_LEFT
-  yanchor: YANCHOR_TOP
+  yanchor: YANCHOR_BOTTOM
   pivot: PIVOT_S
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "s_anchor"

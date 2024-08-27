@@ -1,3 +1,4 @@
+local defsave = require "defsave.defsave"
 local monarch = require "monarch.monarch"
 
 local screens = {
@@ -8,12 +9,19 @@ local screens = {
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
-	msg.post("#", screens.show_level)
+	msg.post("#", screens.show_splashscreen)
+	defsave.set_appname("perfect_1")
+	defsave.use_serialize = true
+	defsave.load("settings")
+end
+
+function final(self)
+	defsave.save_all()
 end
 
 function on_message(self, message_id, message, sender)
 	if message_id == screens.show_level then
-		monarch.show("level")
+		monarch.show("level", {}, { current_level = message.current_level or 1 })
 	elseif message_id == screens.show_splashscreen then
 		monarch.show("splashscreen")
 	elseif message_id == screens.show_titlescreen then

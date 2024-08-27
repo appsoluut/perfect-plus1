@@ -1,0 +1,25 @@
+script: ""
+fonts {
+  name: "perfect-1"
+  font: "/font/perfect-1.font"
+}
+nodes {
+  scale {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+  }
+  size {
+    x: 200.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "NEW GAME"
+  font: "perfect-1"
+  id: "title"
+  pivot: PIVOT_W
+  inherit_alpha: true
+  text_tracking: 0.2
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

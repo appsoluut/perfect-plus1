@@ -21,6 +21,7 @@ version = 1.0.0
 developer = Quarter Hour Games
 custom_resources = /game/levels/
 dependencies#0 = https://github.com/britzl/monarch/archive/refs/tags/5.1.1.zip
+dependencies#1 = https://github.com/subsoap/defsave/archive/refs/tags/v1.2.6.zip
 
 [graphics]
 default_texture_min_filter = nearest

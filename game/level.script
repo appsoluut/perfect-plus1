@@ -1,11 +1,13 @@
-go.property("current_level", 16)
-go.property("max_levels", 17)
+go.property("current_level", 1)
+go.property("max_levels", 19)
 
 local width, height = window.get_size()
 local tile_size = 16
 local zoom = 4
 
+local defsave = require "defsave.defsave"
 local lume = require "libraries.lume"
+local monarch = require "monarch.monarch"
 
 local acceleration = 4
 local max_movement_speed = 16
@@ -82,6 +84,7 @@ local function load_tilemap(self)
 				end
 			end
 		end
+		defsave.set("settings", "level", self.current_level)
 	else
 		print("[ERROR] Level not found?")
 	end
@@ -196,6 +199,11 @@ end
 function init(self)
 	msg.post("@render:", "use_fixed_projection", { near = -1, far = 1, zoom = zoom })
 
+	local data = monarch.data("level")
+	if data ~= nil and data.current_level then
+		self.current_level = data.current_level
+	end
+
 	sound.play(msg.url(nil, "sound", "music"))
 
 	self.tilemap_url = msg.url(nil, "level", nil)
@@ -231,8 +239,6 @@ local function check_teleport(self, tile)
 			break
 		end
 	end
-
-	pprint(lookup)
 
 	if teleport_to ~= nil then
 		self.teleporting = true
@@ -272,6 +278,8 @@ local function check_solution(self)
 				self.current_level = math.min(self.max_levels, self.current_level + 1)
 				load_level(self)
 			end)
+		else
+			play_lost_animation(self)
 		end
 	end
 
@@ -390,5 +398,7 @@ function on_input(self, action_id, action)
 		end
 	elseif action_id == hash("key_r") and action.pressed then
 		reset_level(self)
+	elseif action_id == hash("back") and action.released then
+		msg.post(msg.url("proxy", "/loader", "script"), "show_titlescreen")
 	end
 end

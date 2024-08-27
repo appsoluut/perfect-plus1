@@ -1,0 +1,68 @@
+local defsave = require "defsave.defsave"
+
+local function update_cursor(self)
+	self.active_item = self.menu_items[self.active_index]
+
+	local position = gui.get_position(self.active_item)
+	local cursor = gui.get_position(self.select_node)
+	cursor.y = position.y + self.select_scale.y * 2
+	gui.set_position(self.select_node, cursor)
+	gui.play_flipbook(self.select_node, "blink", function()
+		gui.play_flipbook(self.select_node, "idle")
+	end)
+end
+
+function init(self)
+	self.current_level = defsave.get("settings", "level") or 1
+
+	self.select_node = gui.get_node("select")
+	self.select_scale = gui.get_scale(self.select_node)
+	
+	self.continue_node = gui.get_node("menu_item_continue/title")
+	self.new_game_node = gui.get_node("menu_item_newgame/title")
+	self.levelselect_node = gui.get_node("menu_item_levelselect/title")
+	self.credits_node = gui.get_node("menu_item_credits/title")
+
+	self.menu_items = {}
+
+	if self.current_level > 1 then
+		table.insert(self.menu_items, self.continue_node)
+	else
+		gui.set_visible(self.continue_node, false)
+	end
+
+	table.insert(self.menu_items, self.new_game_node)
+	table.insert(self.menu_items, self.levelselect_node)
+	table.insert(self.menu_items, self.credits_node)
+
+	self.active_index = 1
+	update_cursor(self)
+
+	msg.post(".", "acquire_input_focus")
+end
+
+function final(self)
+	msg.post(".", "release_input_focus")
+end
+
+function on_message(self, message_id, message, sender)
+	-- Add message-handling code here
+	-- Learn more: https://defold.com/manuals/message-passing/
+	-- Remove this function if not needed
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("touch") and action.released then
+		if self.active_item == self.continue_node then
+			msg.post(msg.url("proxy", "/loader", "script"), "show_level", { current_level = self.current_level } )
+		elseif self.active_item == self.new_game_node then
+			msg.post(msg.url("proxy", "/loader", "script"), "show_level")
+		end
+	elseif action_id == hash("up") and action.released then
+		self.active_index = math.max(1, self.active_index - 1)
+		update_cursor(self)
+	elseif action_id == hash("down") and action.released then
+		self.active_index = math.min(4, self.active_index + 1)
+		update_cursor(self)
+	end
+end
