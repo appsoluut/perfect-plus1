@@ -1,5 +1,5 @@
-go.property("current_level", 12)
-go.property("max_levels", 15)
+go.property("current_level", 16)
+go.property("max_levels", 17)
 
 local width, height = window.get_size()
 local tile_size = 16
@@ -55,7 +55,7 @@ local function spawn_special_tile(self, tile, x, y)
 		spawn = "teleporter_purple"
 		table.insert(self.teleporters.purple, { x = x, y = y })
 	end
-	
+
 	if spawn then
 		local position = vmath.vector3(0, 0, 0.1)
 		position.x = self.tilemap_position.x + (tile_size * x - tile_size / 2)
@@ -186,8 +186,10 @@ end
 
 local function play_lost_animation(self)
 	sound.play(msg.url(nil, "sound", "fail"))
+	self.resetting = true
 	sprite.play_flipbook(self.player_sprite_url, "lose", function(self)
-		sprite.play_flipbook(self.player_sprite_url, "lose", reset_level)
+		self.resetting = nil
+		reset_level(self)
 	end)
 end
 
@@ -201,10 +203,6 @@ function init(self)
 	self.player_url = msg.url(nil, "player", nil)
 	self.player_sprite_url = msg.url(nil, "player", "sprite")
 	self.player_size = go.get(self.player_sprite_url, "size")
-	self.select_url = msg.url(nil, "select", nil)
-	self.select_cursor = false
-
-	msg.post(self.select_url, "disable")
 
 	animate_background()
 	load_level(self)
@@ -228,11 +226,13 @@ local function check_teleport(self, tile)
 
 	local teleport_to = nil
 	for index, coords in pairs(lookup) do
-		if self.player_tile_position.x ~= coords.x and self.player_tile_position.y ~= coords.y then
+		if self.player_tile_position.x ~= coords.x or self.player_tile_position.y ~= coords.y then
 			teleport_to = coords
 			break
 		end
 	end
+
+	pprint(lookup)
 
 	if teleport_to ~= nil then
 		self.teleporting = true
@@ -357,22 +357,8 @@ function update(self, dt)
 	end
 end
 
-local function screen_to_world(self, x, y)
-	-- print("width: " .. width .. ", height: " .. height)
-	return vmath.vector3(width / zoom + x / zoom + 160, height / zoom + y / zoom + 90, 1.0)
-end
-
 function on_input(self, action_id, action)
--- 	if action_id == nil and action.x and action.y then
--- 		if not self.select_cursor then
--- 			self.select_cursor = true
--- 			msg.post(self.select_url, "enable")
--- 		end
--- 
--- 		go.set_position(screen_to_world(self, action.screen_x, action.screen_y), self.select_url)
--- 	end
-
-	if self.movement ~= nil or self.teleporting ~= nil then return end
+	if self.movement ~= nil or self.teleporting ~= nil or self.resetting ~= nil then return end
 
 	if action_id == hash("left") and action.pressed then
 		self.movement = vmath.vector3(-1, 0, 0)
