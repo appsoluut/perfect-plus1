@@ -35,7 +35,7 @@ embedded_instances {
   "}\n"
   ""
   position {
-    z: 1.0
+    z: 0.99
   }
 }
 embedded_instances {
@@ -46,6 +46,7 @@ embedded_instances {
   "  data: \"sound: \\\"/game/theme.ogg\\\"\\n"
   "looping: 1\\n"
   "group: \\\"music\\\"\\n"
+  "gain: 0.7\\n"
   "\"\n"
   "}\n"
   "embedded_components {\n"
@@ -80,6 +81,13 @@ embedded_instances {
   "  id: \"impact5\"\n"
   "  type: \"sound\"\n"
   "  data: \"sound: \\\"/game/impact5.wav\\\"\\n"
+  "group: \\\"sfx\\\"\\n"
+  "\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"fail\"\n"
+  "  type: \"sound\"\n"
+  "  data: \"sound: \\\"/game/level_fail.wav\\\"\\n"
   "group: \\\"sfx\\\"\\n"
   "\"\n"
   "}\n"
@@ -145,4 +153,22 @@ embedded_instances {
   "\"\n"
   "}\n"
   ""
+}
+embedded_instances {
+  id: "select"
+  data: "embedded_components {\n"
+  "  id: \"sprite\"\n"
+  "  type: \"sprite\"\n"
+  "  data: \"default_animation: \\\"select\\\"\\n"
+  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
+  "textures {\\n"
+  "  sampler: \\\"texture_sampler\\\"\\n"
+  "  texture: \\\"/game/objects.atlas\\\"\\n"
+  "}\\n"
+  "\"\n"
+  "}\n"
+  ""
+  position {
+    z: 1.0
+  }
 }

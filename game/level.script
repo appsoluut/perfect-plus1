@@ -1,5 +1,5 @@
-go.property("current_level", 1)
-go.property("max_levels", 13)
+go.property("current_level", 12)
+go.property("max_levels", 15)
 
 local width, height = window.get_size()
 local tile_size = 16
@@ -184,6 +184,13 @@ local function reset_level(self)
 	play_idle_animation(self)
 end
 
+local function play_lost_animation(self)
+	sound.play(msg.url(nil, "sound", "fail"))
+	sprite.play_flipbook(self.player_sprite_url, "lose", function(self)
+		sprite.play_flipbook(self.player_sprite_url, "lose", reset_level)
+	end)
+end
+
 function init(self)
 	msg.post("@render:", "use_fixed_projection", { near = -1, far = 1, zoom = zoom })
 
@@ -194,6 +201,10 @@ function init(self)
 	self.player_url = msg.url(nil, "player", nil)
 	self.player_sprite_url = msg.url(nil, "player", "sprite")
 	self.player_size = go.get(self.player_sprite_url, "size")
+	self.select_url = msg.url(nil, "select", nil)
+	self.select_cursor = false
+
+	msg.post(self.select_url, "disable")
 
 	animate_background()
 	load_level(self)
@@ -249,7 +260,6 @@ end
 
 local function check_solution(self)
 	local solved = false
-	local reset = false
 	if self.player_tile_position.x == self.exit_tile_position.x and self.player_tile_position.y == self.exit_tile_position.y then
 		solved = true
 	end
@@ -261,21 +271,19 @@ local function check_solution(self)
 				self.teleporting = nil
 				self.current_level = math.min(self.max_levels, self.current_level + 1)
 				load_level(self)
-				reset = true
 			end)
 		end
 	end
 
-	if self.moves > self.required_moves then
-		reset_level(self)
-		reset = true
+	if (not solved or not self.teleporting) and self.moves >= self.required_moves then
+		play_lost_animation(self)
 	end
-
-	return reset
 end
 
 local function play_collision_animation(self)
-	sound.play(msg.url(nil, "sound", "impact" .. math.random(1, 5)))
+	if self.moves < self.required_moves then
+		sound.play(msg.url(nil, "sound", "impact" .. math.random(1, 5)))
+	end
 	if self.movement.x == 1 then
 		sprite.play_flipbook(self.player_sprite_url, "collision_right", play_idle_animation)
 	elseif self.movement.x == -1 then
@@ -293,19 +301,24 @@ local function check_collision_wall(self, x, y)
 	end
 	
 	local item = self.tilemap_items[y][x]
-	local active_wall = nil
+	local walls = {
+		[tile_oneway_up] = true,
+		[tile_oneway_down] = true,
+		[tile_oneway_left] = true,
+		[tile_oneway_right] = true
+	}
 
 	if self.movement.x == 1 then
-		active_wall = tile_oneway_left
+		walls[tile_oneway_right] = false
 	elseif self.movement.x == -1 then
-		active_wall = tile_oneway_right
+		walls[tile_oneway_left] = false
 	elseif self.movement.y == 1 then
-		active_wall = tile_oneway_down
+		walls[tile_oneway_up] = false
 	elseif self.movement.y == -1 then
-		active_wall = tile_oneway_up
+		walls[tile_oneway_down] = false
 	end
 
-	return item == active_wall
+	return walls[item] or false
 end
 
 local function check_bounds(self, player_position)
@@ -324,9 +337,7 @@ local function check_bounds(self, player_position)
 		self.movement = nil
 		self.speed = 0
 		msg.post(msg.url(nil, "gui", "level"), hash("update_moves"), { moves = self.moves })
-		if check_solution(self) then
-			player_position = nil
-		end
+		check_solution(self)
 	end
 
 	return player_position
@@ -346,7 +357,21 @@ function update(self, dt)
 	end
 end
 
+local function screen_to_world(self, x, y)
+	-- print("width: " .. width .. ", height: " .. height)
+	return vmath.vector3(width / zoom + x / zoom + 160, height / zoom + y / zoom + 90, 1.0)
+end
+
 function on_input(self, action_id, action)
+-- 	if action_id == nil and action.x and action.y then
+-- 		if not self.select_cursor then
+-- 			self.select_cursor = true
+-- 			msg.post(self.select_url, "enable")
+-- 		end
+-- 
+-- 		go.set_position(screen_to_world(self, action.screen_x, action.screen_y), self.select_url)
+-- 	end
+
 	if self.movement ~= nil or self.teleporting ~= nil then return end
 
 	if action_id == hash("left") and action.pressed then

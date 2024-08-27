@@ -34,7 +34,59 @@ key_trigger {
   input: KEY_A
   action: "left"
 }
+key_trigger {
+  input: KEY_SPACE
+  action: "touch"
+}
+key_trigger {
+  input: KEY_ENTER
+  action: "touch"
+}
 mouse_trigger {
   input: MOUSE_BUTTON_1
+  action: "touch"
+}
+gamepad_trigger {
+  input: GAMEPAD_LSTICK_LEFT
+  action: "left"
+}
+gamepad_trigger {
+  input: GAMEPAD_LSTICK_RIGHT
+  action: "right"
+}
+gamepad_trigger {
+  input: GAMEPAD_LSTICK_UP
+  action: "up"
+}
+gamepad_trigger {
+  input: GAMEPAD_LSTICK_DOWN
+  action: "down"
+}
+gamepad_trigger {
+  input: GAMEPAD_LPAD_LEFT
+  action: "left"
+}
+gamepad_trigger {
+  input: GAMEPAD_LPAD_RIGHT
+  action: "right"
+}
+gamepad_trigger {
+  input: GAMEPAD_LPAD_UP
+  action: "up"
+}
+gamepad_trigger {
+  input: GAMEPAD_LPAD_DOWN
+  action: "down"
+}
+gamepad_trigger {
+  input: GAMEPAD_RPAD_UP
+  action: "key_r"
+}
+gamepad_trigger {
+  input: GAMEPAD_RPAD_DOWN
+  action: "touch"
+}
+gamepad_trigger {
+  input: GAMEPAD_START
   action: "touch"
 }

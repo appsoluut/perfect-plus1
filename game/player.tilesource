@@ -63,6 +63,12 @@ animations {
   fps: 1
 }
 animations {
+  id: "lose"
+  start_tile: 30
+  end_tile: 37
+  fps: 8
+}
+animations {
   id: "move_down"
   start_tile: 15
   end_tile: 15

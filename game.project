@@ -41,3 +41,7 @@ scale_mode = no_scale
 [sprite]
 subpixels = 0
 
+[input]
+gamepads = /input/default.gamepadsc
+use_accelerometer = 0
+

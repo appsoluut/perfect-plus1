@@ -157,9 +157,9 @@ nodes {
     y: 25.0
   }
   type: TYPE_TEXT
-  text: "(C) 2024 - QUARTER HOUR GAMES"
+  text: "< 2024 - QUARTER HOUR GAMES"
   font: "perfect-1"
-  id: "text1"
+  id: "copyright"
   pivot: PIVOT_S
   line_break: true
   parent: "s_content"

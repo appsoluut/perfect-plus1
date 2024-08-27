@@ -1,0 +1,4 @@
+images {
+  image: "/game/select.png"
+}
+extrude_borders: 2
