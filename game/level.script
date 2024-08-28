@@ -1,5 +1,5 @@
 go.property("current_level", 1)
-go.property("max_levels", 19)
+go.property("max_levels", 20)
 
 local width, height = window.get_size()
 local tile_size = 16
@@ -206,8 +206,6 @@ function init(self)
 		self.current_level = data.current_level
 	end
 
-	sound.play(msg.url(nil, "sound", "music"))
-
 	self.tilemap_url = msg.url(nil, "level", nil)
 	self.tilemap_level_url = msg.url(nil, "level", "tilemap")
 	self.player_url = msg.url(nil, "player", nil)
@@ -277,6 +275,10 @@ local function check_solution(self)
 			self.teleporting = true
 			sprite.play_flipbook(self.player_sprite_url, "victory", function()
 				self.teleporting = nil
+				if self.current_level + 1 > self.max_levels then
+					msg.post(msg.url("proxy", "/loader", "script"), "show_titlescreen", { subscreen = "credits" })
+					return
+				end
 				self.current_level = math.min(self.max_levels, self.current_level + 1)
 				load_level(self)
 			end)

@@ -1,4 +1,7 @@
 images {
   image: "/titlescreen/perfect+1_logo.png"
 }
+images {
+  image: "/titlescreen/selector.png"
+}
 extrude_borders: 2

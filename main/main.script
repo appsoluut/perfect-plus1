@@ -13,6 +13,7 @@ function init(self)
 	defsave.set_appname("perfect_1")
 	defsave.use_serialize = true
 	defsave.load("settings")
+	self.music_playing = false
 end
 
 function final(self)
@@ -25,6 +26,10 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == screens.show_splashscreen then
 		monarch.show("splashscreen")
 	elseif message_id == screens.show_titlescreen then
-		monarch.show("titlescreen")
+		if not self.music_playing then
+			sound.play(msg.url(nil, "sound", "music"))
+			self.music_playing = true
+		end
+		monarch.show("titlescreen", {}, { subscreen = message.subscreen or "menu" })
 	end
 end

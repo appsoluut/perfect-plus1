@@ -1,6 +1,13 @@
 local defsave = require "defsave.defsave"
+local monarch = require "monarch.monarch"
+
 local table = table
 local srep = string.rep
+
+local states = {
+	menu = 1,
+	credits = 2
+}
 
 local function lpad(s, l, c)
 	return srep(c or ' ', l - #tostring(s)) .. s
@@ -13,16 +20,37 @@ local function update_cursor(self)
 	local cursor = gui.get_position(self.select_node)
 	cursor.y = position.y + self.select_scale.y * 2
 	gui.set_position(self.select_node, cursor)
-	gui.play_flipbook(self.select_node, "blink", function()
-		gui.play_flipbook(self.select_node, "idle")
-	end)
+end
+
+local function update_state(self)
+	if self.state == states.menu then
+		gui.set_visible(self.state_menu_node, true)
+		gui.set_visible(self.copyright_node, true)
+		gui.set_visible(self.state_credits_node, false)
+	elseif self.state == states.credits then
+		gui.set_visible(self.state_menu_node, false)
+		gui.set_visible(self.copyright_node, false)
+		gui.set_visible(self.state_credits_node, true)
+	end
 end
 
 function init(self)
+	local data = monarch.data("titlescreen")
+	
 	self.current_level = defsave.get("settings", "level") or 1
 	self.max_levels = defsave.get("settings", "max_level") or 1
 	self.level_selected = self.max_levels
+	
+	if data ~= nil and data.subscreen ~= nil and data.subscreen == "credits" then
+		self.state = states.credits
+	else
+		self.state = states.menu
+	end
 
+	self.state_menu_node = gui.get_node("menu")
+	self.state_credits_node = gui.get_node("credits")
+	self.copyright_node = gui.get_node("copyright")
+	
 	self.select_node = gui.get_node("select")
 	self.select_scale = gui.get_scale(self.select_node)
 	
@@ -50,6 +78,8 @@ function init(self)
 	update_cursor(self)
 	gui.set_text(self.levelselect_node, self.levelselect_text .. lpad(self.level_selected, 2, '0'))
 
+	update_state(self)
+
 	msg.post(".", "acquire_input_focus")
 end
 
@@ -59,26 +89,36 @@ end
 
 function on_input(self, action_id, action)
 	if not action.released then return end
-	
-	if action_id == hash("touch") then
-		if self.active_item == self.continue_node then
-			msg.post(self.proxy_url, "show_level", { current_level = self.current_level } )
-		elseif self.active_item == self.levelselect_node then
-			msg.post(self.proxy_url, "show_level", { current_level = self.level_selected } )
-		elseif self.active_item == self.new_game_node then
-			msg.post(self.proxy_url, "show_level")
+
+	if self.state == states.menu then
+		if action_id == hash("touch") then
+			if self.active_item == self.continue_node then
+				msg.post(self.proxy_url, "show_level", { current_level = self.current_level } )
+			elseif self.active_item == self.levelselect_node then
+				msg.post(self.proxy_url, "show_level", { current_level = self.level_selected } )
+			elseif self.active_item == self.new_game_node then
+				msg.post(self.proxy_url, "show_level")
+			elseif self.active_item == self.credits_node then
+				self.state = states.credits
+				update_state(self)
+			end
+		elseif action_id == hash("up") then
+			self.active_index = math.max(1, self.active_index - 1)
+			update_cursor(self)
+		elseif action_id == hash("down") then
+			self.active_index = math.min(4, self.active_index + 1)
+			update_cursor(self)
+		elseif action_id == hash("left") and self.active_item == self.levelselect_node then
+			self.level_selected = math.max(1, self.level_selected - 1)
+			gui.set_text(self.levelselect_node, self.levelselect_text .. lpad(self.level_selected, 2, '0'))
+		elseif action_id == hash("right") and self.active_item == self.levelselect_node then
+			self.level_selected = math.min(self.max_levels, self.level_selected + 1)
+			gui.set_text(self.levelselect_node, self.levelselect_text .. lpad(self.level_selected, 2, '0'))
 		end
-	elseif action_id == hash("up") then
-		self.active_index = math.max(1, self.active_index - 1)
-		update_cursor(self)
-	elseif action_id == hash("down") then
-		self.active_index = math.min(4, self.active_index + 1)
-		update_cursor(self)
-	elseif action_id == hash("left") and self.active_item == self.levelselect_node then
-		self.level_selected = math.max(1, self.level_selected - 1)
-		gui.set_text(self.levelselect_node, self.levelselect_text .. lpad(self.level_selected, 2, '0'))
-	elseif action_id == hash("right") and self.active_item == self.levelselect_node then
-		self.level_selected = math.min(self.max_levels, self.level_selected + 1)
-		gui.set_text(self.levelselect_node, self.levelselect_text .. lpad(self.level_selected, 2, '0'))
+	else
+		if action_id == hash("touch") or action_id == hash("back") then
+			self.state = states.menu
+			update_state(self)
+		end
 	end
 end

@@ -49,7 +49,7 @@ nodes {
   }
   size {
     x: 960.0
-    y: 600.0
+    y: 650.0
   }
   color {
     x: 0.102
@@ -83,6 +83,20 @@ nodes {
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
+  size {
+    x: 960.0
+    y: 600.0
+  }
+  type: TYPE_BOX
+  id: "menu"
+  pivot: PIVOT_N
+  parent: "content"
+  inherit_alpha: true
+  clipping_mode: CLIPPING_MODE_STENCIL
+  clipping_visible: false
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
   position {
     y: -96.0
   }
@@ -96,12 +110,14 @@ nodes {
     y: 100.0
   }
   type: TYPE_TEXT
-  text: "PERFECT@# IS ABOUT FINDING THE SHORTEST PATH TO THE EXIT, AND THEN NOT TAKING IT. INSTEAD, FIND A PATH THAT REQUIRES JUST ONE MORE MOVE OVER PERFECTION."
+  text: "FIND THE SHORTEST PATH TO THE EXIT, AND THEN DO NOT TAKE IT.\n"
+  "\n"
+  "INSTEAD, FIND A PATH THAT REQUIRES JUST ONE MORE MOVE OVER PERFECTION."
   font: "perfect-1"
   id: "text"
   pivot: PIVOT_N
   line_break: true
-  parent: "content"
+  parent: "menu"
   inherit_alpha: true
   text_tracking: 0.2
 }
@@ -112,7 +128,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "menu_item_continue"
-  parent: "content"
+  parent: "menu"
   inherit_alpha: true
   template: "/titlescreen/menu_item.gui"
 }
@@ -131,7 +147,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "menu_item_newgame"
-  parent: "content"
+  parent: "menu"
   inherit_alpha: true
   template: "/titlescreen/menu_item.gui"
 }
@@ -148,7 +164,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "menu_item_levelselect"
-  parent: "content"
+  parent: "menu"
   inherit_alpha: true
   template: "/titlescreen/menu_item.gui"
 }
@@ -167,7 +183,7 @@ nodes {
   }
   type: TYPE_TEMPLATE
   id: "menu_item_credits"
-  parent: "content"
+  parent: "menu"
   inherit_alpha: true
   template: "/titlescreen/menu_item.gui"
 }
@@ -190,11 +206,67 @@ nodes {
     z: 2.0
   }
   type: TYPE_BOX
-  texture: "player/blink"
+  texture: "titlescreen/selector"
   id: "select"
-  parent: "content"
+  parent: "menu"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 960.0
+    y: 650.0
+  }
+  type: TYPE_BOX
+  id: "credits"
+  pivot: PIVOT_N
+  parent: "content"
+  inherit_alpha: true
+  clipping_mode: CLIPPING_MODE_STENCIL
+  clipping_visible: false
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    y: -96.0
+  }
+  scale {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+  }
+  size {
+    x: 480.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "- PROGRAMMING -\n"
+  "PIRO\n"
+  "\n"
+  "- GRAPHICS, SOUND and MUSIC -\n"
+  "PIGBERT\n"
+  "\n"
+  "- LEVEL DESIGN -\n"
+  "PIRO\n"
+  "PIGBERT\n"
+  "\n"
+  "- ENGINE -\n"
+  "DEFOLD\n"
+  "\n"
+  "- SPECIAL THANKS TO -\n"
+  "BRITZL: MONARCH\n"
+  "SUBSOAP: DEFSAVE\n"
+  "MADE WITH DEFOLD JAM 2024\n"
+  "\n"
+  "YOU: FOR PLAYING THIS GAME"
+  font: "perfect-1"
+  id: "credits_text"
+  pivot: PIVOT_N
+  line_break: true
+  parent: "credits"
+  inherit_alpha: true
+  text_tracking: 0.2
 }
 nodes {
   position {

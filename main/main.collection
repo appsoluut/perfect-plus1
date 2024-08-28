@@ -65,3 +65,16 @@ embedded_instances {
   "}\n"
   ""
 }
+embedded_instances {
+  id: "sound"
+  data: "embedded_components {\n"
+  "  id: \"music\"\n"
+  "  type: \"sound\"\n"
+  "  data: \"sound: \\\"/game/theme.ogg\\\"\\n"
+  "looping: 1\\n"
+  "group: \\\"music\\\"\\n"
+  "gain: 0.5\\n"
+  "\"\n"
+  "}\n"
+  ""
+}

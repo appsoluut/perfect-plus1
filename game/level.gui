@@ -231,6 +231,7 @@ nodes {
   type: TYPE_TEXT
   text: "$%^&: MOVE\n"
   "WASD: MOVE\n"
+  "ESC: MENU\n"
   "R: RESET"
   font: "perfect-1"
   id: "text_controls"
