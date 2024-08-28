@@ -79,6 +79,7 @@ function init(self)
 	gui.set_text(self.levelselect_node, self.levelselect_text .. lpad(self.level_selected, 2, '0'))
 
 	update_state(self)
+	defsave.save("settings", true)
 
 	msg.post(".", "acquire_input_focus")
 end

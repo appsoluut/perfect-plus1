@@ -113,6 +113,14 @@
                 "y": 79.92863514719001
             }
         },
+        "tiled/level20.tmx": {
+            "scale": 4.7440625,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 80.10012515644556,
+                "y": 80.10012515644556
+            }
+        },
         "tiled/level3.tmx": {
             "scale": 4.7440625,
             "selectedLayer": 2,

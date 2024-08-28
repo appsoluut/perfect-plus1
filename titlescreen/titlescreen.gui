@@ -248,8 +248,7 @@ nodes {
   "PIGBERT\n"
   "\n"
   "- LEVEL DESIGN -\n"
-  "PIRO\n"
-  "PIGBERT\n"
+  "PIRO and PIGBERT\n"
   "\n"
   "- ENGINE -\n"
   "DEFOLD\n"
@@ -266,6 +265,7 @@ nodes {
   line_break: true
   parent: "credits"
   inherit_alpha: true
+  text_leading: 1.1
   text_tracking: 0.2
 }
 nodes {
