@@ -9,7 +9,7 @@ local screens = {
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
-	msg.post("#", screens.show_splashscreen)
+	msg.post("#", screens.show_titlescreen)
 	defsave.set_appname("perfect_1")
 	defsave.use_serialize = true
 	defsave.load("settings")

@@ -154,7 +154,7 @@ nodes {
 }
 nodes {
   type: TYPE_TEXT
-  text: "LEVEL SELECT: 01"
+  text: "LEVEL SELECT: "
   id: "menu_item_levelselect/title"
   parent: "menu_item_levelselect"
   overridden_fields: 8

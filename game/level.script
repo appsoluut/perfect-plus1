@@ -85,6 +85,8 @@ local function load_tilemap(self)
 			end
 		end
 		defsave.set("settings", "level", self.current_level)
+		local max_level = math.max(defsave.get("settings", "max_level") or 1, self.current_level)
+		defsave.set("settings", "max_level", math.min(self.max_levels, max_level))
 	else
 		print("[ERROR] Level not found?")
 	end
