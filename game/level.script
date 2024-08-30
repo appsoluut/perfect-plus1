@@ -400,6 +400,10 @@ function on_input(self, action_id, action)
 		else
 			self.movement = nil
 		end
+	elseif action_id == hash("raw") then
+		pprint(action.gamepad_buttons)
+		pprint(action.gamepad_axis)
+		pprint(action.gamepad_hats)
 	elseif action_id == hash("key_r") and action.pressed then
 		reset_level(self)
 	elseif action_id == hash("back") and action.released then

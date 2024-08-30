@@ -232,32 +232,34 @@ nodes {
     y: -96.0
   }
   scale {
-    x: 2.0
-    y: 2.0
-    z: 2.0
+    x: 1.5
+    y: 1.5
+    z: 1.5
   }
   size {
-    x: 480.0
+    x: 570.0
     y: 100.0
   }
   type: TYPE_TEXT
   text: "- PROGRAMMING -\n"
-  "PIRO\n"
+  "PIROMAAN\n"
   "\n"
   "- GRAPHICS, SOUND and MUSIC -\n"
   "PIGBERT\n"
   "\n"
   "- LEVEL DESIGN -\n"
-  "PIRO and PIGBERT\n"
+  "PIROMAAN and PIGBERT\n"
   "\n"
   "- ENGINE -\n"
   "DEFOLD\n"
   "\n"
   "- SPECIAL THANKS TO -\n"
   "BRITZL: MONARCH\n"
-  "SUBSOAP: DEFSAVE\n"
+  "SUBSOAP: DEFOS and DEFSAVE\n"
+  "FATALEXIT: CONTROLLER SUPPORT and TESTING\n"
   "MADE WITH DEFOLD JAM 2024\n"
   "\n"
+  "and\n"
   "YOU: FOR PLAYING THIS GAME"
   font: "perfect-1"
   id: "credits_text"
@@ -265,7 +267,7 @@ nodes {
   line_break: true
   parent: "credits"
   inherit_alpha: true
-  text_leading: 1.1
+  text_leading: 1.2
   text_tracking: 0.2
 }
 nodes {

@@ -22,6 +22,7 @@ developer = Quarter Hour Games
 custom_resources = /game/levels/
 dependencies#0 = https://github.com/britzl/monarch/archive/refs/tags/5.1.1.zip
 dependencies#1 = https://github.com/subsoap/defsave/archive/refs/tags/v1.2.6.zip
+dependencies#2 = https://github.com/subsoap/defos/archive/refs/tags/v2.7.1.zip
 
 [graphics]
 default_texture_min_filter = nearest
@@ -38,11 +39,13 @@ bundle_name = Perfect+1
 [html5]
 cssfile = /builtins/manifests/web/dark_theme.css
 scale_mode = no_scale
+show_fullscreen_button = 0
+show_made_with_defold = 0
 
 [sprite]
 subpixels = 0
 
 [input]
-gamepads = /input/default.gamepadsc
+gamepads = /builtins/input/default.gamepadsc
 use_accelerometer = 0
 

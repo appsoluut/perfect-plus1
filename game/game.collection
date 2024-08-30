@@ -12,7 +12,7 @@ embedded_instances {
   id: "level"
   data: "components {\n"
   "  id: \"tilemap\"\n"
-  "  component: \"/input/placeholder.tilemap\"\n"
+  "  component: \"/game/placeholder.tilemap\"\n"
   "}\n"
   ""
 }
