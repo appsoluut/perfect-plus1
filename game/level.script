@@ -273,6 +273,7 @@ local function check_solution(self)
 	if solved then
 		if self.moves == self.required_moves then
 			self.teleporting = true
+			sound.play(msg.url(nil, "sound", "win"))
 			sprite.play_flipbook(self.player_sprite_url, "victory", function()
 				self.teleporting = nil
 				if self.current_level + 1 > self.max_levels then
@@ -282,6 +283,7 @@ local function check_solution(self)
 				self.current_level = math.min(self.max_levels, self.current_level + 1)
 				load_level(self)
 			end)
+			return
 		else
 			play_lost_animation(self)
 		end
@@ -289,13 +291,12 @@ local function check_solution(self)
 
 	if (not solved or not self.teleporting) and self.moves >= self.required_moves then
 		play_lost_animation(self)
+	else
+		sound.play(msg.url(nil, "sound", "impact" .. math.random(1, 5)))
 	end
 end
 
 local function play_collision_animation(self)
-	if self.moves < self.required_moves then
-		sound.play(msg.url(nil, "sound", "impact" .. math.random(1, 5)))
-	end
 	if self.movement.x == 1 then
 		sprite.play_flipbook(self.player_sprite_url, "collision_right", play_idle_animation)
 	elseif self.movement.x == -1 then

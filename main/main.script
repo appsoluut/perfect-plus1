@@ -9,7 +9,7 @@ local screens = {
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
-	msg.post("#", screens.show_titlescreen)
+	msg.post("#", screens.show_splashscreen)
 	if defos then
 		defos.disable_maximize_button()
 		defos.disable_window_resize()

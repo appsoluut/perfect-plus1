@@ -82,6 +82,13 @@ embedded_instances {
   "group: \\\"sfx\\\"\\n"
   "\"\n"
   "}\n"
+  "embedded_components {\n"
+  "  id: \"win\"\n"
+  "  type: \"sound\"\n"
+  "  data: \"sound: \\\"/game/level_win.wav\\\"\\n"
+  "group: \\\"sfx\\\"\\n"
+  "\"\n"
+  "}\n"
   ""
 }
 embedded_instances {
