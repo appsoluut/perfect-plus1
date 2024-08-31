@@ -1,7 +1,6 @@
 go.property("current_level", 1)
 go.property("max_levels", 20)
 
-local width, height = window.get_size()
 local tile_size = 16
 local zoom = 4
 
@@ -97,8 +96,10 @@ local function init_tilemap_position(self)
 
 	self.tilemap_x, self.tilemap_y, self.tilemap_width, self.tilemap_height = tilemap.get_bounds(self.tilemap_level_url)
 
-	self.tilemap_position.x = (width / 2) - (self.tilemap_width * tile_size) / 2
-	self.tilemap_position.y = height / 2 - (self.tilemap_height * tile_size) / 2
+	self.tilemap_position.x = (self.width / 2) - (self.tilemap_width * tile_size) / 2
+	self.tilemap_position.y = self.height / 2 - (self.tilemap_height * tile_size) / 2
+
+	pprint(self.tilemap_position)
 
 	go.set(self.tilemap_url, "position", self.tilemap_position)
 end
@@ -205,6 +206,9 @@ function init(self)
 	if data ~= nil and data.current_level then
 		self.current_level = data.current_level
 	end
+
+	self.width = sys.get_config_int("display.width")
+	self.height = sys.get_config_int("display.height")
 
 	self.tilemap_url = msg.url(nil, "level", nil)
 	self.tilemap_level_url = msg.url(nil, "level", "tilemap")

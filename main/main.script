@@ -6,14 +6,11 @@ local screens = {
 	show_level = hash("show_level"),
 	show_titlescreen = hash("show_titlescreen")
 }
+local toggle_fullscreen = hash("toggle_fullscreen")
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
 	msg.post("#", screens.show_splashscreen)
-	if defos then
-		defos.disable_maximize_button()
-		defos.disable_window_resize()
-	end
 	defsave.set_appname("perfect_1")
 	defsave.use_serialize = true
 	defsave.load("settings")
@@ -35,5 +32,7 @@ function on_message(self, message_id, message, sender)
 			self.music_playing = true
 		end
 		monarch.show("titlescreen", {}, { subscreen = message.subscreen or "menu" })
+	elseif defos and message_id == toggle_fullscreen then
+		defos.toggle_fullscreen()
 	end
 end

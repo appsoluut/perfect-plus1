@@ -17,7 +17,7 @@ package = eu.qhgames.perfect-plus1
 
 [project]
 title = Perfect+1
-version = 1.0.0
+version = 1.0.1
 developer = Quarter Hour Games
 custom_resources = /game/levels/
 dependencies#0 = https://github.com/britzl/monarch/archive/refs/tags/5.1.1.zip
@@ -38,7 +38,7 @@ bundle_name = Perfect+1
 
 [html5]
 cssfile = /builtins/manifests/web/dark_theme.css
-scale_mode = no_scale
+scale_mode = downscale_fit
 show_fullscreen_button = 0
 show_made_with_defold = 0
 

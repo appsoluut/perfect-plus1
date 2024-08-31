@@ -34,6 +34,20 @@ local function update_state(self)
 	end
 end
 
+local function update_menu_position(self, node)
+	local position = gui.get_position(node)
+	position.y = position.y + (self.button_size.y * self.select_scale.y)
+	gui.set_position(node, position)
+end
+
+local function update_fullscreen_text(self)
+	local fullscreen_state = "OFF"
+	if self.fullscreen_state then
+		fullscreen_state = "ON"
+	end
+	gui.set_text(self.fullscreen_node, self.fullscreen_text .. fullscreen_state)
+end
+
 function init(self)
 	local data = monarch.data("titlescreen")
 	
@@ -53,12 +67,21 @@ function init(self)
 	
 	self.select_node = gui.get_node("select")
 	self.select_scale = gui.get_scale(self.select_node)
-	
+
 	self.continue_node = gui.get_node("menu_item_continue/title")
 	self.new_game_node = gui.get_node("menu_item_newgame/title")
+	self.fullscreen_node = gui.get_node("menu_item_fullscreen/title")
+	self.fullscreen_text = gui.get_text(self.fullscreen_node)
+	if defos then
+		self.fullscreen_state = defos.is_fullscreen()
+	else
+		self.fullscreen_state = false
+	end
 	self.levelselect_node = gui.get_node("menu_item_levelselect/title")
 	self.levelselect_text = gui.get_text(self.levelselect_node)
 	self.credits_node = gui.get_node("menu_item_credits/title")
+
+	self.button_size = gui.get_size(self.new_game_node)
 
 	self.proxy_url = msg.url("proxy", "/loader", "script")
 
@@ -71,6 +94,14 @@ function init(self)
 	end
 
 	table.insert(self.menu_items, self.new_game_node)
+	if not html5 then
+		update_fullscreen_text(self)
+		table.insert(self.menu_items, self.fullscreen_node)
+	else
+		gui.set_visible(self.fullscreen_node, false)
+		update_menu_position(self, self.levelselect_node)
+		update_menu_position(self, self.credits_node)
+	end
 	table.insert(self.menu_items, self.levelselect_node)
 	table.insert(self.menu_items, self.credits_node)
 
@@ -99,6 +130,10 @@ function on_input(self, action_id, action)
 				msg.post(self.proxy_url, "show_level", { current_level = self.level_selected } )
 			elseif self.active_item == self.new_game_node then
 				msg.post(self.proxy_url, "show_level")
+			elseif self.active_item == self.fullscreen_node then
+				msg.post(self.proxy_url, "toggle_fullscreen")
+				self.fullscreen_state = not self.fullscreen_state
+				update_fullscreen_text(self)
 			elseif self.active_item == self.credits_node then
 				self.state = states.credits
 				update_state(self)
@@ -107,7 +142,7 @@ function on_input(self, action_id, action)
 			self.active_index = math.max(1, self.active_index - 1)
 			update_cursor(self)
 		elseif action_id == hash("down") then
-			self.active_index = math.min(4, self.active_index + 1)
+			self.active_index = math.min(#self.menu_items, self.active_index + 1)
 			update_cursor(self)
 		elseif action_id == hash("left") and self.active_item == self.levelselect_node then
 			self.level_selected = math.max(1, self.level_selected - 1)

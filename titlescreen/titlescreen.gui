@@ -163,6 +163,25 @@ nodes {
     y: -394.0
   }
   type: TYPE_TEMPLATE
+  id: "menu_item_fullscreen"
+  parent: "menu"
+  inherit_alpha: true
+  template: "/titlescreen/menu_item.gui"
+}
+nodes {
+  type: TYPE_TEXT
+  text: "FULLSCREEN: "
+  id: "menu_item_fullscreen/title"
+  parent: "menu_item_fullscreen"
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  position {
+    x: -140.0
+    y: -433.0
+  }
+  type: TYPE_TEMPLATE
   id: "menu_item_levelselect"
   parent: "menu"
   inherit_alpha: true
@@ -179,7 +198,7 @@ nodes {
 nodes {
   position {
     x: -140.0
-    y: -435.0
+    y: -474.0
   }
   type: TYPE_TEMPLATE
   id: "menu_item_credits"
