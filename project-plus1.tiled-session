@@ -3,12 +3,15 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "tiled/level19.tmx",
+    "activeFile": "tiled/level1.tmx",
     "expandedProjectPaths": [
-        ".",
-        "tiled"
+        "tiled",
+        "."
     ],
     "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
         "level2.tmx": {
             "scale": 3.503125,
             "selectedLayer": 2,
@@ -21,9 +24,13 @@
             "scale": 2,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 80,
-                "y": 79.5
+                "x": 39,
+                "y": 68.5
             }
+        },
+        "tiled/level1.tmx#tiles": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "tiled/level10.tmx": {
             "scale": 2,
@@ -115,7 +122,7 @@
         },
         "tiled/level20.tmx": {
             "scale": 4.7440625,
-            "selectedLayer": 2,
+            "selectedLayer": 0,
             "viewCenter": {
                 "x": 80.10012515644556,
                 "y": 80.10012515644556
@@ -191,7 +198,9 @@
         }
     },
     "last.exportedFilePath": "/home/paul/Documents/Projects/Perfect +1/game/levels",
+    "last.externalTilesetPath": "/home/paul/Documents/Projects/Perfect +1/tiled",
     "last.imagePath": "/home/paul/Documents/Projects/Perfect +1/game",
+    "lastUsedTilesetExportFilter": "Lua files (*.lua)",
     "map.height": 10,
     "map.lastUsedExportFilter": "Lua files (*.lua)",
     "map.lastUsedFormat": "tmx",
@@ -201,41 +210,25 @@
     "map.width": 10,
     "openFiles": [
         "tiled/level1.tmx",
-        "tiled/level10.tmx",
-        "tiled/level11.tmx",
-        "tiled/level12.tmx",
-        "tiled/level13.tmx",
-        "tiled/level14.tmx",
-        "tiled/level15.tmx",
-        "tiled/level2.tmx",
-        "tiled/level3.tmx",
-        "tiled/level4.tmx",
-        "tiled/level5.tmx",
-        "tiled/level6.tmx",
-        "tiled/level7.tmx",
-        "tiled/level8.tmx",
-        "tiled/level9.tmx",
-        "tiled/level16.tmx",
-        "tiled/level17.tmx",
-        "tiled/level18.tmx",
-        "tiled/level19.tmx"
+        "tiled/tiles.tsx"
     ],
     "project": "project-plus1.tiled-project",
-    "property.type": "int",
+    "property.type": "string",
     "recentFiles": [
+        "tiled/tiles.tsx",
         "tiled/level1.tmx",
         "tiled/level10.tmx",
-        "tiled/level11.tmx",
-        "tiled/level12.tmx",
-        "tiled/level13.tmx",
-        "tiled/level14.tmx",
-        "tiled/level15.tmx",
-        "tiled/level2.tmx",
-        "tiled/level3.tmx",
-        "tiled/level4.tmx",
-        "tiled/level5.tmx",
+        "tiled/level20.tmx",
+        "tiled/level19.tmx",
+        "tiled/level18.tmx",
+        "tiled/level17.tmx",
+        "tiled/level16.tmx",
+        "tiled/level9.tmx",
+        "tiled/level8.tmx",
+        "tiled/level7.tmx",
         "tiled/level6.tmx"
     ],
+    "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
         "height": 16,

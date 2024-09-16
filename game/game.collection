@@ -152,3 +152,37 @@ embedded_instances {
   "}\n"
   ""
 }
+embedded_instances {
+  id: "cursor"
+  data: "embedded_components {\n"
+  "  id: \"sprite\"\n"
+  "  type: \"sprite\"\n"
+  "  data: \"default_animation: \\\"select\\\"\\n"
+  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
+  "textures {\\n"
+  "  sampler: \\\"texture_sampler\\\"\\n"
+  "  texture: \\\"/game/objects.atlas\\\"\\n"
+  "}\\n"
+  "\"\n"
+  "}\n"
+  ""
+}
+embedded_instances {
+  id: "camera"
+  data: "embedded_components {\n"
+  "  id: \"camera\"\n"
+  "  type: \"camera\"\n"
+  "  data: \"aspect_ratio: 1.78\\n"
+  "fov: 0.7854\\n"
+  "near_z: -1.0\\n"
+  "far_z: 1.0\\n"
+  "orthographic_projection: 1\\n"
+  "orthographic_zoom: 3.0\\n"
+  "\"\n"
+  "}\n"
+  ""
+  position {
+    x: 640.0
+    y: 360.0
+  }
+}

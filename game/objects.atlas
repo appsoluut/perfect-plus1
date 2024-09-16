@@ -1,4 +1,12 @@
-images {
-  image: "/game/select.png"
+animations {
+  id: "select"
+  images {
+    image: "/game/select_anim1.png"
+  }
+  images {
+    image: "/game/select_anim2.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 2
 }
 extrude_borders: 2

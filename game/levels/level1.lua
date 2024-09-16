@@ -9,8 +9,8 @@ return {
   height = 10,
   tilewidth = 16,
   tileheight = 16,
-  nextlayerid = 4,
-  nextobjectid = 1,
+  nextlayerid = 5,
+  nextobjectid = 4,
   properties = {
     ["moves"] = 4,
     ["name"] = "U-TURN"

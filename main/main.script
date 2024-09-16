@@ -10,7 +10,7 @@ local toggle_fullscreen = hash("toggle_fullscreen")
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
-	msg.post("#", screens.show_splashscreen)
+	msg.post("#", screens.show_level)
 	defsave.set_appname("perfect_1")
 	defsave.use_serialize = true
 	defsave.load("settings")

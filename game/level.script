@@ -2,7 +2,6 @@ go.property("current_level", 1)
 go.property("max_levels", 20)
 
 local tile_size = 16
-local zoom = 4
 
 local defsave = require "defsave.defsave"
 local lume = require "libraries.lume"
@@ -12,6 +11,7 @@ local acceleration = 4
 local max_movement_speed = 16
 
 local tile_empty = 0
+local tile_invisible = 1
 local tile_wall = 2
 local tile_floor = 3
 local tile_exit = 4
@@ -67,6 +67,20 @@ local function spawn_special_tile(self, tile, x, y)
 	end
 end
 
+local function load_tileset(self)
+	local data = sys.load_resource("/game/levels/tileset.lua")
+	if data ~= nil then
+		local tileset = assert(loadstring(data))()
+		for _, tile in pairs(tileset.tiles) do
+			if tile.properties.type == "spawn" then
+				tile_player_start = tile.id + 1
+			end
+		end
+	else
+		print("[ERROR] Tileset data not found or corrupt?")
+	end
+end
+
 local function load_tilemap(self)
 	local data = sys.load_resource("/game/levels/level" .. self.current_level .. ".lua")
 	if data ~= nil then
@@ -75,7 +89,7 @@ local function load_tilemap(self)
 		self.level_name = level_data.properties.name
 		self.teleporters = { green = {}, purple = {} }
 		msg.post(msg.url(nil, "gui", "level"), hash("update_required"), { required = self.required_moves })
-		msg.post(msg.url(nil, "gui", "level"), hash("update_levelname"), { level_name = self.level_name })
+		msg.post(msg.url(nil, "gui", "level"), hash("update_levelname"), { level = self.current_level, level_name = self.level_name })
 		for _, layer in ipairs(level_data.layers) do
 			for y = 1, layer.height do
 				for x = 1, layer.width do
@@ -99,8 +113,6 @@ local function init_tilemap_position(self)
 	self.tilemap_position.x = (self.width / 2) - (self.tilemap_width * tile_size) / 2
 	self.tilemap_position.y = self.height / 2 - (self.tilemap_height * tile_size) / 2
 
-	pprint(self.tilemap_position)
-
 	go.set(self.tilemap_url, "position", self.tilemap_position)
 end
 
@@ -108,6 +120,7 @@ local function init_tilemap_data(self)
 	self.tilemap_data = tilemap.get_tiles(self.tilemap_level_url, "walls")
 	self.exit_tile_position = { x = 0, y = 0 }
 	self.player_start_tile_position = { x = 0, y = 0 }
+	self.tilemap_floor = tilemap.get_tiles(self.tilemap_level_url, "floor")
 	self.tilemap_items = tilemap.get_tiles(self.tilemap_level_url, "items")
 	for row = 1, #self.tilemap_items do
 		for col = 1, #self.tilemap_items[row] do
@@ -199,24 +212,50 @@ local function play_lost_animation(self)
 	end)
 end
 
+local function on_window_event(self, event, data)
+	if event == window.WINDOW_EVENT_RESIZED then
+		self.window_width = data.width
+		self.window_height = data.height
+	end
+end
+
+local function show_cursor(self, show)
+	if self.cursor_enabled ~= nil and show == self.cursor_enabled then return end
+
+	self.cursor_enabled = show
+	if self.cursor_enabled then
+		msg.post(self.cursor_url, "enable")
+	else
+		msg.post(self.cursor_url, "disable")
+	end
+end
+
 function init(self)
-	msg.post("@render:", "use_fixed_projection", { near = -1, far = 1, zoom = zoom })
+	msg.post("/camera#camera", "enable")
+	msg.post("@render:", "use_camera_projection")
 
 	local data = monarch.data("level")
 	if data ~= nil and data.current_level then
 		self.current_level = data.current_level
 	end
 
+	self.window_width, self.window_height = window.get_size()
+
 	self.width = sys.get_config_int("display.width")
 	self.height = sys.get_config_int("display.height")
 
+	self.cursor_url = msg.url(nil, "cursor", nil)
 	self.tilemap_url = msg.url(nil, "level", nil)
 	self.tilemap_level_url = msg.url(nil, "level", "tilemap")
 	self.player_url = msg.url(nil, "player", nil)
 	self.player_sprite_url = msg.url(nil, "player", "sprite")
 	self.player_size = go.get(self.player_sprite_url, "size")
 
+	window.set_listener(on_window_event)
+
+	show_cursor(self, false)
 	animate_background()
+	load_tileset(self)
 	load_level(self)
 
 	msg.post(".", "acquire_input_focus")
@@ -312,12 +351,14 @@ local function play_collision_animation(self)
 	end
 end
 
-local function check_collision_wall(self, x, y)
-	if self.tilemap_data[y][x] ~= tile_empty then
+local function check_collision_wall(self, x, y, check_oneway)
+	if self.tilemap_data[y] ~= nil and self.tilemap_data[y][x] ~= tile_empty then
 		return true
 	end
-	
-	local item = self.tilemap_items[y][x]
+
+	if self.tilemap_items[y] == nil then return true end
+
+	local item = self.tilemap_items[y][x] or tile_empty
 	local walls = {
 		[tile_oneway_up] = true,
 		[tile_oneway_down] = true,
@@ -325,14 +366,16 @@ local function check_collision_wall(self, x, y)
 		[tile_oneway_right] = true
 	}
 
-	if self.movement.x == 1 then
-		walls[tile_oneway_right] = false
-	elseif self.movement.x == -1 then
-		walls[tile_oneway_left] = false
-	elseif self.movement.y == 1 then
-		walls[tile_oneway_up] = false
-	elseif self.movement.y == -1 then
-		walls[tile_oneway_down] = false
+	if self.movement then
+		if self.movement.x == 1 then
+			walls[tile_oneway_right] = false
+		elseif self.movement.x == -1 then
+			walls[tile_oneway_left] = false
+		elseif self.movement.y == 1 then
+			walls[tile_oneway_up] = false
+		elseif self.movement.y == -1 then
+			walls[tile_oneway_down] = false
+		end
 	end
 
 	return walls[item] or false
@@ -374,41 +417,108 @@ function update(self, dt)
 	end
 end
 
+-- function to convert screen (mouse/touch) coordinates to
+-- world coordinates given a camera component
+-- this function will use the camera view and projection to
+-- translate the screen coordinates into world coordinates
+local function screen_to_world(self, x, y, z, camera)
+	local projection = go.get(camera, "projection")
+	local view = go.get(camera, "view")
+	local w = self.window_width / (self.window_width / self.width)
+	local h = self.window_height / (self.window_height / self.height)
+
+	-- https://defold.com/manuals/camera/#converting-mouse-to-world-coordinates
+	local inv = vmath.inv(projection * view)
+	x = (2 * x / w) - 1
+	y = (2 * y / h) - 1
+	z = (2 * z) - 1
+	local x1 = x * inv.m00 + y * inv.m01 + z * inv.m02 + inv.m03
+	local y1 = x * inv.m10 + y * inv.m11 + z * inv.m12 + inv.m13
+	return vmath.vector3(x1, y1, z)
+end
+
+local function is_floor(self, x, y)
+	return self.tilemap_floor[y][x] ~= tile_empty and self.tilemap_floor[y][x] ~= tile_invisible
+end
+
+local function move_up(self)
+	self.movement = vmath.vector3(0, 1, 0)
+	if not check_collision_wall(self, self.player_tile_position.x, self.player_tile_position.y + 1) then
+		sprite.play_flipbook(self.player_sprite_url, "move_up")
+	else
+		self.movement = nil
+	end
+end
+
+local function move_down(self)
+	self.movement = vmath.vector3(0, -1, 0)
+	if not check_collision_wall(self, self.player_tile_position.x, self.player_tile_position.y - 1) then
+		sprite.play_flipbook(self.player_sprite_url, "move_down")
+	else
+		self.movement = nil
+	end
+end
+
+local function move_left(self)
+	self.movement = vmath.vector3(-1, 0, 0)
+	if not check_collision_wall(self, self.player_tile_position.x - 1, self.player_tile_position.y) then
+		sprite.play_flipbook(self.player_sprite_url, "move_left")
+	else
+		self.movement = nil
+	end
+end
+
+local function move_right(self)
+	self.movement = vmath.vector3(1, 0, 0)
+	if not check_collision_wall(self, self.player_tile_position.x + 1, self.player_tile_position.y) then
+		sprite.play_flipbook(self.player_sprite_url, "move_right")
+	else
+		self.movement = nil
+	end
+end
+
 function on_input(self, action_id, action)
+	if action_id == nil or action_id == hash("touch") and action.x and action.y then
+		show_cursor(self, true)
+		local position = screen_to_world(self, action.x, action.y, 1, msg.url(nil, "/camera", "camera"))
+		local px = math.floor((position.x - self.tilemap_position.x) / tile_size) + 1
+		local py = math.floor((position.y - self.tilemap_position.y) / tile_size) + 1
+
+		if not check_collision_wall(self, px, py, false) and is_floor(self, px, py) then
+			position.x = self.tilemap_position.x + (tile_size * px - tile_size / 2)
+			position.y = self.tilemap_position.y + (tile_size * py - tile_size / 2)
+			go.set_position(position, self.cursor_url)
+		end
+
+		if action_id == hash("touch") then
+			if px == self.player_tile_position.x and py ~= self.player_tile_position.y or px ~= self.player_tile_position.x and py == self.player_tile_position.y then
+				if px < self.player_tile_position.x then
+					move_left(self)
+				elseif px > self.player_tile_position.x then
+					move_right(self)
+				elseif py < self.player_tile_position.y then
+					move_down(self)
+				elseif py > self.player_tile_position.y then
+					move_up(self)
+				end
+			end
+		end
+
+		return
+	else
+		show_cursor(self, false)
+	end
+	
 	if self.movement ~= nil or self.teleporting ~= nil or self.resetting ~= nil then return end
 
 	if action_id == hash("left") and action.pressed then
-		self.movement = vmath.vector3(-1, 0, 0)
-		if not check_collision_wall(self, self.player_tile_position.x - 1, self.player_tile_position.y) then
-			sprite.play_flipbook(self.player_sprite_url, "move_left")
-		else
-			self.movement = nil
-		end
+		move_left(self)
 	elseif action_id == hash("right") and action.pressed then
-		self.movement = vmath.vector3(1, 0, 0)
-		if not check_collision_wall(self, self.player_tile_position.x + 1, self.player_tile_position.y) then
-			sprite.play_flipbook(self.player_sprite_url, "move_right")
-		else
-			self.movement = nil
-		end
+		move_right(self)
 	elseif action_id == hash("up") and action.pressed then
-		self.movement = vmath.vector3(0, 1, 0)
-		if not check_collision_wall(self, self.player_tile_position.x, self.player_tile_position.y + 1) then
-			sprite.play_flipbook(self.player_sprite_url, "move_up")
-		else
-			self.movement = nil
-		end
+		move_up(self)
 	elseif action_id == hash("down") and action.pressed then
-		self.movement = vmath.vector3(0, -1, 0)
-		if not check_collision_wall(self, self.player_tile_position.x, self.player_tile_position.y - 1) then
-			sprite.play_flipbook(self.player_sprite_url, "move_down")
-		else
-			self.movement = nil
-		end
-	elseif action_id == hash("raw") then
-		pprint(action.gamepad_buttons)
-		pprint(action.gamepad_axis)
-		pprint(action.gamepad_hats)
+		move_down(self)
 	elseif action_id == hash("key_r") and action.pressed then
 		reset_level(self)
 	elseif action_id == hash("back") and action.released then
