@@ -6,6 +6,7 @@ local tile_size = 16
 local defsave = require "defsave.defsave"
 local lume = require "libraries.lume"
 local monarch = require "monarch.monarch"
+local gesture = require "in.gesture"
 
 local acceleration = 4
 local max_movement_speed = 16
@@ -144,8 +145,6 @@ local function init_tilemap_position(self)
 	self.tilemap_position = go.get(self.tilemap_url, "position")
 
 	self.tilemap_x, self.tilemap_y, self.tilemap_width, self.tilemap_height = tilemap.get_bounds(self.tilemap_level_url)
-
-	print("tilemap width: " .. self.tilemap_width .. " -- tilemap height: " .. self.tilemap_height)
 
 	self.tilemap_position.x = (self.width / 2) - (self.tilemap_width * tile_size) / 2
 	self.tilemap_position.y = self.height / 2 - (self.tilemap_height * tile_size) / 2
@@ -545,6 +544,19 @@ function on_input(self, action_id, action)
 					move_down(self)
 				elseif py > self.player_tile_position.y then
 					move_up(self)
+				end
+			else
+				local g = gesture.on_input(self, action_id, action)
+				if g then
+					if g.swipe_right then
+						move_right(self)
+					elseif g.swipe_left then
+						move_left(self)
+					elseif g.swipe_up then
+						move_up(self)
+					elseif g.swipe_down then
+						move_down(self)
+					end
 				end
 			end
 		end

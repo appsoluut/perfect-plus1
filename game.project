@@ -13,7 +13,7 @@ display_device_info = 0
 
 [android]
 input_method = HiddenInputField
-package = eu.qhgames.perfect-plus1
+package = eu.qhgames.perfectplus1
 
 [project]
 title = Perfect+1
@@ -23,6 +23,7 @@ custom_resources = /game/levels/
 dependencies#0 = https://github.com/britzl/monarch/archive/refs/tags/5.1.1.zip
 dependencies#1 = https://github.com/subsoap/defsave/archive/refs/tags/v1.2.6.zip
 dependencies#2 = https://github.com/subsoap/defos/archive/refs/tags/v2.7.1.zip
+dependencies#3 = https://github.com/britzl/defold-input/archive/refs/tags/4.6.2.zip
 
 [graphics]
 default_texture_min_filter = nearest
