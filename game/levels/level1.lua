@@ -13,7 +13,7 @@ return {
   nextobjectid = 1,
   properties = {
     ["moves"] = 4,
-    ["name"] = "U-TURN"
+    ["name"] = "EASY AS 1-2-3-4"
   },
   tilesets = {
     {

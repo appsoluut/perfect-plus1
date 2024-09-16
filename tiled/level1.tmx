@@ -5,7 +5,7 @@
  </editorsettings>
  <properties>
   <property name="moves" type="int" value="4"/>
-  <property name="name" value="U-TURN"/>
+  <property name="name" value="EASY AS 1-2-3-4"/>
  </properties>
  <tileset firstgid="1" source="tiles.tsx"/>
  <layer id="1" name="floor" width="12" height="12">
