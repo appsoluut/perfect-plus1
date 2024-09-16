@@ -20,12 +20,15 @@
                 "y": 79.92863514719
             }
         },
+        "tiled/Perfect+1.tsx": {
+            "scaleInDock": 1
+        },
         "tiled/level1.tmx": {
             "scale": 2,
             "selectedLayer": 2,
             "viewCenter": {
                 "x": 39,
-                "y": 68.5
+                "y": 141.5
             }
         },
         "tiled/level1.tmx#tiles": {
@@ -117,7 +120,7 @@
             "selectedLayer": 2,
             "viewCenter": {
                 "x": 79.92863514719,
-                "y": 79.92863514719001
+                "y": 121.6057091882248
             }
         },
         "tiled/level20.tmx": {
@@ -215,8 +218,10 @@
     "project": "project-plus1.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "tiled/tiles.tsx",
         "tiled/level1.tmx",
+        "tiled/level2.tmx",
+        "tiled/tiles.tsx",
+        "tiled/level3.tmx",
         "tiled/level10.tmx",
         "tiled/level20.tmx",
         "tiled/level19.tmx",
@@ -224,9 +229,7 @@
         "tiled/level17.tmx",
         "tiled/level16.tmx",
         "tiled/level9.tmx",
-        "tiled/level8.tmx",
-        "tiled/level7.tmx",
-        "tiled/level6.tmx"
+        "tiled/level8.tmx"
     ],
     "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",

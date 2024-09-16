@@ -150,6 +150,18 @@ embedded_instances {
   "  data: \"prototype: \\\"/game/special/teleporter_purple_tile.go\\\"\\n"
   "\"\n"
   "}\n"
+  "embedded_components {\n"
+  "  id: \"teleporter_red\"\n"
+  "  type: \"factory\"\n"
+  "  data: \"prototype: \\\"/game/special/teleporter_red_tile.go\\\"\\n"
+  "\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"teleporter_pink\"\n"
+  "  type: \"factory\"\n"
+  "  data: \"prototype: \\\"/game/special/teleporter_pink_tile.go\\\"\\n"
+  "\"\n"
+  "}\n"
   ""
 }
 embedded_instances {

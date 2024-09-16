@@ -2,16 +2,16 @@ return {
   version = "1.10",
   luaversion = "5.1",
   tiledversion = "1.11.0",
-  name = "tiles",
+  name = "Perfect+1",
   class = "",
   tilewidth = 16,
   tileheight = 16,
   spacing = 0,
   margin = 0,
-  columns = 5,
+  columns = 10,
   image = "../tiles.png",
-  imagewidth = 80,
-  imageheight = 144,
+  imagewidth = 160,
+  imageheight = 96,
   objectalignment = "unspecified",
   tilerendersize = "tile",
   fillmode = "stretch",
@@ -26,12 +26,74 @@ return {
   },
   properties = {},
   wangsets = {},
-  tilecount = 45,
+  tilecount = 60,
   tiles = {
+    {
+      id = 0,
+      properties = {
+        ["type"] = "exit"
+      }
+    },
+    {
+      id = 1,
+      properties = {
+        ["type"] = "spawn"
+      }
+    },
+    {
+      id = 2,
+      properties = {
+        ["position"] = "left",
+        ["type"] = "oneway"
+      }
+    },
+    {
+      id = 3,
+      properties = {
+        ["position"] = "right",
+        ["type"] = "oneway"
+      }
+    },
     {
       id = 4,
       properties = {
-        ["type"] = "spawn"
+        ["position"] = "up",
+        ["type"] = "oneway"
+      }
+    },
+    {
+      id = 5,
+      properties = {
+        ["position"] = "down",
+        ["type"] = "oneway"
+      }
+    },
+    {
+      id = 6,
+      properties = {
+        ["color"] = "green",
+        ["type"] = "teleporter"
+      }
+    },
+    {
+      id = 7,
+      properties = {
+        ["color"] = "pink",
+        ["type"] = "teleporter"
+      }
+    },
+    {
+      id = 8,
+      properties = {
+        ["color"] = "red",
+        ["type"] = "teleporter"
+      }
+    },
+    {
+      id = 9,
+      properties = {
+        ["color"] = "purple",
+        ["type"] = "teleporter"
       }
     }
   }

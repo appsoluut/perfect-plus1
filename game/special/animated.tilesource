@@ -16,9 +16,23 @@ animations {
   fps: 3
 }
 animations {
-  id: "teleporter_purple"
+  id: "teleporter_pink"
   start_tile: 9
   end_tile: 12
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 3
+}
+animations {
+  id: "teleporter_purple"
+  start_tile: 17
+  end_tile: 20
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 3
+}
+animations {
+  id: "teleporter_red"
+  start_tile: 13
+  end_tile: 16
   playback: PLAYBACK_LOOP_FORWARD
   fps: 3
 }

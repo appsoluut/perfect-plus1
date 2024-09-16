@@ -22,6 +22,8 @@ local tile_oneway_up = 8
 local tile_oneway_down = 9
 local tile_teleporter_green = 10
 local tile_teleporter_purple = 11
+local tile_teleporter_pink = 12
+local tile_teleporter_red = 13
 
 local idle_animations = {
 	[hash("idle")] = 4,
@@ -55,6 +57,12 @@ local function spawn_special_tile(self, tile, x, y)
 	elseif tile == tile_teleporter_purple then
 		spawn = "teleporter_purple"
 		table.insert(self.teleporters.purple, { x = x, y = y })
+	elseif tile == tile_teleporter_pink then
+		spawn = "teleporter_pink"
+		table.insert(self.teleporters.pink, { x = x, y = y })
+	elseif tile == tile_teleporter_red then
+		spawn = "teleporter_red"
+		table.insert(self.teleporters.red, { x = x, y = y })
 	end
 
 	if spawn then
@@ -74,6 +82,28 @@ local function load_tileset(self)
 		for _, tile in pairs(tileset.tiles) do
 			if tile.properties.type == "spawn" then
 				tile_player_start = tile.id + 1
+			elseif tile.properties.type == "exit" then
+				tile_exit = tile.id + 1
+			elseif tile.properties.type == "oneway" then
+				if tile.properties.position == "left" then
+					tile_oneway_left = tile.id + 1
+				elseif tile.properties.position == "right" then
+					tile_oneway_right = tile.id + 1
+				elseif tile.properties.position == "up" then
+					tile_oneway_up = tile.id + 1
+				elseif tile.properties.position == "down" then
+					tile_oneway_down = tile.id + 1
+				end
+			elseif tile.properties.type == "teleporter" then
+				if tile.properties.color == "green" then
+					tile_teleporter_green = tile.id + 1
+				elseif tile.properties.color == "pink" then
+					tile_teleporter_pink = tile.id + 1
+				elseif tile.properties.color == "red" then
+					tile_teleporter_red = tile.id + 1
+				elseif tile.properties.color == "purple" then
+					tile_teleporter_purple = tile.id + 1
+				end
 			end
 		end
 	else
@@ -87,7 +117,12 @@ local function load_tilemap(self)
 		local level_data = assert(loadstring(data))()
 		self.required_moves = level_data.properties.moves
 		self.level_name = level_data.properties.name
-		self.teleporters = { green = {}, purple = {} }
+		self.teleporters = {
+			green = {},
+			purple = {},
+			pink = {},
+			red = {}
+		}
 		msg.post(msg.url(nil, "gui", "level"), hash("update_required"), { required = self.required_moves })
 		msg.post(msg.url(nil, "gui", "level"), hash("update_levelname"), { level = self.current_level, level_name = self.level_name })
 		for _, layer in ipairs(level_data.layers) do
@@ -109,6 +144,8 @@ local function init_tilemap_position(self)
 	self.tilemap_position = go.get(self.tilemap_url, "position")
 
 	self.tilemap_x, self.tilemap_y, self.tilemap_width, self.tilemap_height = tilemap.get_bounds(self.tilemap_level_url)
+
+	print("tilemap width: " .. self.tilemap_width .. " -- tilemap height: " .. self.tilemap_height)
 
 	self.tilemap_position.x = (self.width / 2) - (self.tilemap_width * tile_size) / 2
 	self.tilemap_position.y = self.height / 2 - (self.tilemap_height * tile_size) / 2
@@ -266,13 +303,21 @@ function final(self)
 end
 
 local function check_teleport(self, tile)
-	if tile ~= tile_teleporter_green and tile ~= tile_teleporter_purple then
+	if tile ~= tile_teleporter_green
+	and tile ~= tile_teleporter_purple
+	and tile ~= tile_teleporter_pink
+	and tile ~= tile_teleporter_red
+	then
 		return false
 	end
 
 	local lookup = self.teleporters.green
 	if tile == tile_teleporter_purple then
 		lookup = self.teleporters.purple
+	elseif tile == tile_teleporter_red then
+		lookup = self.teleporters.red
+	elseif tile == tile_teleporter_pink then
+		lookup = self.teleporters.pink
 	end	
 
 	local teleport_to = nil
