@@ -101,6 +101,12 @@ return {
       properties = {
         ["type"] = "glue"
       }
+    },
+    {
+      id = 11,
+      properties = {
+        ["type"] = "trapdoor"
+      }
     }
   }
 }

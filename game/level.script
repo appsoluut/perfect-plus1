@@ -26,6 +26,7 @@ local tile_teleporter_purple = 11
 local tile_teleporter_pink = 12
 local tile_teleporter_red = 13
 local tile_glue = 14
+local tile_trapdoor = 15
 
 local idle_animations = {
 	[hash("idle")] = 4,
@@ -34,6 +35,12 @@ local idle_animations = {
 	[hash("idle_up")] = 4,
 	[hash("idle_down")] = 4,
 	[hash("blink")] = 2
+}
+
+local stop_reason = {
+	glue = 1,
+	trapdoor = 2,
+	none = 0
 }
 
 local function animate_background()
@@ -65,6 +72,8 @@ local function spawn_special_tile(self, tile, x, y)
 	elseif tile == tile_teleporter_red then
 		spawn = "teleporter_red"
 		table.insert(self.teleporters.red, { x = x, y = y })
+	elseif tile == tile_trapdoor then
+		spawn = "trapdoor"
 	end
 
 	if spawn then
@@ -74,6 +83,9 @@ local function spawn_special_tile(self, tile, x, y)
 
 		local id = factory.create(msg.url(nil, "special", spawn), position)
 		table.insert(self.special_tiles, id)
+		if tile == tile_trapdoor then
+			table.insert(self.trapdoor_tiles, { x = x, y = y, id = id })
+		end
 	end
 end
 
@@ -88,6 +100,8 @@ local function load_tileset(self)
 				tile_exit = tile.id + 1
 			elseif tile.properties.type == "glue" then
 				tile_glue = tile.id + 1
+			elseif tile.properties.type == "trapdoor" then
+				tile_trapdoor = tile.id + 1
 			elseif tile.properties.type == "oneway" then
 				if tile.properties.position == "left" then
 					tile_oneway_left = tile.id + 1
@@ -170,7 +184,10 @@ local function init_tilemap_data(self)
 				self.player_start_tile_position.x = col
 				self.player_start_tile_position.y = row
 			elseif self.tilemap_items[row][col] == tile_teleporter_green
-			or self.tilemap_items[row][col] == tile_teleporter_purple then
+			or self.tilemap_items[row][col] == tile_teleporter_red
+			or self.tilemap_items[row][col] == tile_teleporter_pink
+			or self.tilemap_items[row][col] == tile_teleporter_purple
+			or self.tilemap_items[row][col] == tile_trapdoor then
 				spawn_special_tile(self, self.tilemap_items[row][col], col, row)
 			end
 
@@ -180,6 +197,10 @@ local function init_tilemap_data(self)
 			and self.tilemap_items[row][col] ~= tile_oneway_up
 			and self.tilemap_items[row][col] ~= tile_glue then
 				tilemap.set_tile(self.tilemap_level_url, "items", col, row, tile_empty)
+			end
+
+			if self.tilemap_items[row][col] == tile_trapdoor then
+				tilemap.set_tile(self.tilemap_level_url, "floor", col, row, tile_empty)
 			end
 		end
 	end
@@ -214,6 +235,7 @@ local function load_level(self)
 		self.special_tiles = {}
 	end
 	self.special_tiles = {}
+	self.trapdoor_tiles = {}
 
 	msg.post(msg.url(nil, "gui", "level"), hash("update_moves"), { moves = self.moves })
 
@@ -232,6 +254,15 @@ local function reset_level(self)
 	self.teleporting = nil
 	msg.post(msg.url(nil, "gui", "level"), hash("update_moves"), { moves = self.moves })
 
+	if self.trapdoor_tiles then
+		for _, trapdoor in pairs(self.trapdoor_tiles) do
+			local trapdoor_url = msg.url(nil, trapdoor.id, "sprite")
+			go.set(trapdoor_url, "cursor", 0.0)
+			go.set(trapdoor_url, "playback_rate", 0.0)
+			trapdoor.is_open = false
+		end
+	end
+
 	self.player_position.x = self.tilemap_position.x + (tile_size * self.player_start_tile_position.x - tile_size / 2)
 	self.player_position.y = self.tilemap_position.y + (tile_size * self.player_start_tile_position.y - tile_size / 2)
 	self.player_tile_position = {
@@ -243,10 +274,10 @@ local function reset_level(self)
 	play_idle_animation(self)
 end
 
-local function play_lost_animation(self)
+local function play_lost_animation(self, animation_to_play)
 	sound.play(msg.url(nil, "sound", "fail"))
 	self.resetting = true
-	sprite.play_flipbook(self.player_sprite_url, "lose", function(self)
+	sprite.play_flipbook(self.player_sprite_url, animation_to_play or "lose", function(self)
 		self.resetting = nil
 		reset_level(self)
 	end)
@@ -429,6 +460,9 @@ local function check_collision_wall(self, x, y, check_oneway)
 	return walls[item] or false
 end
 
+local function is_floor(self, x, y)
+	return self.tilemap_floor[y][x] ~= tile_empty and self.tilemap_floor[y][x] ~= tile_invisible
+end
 
 local function is_glue(self, x, y)
 	if not self.glue and self.tilemap_items[y][x] == tile_glue then
@@ -436,15 +470,33 @@ local function is_glue(self, x, y)
 	end
 end
 
-local function is_floor(self, x, y)
-	return self.tilemap_floor[y][x] ~= tile_empty and self.tilemap_floor[y][x] ~= tile_invisible
+local function is_trapdoor(self, x, y)
+	if self.tilemap_items[y][x] == tile_trapdoor then
+		for _, trapdoor in pairs(self.trapdoor_tiles) do
+			if trapdoor.x == x and trapdoor.y == y then
+				if not trapdoor.is_open then
+					local trapdoor_url = msg.url(nil, trapdoor.id, "sprite")
+					go.set(trapdoor_url, "playback_rate", 1.0)
+					sprite.play_flipbook(trapdoor_url, "trapdoor")
+					trapdoor.is_open = true
+					self.trapdoor = { x = x, y = y, id = trapdoor.id }
+				elseif not self.trapdoor then
+					self.trapdoor = { x = x, y = y }
+				end
+				break
+			end
+		end
+	end
 end
 
 local function stop_player(self, x, y)
-	if self.glue ~= nil and (self.glue.x ~= x or self.glue.y ~= y) then
-		return true
+	if (self.glue ~= nil and (self.glue.x ~= x or self.glue.y ~= y)) then
+		return stop_reason.glue
+	elseif (self.trapdoor ~= nil and not self.trapdoor.id and (self.trapdoor.x ~= x or self.trapdoor.y ~= y)) then
+		return stop_reason.trapdoor
+	else
+		return stop_reason.none
 	end
-	return false
 end
 
 local function check_bounds(self, player_position)
@@ -452,21 +504,30 @@ local function check_bounds(self, player_position)
 	local py = math.floor((player_position.y + (self.movement.y * tile_size / 2) - self.tilemap_position.y) / tile_size) + 1
 
 	is_glue(self, px, py)
+	is_trapdoor(self, px, py)
+	local should_stop = stop_player(self, px, py)
 
-	if stop_player(self, px, py) or check_collision_wall(self, px, py) then
+	if should_stop ~= stop_reason.none or check_collision_wall(self, px, py) then
 		self.player_tile_position.x = px - self.movement.x
 		self.player_tile_position.y = py - self.movement.y
 		if not check_teleport(self, self.tilemap_items[self.player_tile_position.y][self.player_tile_position.x]) then
-			play_collision_animation(self)
+			if should_stop == stop_reason.trapdoor then
+				play_lost_animation(self, "victory")
+			else
+				play_collision_animation(self)
+			end
 		end
 		player_position.x = self.tilemap_position.x + ((self.player_tile_position.x - 1) * tile_size) + tile_size / 2
 		player_position.y = self.tilemap_position.y + ((self.player_tile_position.y - 1) * tile_size) + tile_size / 2
 		self.glue = nil
+		self.trapdoor = nil
 		self.moves = self.moves + 1
 		self.movement = nil
 		self.speed = 0
 		msg.post(msg.url(nil, "gui", "level"), hash("update_moves"), { moves = self.moves })
-		check_solution(self)
+		if should_stop ~= stop_reason.trapdoor then
+			check_solution(self)
+		end
 	end
 
 	return player_position

@@ -162,6 +162,12 @@ embedded_instances {
   "  data: \"prototype: \\\"/game/special/teleporter_pink_tile.go\\\"\\n"
   "\"\n"
   "}\n"
+  "embedded_components {\n"
+  "  id: \"trapdoor\"\n"
+  "  type: \"factory\"\n"
+  "  data: \"prototype: \\\"/game/special/trapdoor_tile.go\\\"\\n"
+  "\"\n"
+  "}\n"
   ""
 }
 embedded_instances {

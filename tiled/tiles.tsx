@@ -67,4 +67,9 @@
    <property name="type" value="glue"/>
   </properties>
  </tile>
+ <tile id="11">
+  <properties>
+   <property name="type" value="trapdoor"/>
+  </properties>
+ </tile>
 </tileset>
