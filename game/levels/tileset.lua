@@ -11,7 +11,7 @@ return {
   columns = 10,
   image = "../tiles.png",
   imagewidth = 160,
-  imageheight = 96,
+  imageheight = 144,
   objectalignment = "unspecified",
   tilerendersize = "tile",
   fillmode = "stretch",
@@ -26,7 +26,7 @@ return {
   },
   properties = {},
   wangsets = {},
-  tilecount = 60,
+  tilecount = 90,
   tiles = {
     {
       id = 0,
@@ -94,6 +94,12 @@ return {
       properties = {
         ["color"] = "purple",
         ["type"] = "teleporter"
+      }
+    },
+    {
+      id = 10,
+      properties = {
+        ["type"] = "glue"
       }
     }
   }

@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "tiled/level1.tmx",
+    "activeFile": "tiled/level2.tmx",
     "expandedProjectPaths": [
         "tiled",
         "."
@@ -27,8 +27,8 @@
             "scale": 2,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 39,
-                "y": 141.5
+                "x": 96,
+                "y": 95.5
             }
         },
         "tiled/level1.tmx#tiles": {
@@ -149,10 +149,10 @@
         },
         "tiled/level5.tmx": {
             "scale": 4.7440625,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 80.10012515644556,
-                "y": 80.10012515644556
+                "x": 95.90936038469138,
+                "y": 95.90936038469138
             }
         },
         "tiled/level6.tmx": {
@@ -197,7 +197,7 @@
         },
         "tiled/tiles.tsx": {
             "scaleInDock": 1,
-            "scaleInEditor": 1
+            "scaleInEditor": 5.5
         }
     },
     "last.exportedFilePath": "/home/paul/Documents/Projects/Perfect +1/game/levels",
@@ -213,23 +213,28 @@
     "map.width": 10,
     "openFiles": [
         "tiled/level1.tmx",
+        "tiled/level2.tmx",
+        "tiled/level3.tmx",
+        "tiled/level4.tmx",
+        "tiled/level5.tmx",
+        "tiled/level6.tmx",
         "tiled/tiles.tsx"
     ],
     "project": "project-plus1.tiled-project",
     "property.type": "string",
     "recentFiles": [
+        "tiled/level4.tmx",
         "tiled/level1.tmx",
         "tiled/level2.tmx",
-        "tiled/tiles.tsx",
         "tiled/level3.tmx",
+        "tiled/level5.tmx",
+        "tiled/level6.tmx",
+        "tiled/tiles.tsx",
         "tiled/level10.tmx",
         "tiled/level20.tmx",
         "tiled/level19.tmx",
         "tiled/level18.tmx",
-        "tiled/level17.tmx",
-        "tiled/level16.tmx",
-        "tiled/level9.tmx",
-        "tiled/level8.tmx"
+        "tiled/level17.tmx"
     ],
     "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",

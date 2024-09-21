@@ -25,6 +25,7 @@ local tile_teleporter_green = 10
 local tile_teleporter_purple = 11
 local tile_teleporter_pink = 12
 local tile_teleporter_red = 13
+local tile_glue = 14
 
 local idle_animations = {
 	[hash("idle")] = 4,
@@ -85,6 +86,8 @@ local function load_tileset(self)
 				tile_player_start = tile.id + 1
 			elseif tile.properties.type == "exit" then
 				tile_exit = tile.id + 1
+			elseif tile.properties.type == "glue" then
+				tile_glue = tile.id + 1
 			elseif tile.properties.type == "oneway" then
 				if tile.properties.position == "left" then
 					tile_oneway_left = tile.id + 1
@@ -174,7 +177,8 @@ local function init_tilemap_data(self)
 			if self.tilemap_items[row][col] ~= tile_oneway_down
 			and self.tilemap_items[row][col] ~= tile_oneway_left
 			and self.tilemap_items[row][col] ~= tile_oneway_right
-			and self.tilemap_items[row][col] ~= tile_oneway_up then
+			and self.tilemap_items[row][col] ~= tile_oneway_up
+			and self.tilemap_items[row][col] ~= tile_glue then
 				tilemap.set_tile(self.tilemap_level_url, "items", col, row, tile_empty)
 			end
 		end
@@ -425,11 +429,31 @@ local function check_collision_wall(self, x, y, check_oneway)
 	return walls[item] or false
 end
 
+
+local function is_glue(self, x, y)
+	if not self.glue and self.tilemap_items[y][x] == tile_glue then
+		self.glue = { x = x, y = y }
+	end
+end
+
+local function is_floor(self, x, y)
+	return self.tilemap_floor[y][x] ~= tile_empty and self.tilemap_floor[y][x] ~= tile_invisible
+end
+
+local function stop_player(self, x, y)
+	if self.glue ~= nil and (self.glue.x ~= x or self.glue.y ~= y) then
+		return true
+	end
+	return false
+end
+
 local function check_bounds(self, player_position)
 	local px = math.floor((player_position.x + (self.movement.x * tile_size / 2) - self.tilemap_position.x) / tile_size) + 1
 	local py = math.floor((player_position.y + (self.movement.y * tile_size / 2) - self.tilemap_position.y) / tile_size) + 1
 
-	if check_collision_wall(self, px, py) then
+	is_glue(self, px, py)
+
+	if stop_player(self, px, py) or check_collision_wall(self, px, py) then
 		self.player_tile_position.x = px - self.movement.x
 		self.player_tile_position.y = py - self.movement.y
 		if not check_teleport(self, self.tilemap_items[self.player_tile_position.y][self.player_tile_position.x]) then
@@ -437,6 +461,7 @@ local function check_bounds(self, player_position)
 		end
 		player_position.x = self.tilemap_position.x + ((self.player_tile_position.x - 1) * tile_size) + tile_size / 2
 		player_position.y = self.tilemap_position.y + ((self.player_tile_position.y - 1) * tile_size) + tile_size / 2
+		self.glue = nil
 		self.moves = self.moves + 1
 		self.movement = nil
 		self.speed = 0
@@ -479,10 +504,6 @@ local function screen_to_world(self, x, y, z, camera)
 	local x1 = x * inv.m00 + y * inv.m01 + z * inv.m02 + inv.m03
 	local y1 = x * inv.m10 + y * inv.m11 + z * inv.m12 + inv.m13
 	return vmath.vector3(x1, y1, z)
-end
-
-local function is_floor(self, x, y)
-	return self.tilemap_floor[y][x] ~= tile_empty and self.tilemap_floor[y][x] ~= tile_invisible
 end
 
 local function move_up(self)

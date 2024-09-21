@@ -8,7 +8,7 @@ shared_state = 1
 [display]
 width = 1280
 height = 720
-high_dpi = 0
+high_dpi = 1
 display_device_info = 0
 
 [android]
