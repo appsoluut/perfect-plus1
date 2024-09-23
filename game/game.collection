@@ -89,6 +89,13 @@ embedded_instances {
   "group: \\\"sfx\\\"\\n"
   "\"\n"
   "}\n"
+  "embedded_components {\n"
+  "  id: \"pickup_key\"\n"
+  "  type: \"sound\"\n"
+  "  data: \"sound: \\\"/game/key.wav\\\"\\n"
+  "group: \\\"sfx\\\"\\n"
+  "\"\n"
+  "}\n"
   ""
 }
 embedded_instances {

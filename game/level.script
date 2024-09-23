@@ -1,5 +1,5 @@
 go.property("current_level", 1)
-go.property("max_levels", 20)
+go.property("max_levels", 17)
 
 local tile_size = 16
 
@@ -27,6 +27,8 @@ local tile_teleporter_pink = 12
 local tile_teleporter_red = 13
 local tile_glue = 14
 local tile_trapdoor = 15
+local tile_key = 16
+local tile_door = 17
 
 local idle_animations = {
 	[hash("idle")] = 4,
@@ -102,6 +104,10 @@ local function load_tileset(self)
 				tile_glue = tile.id + 1
 			elseif tile.properties.type == "trapdoor" then
 				tile_trapdoor = tile.id + 1
+			elseif tile.properties.type == "key" then
+				tile_key = tile.id + 1
+			elseif tile.properties.type == "door" then
+				tile_door = tile.id + 1
 			elseif tile.properties.type == "oneway" then
 				if tile.properties.position == "left" then
 					tile_oneway_left = tile.id + 1
@@ -175,6 +181,7 @@ local function init_tilemap_data(self)
 	self.player_start_tile_position = { x = 0, y = 0 }
 	self.tilemap_floor = tilemap.get_tiles(self.tilemap_level_url, "floor")
 	self.tilemap_items = tilemap.get_tiles(self.tilemap_level_url, "items")
+	
 	for row = 1, #self.tilemap_items do
 		for col = 1, #self.tilemap_items[row] do
 			if self.tilemap_items[row][col] == tile_exit then
@@ -195,7 +202,9 @@ local function init_tilemap_data(self)
 			and self.tilemap_items[row][col] ~= tile_oneway_left
 			and self.tilemap_items[row][col] ~= tile_oneway_right
 			and self.tilemap_items[row][col] ~= tile_oneway_up
-			and self.tilemap_items[row][col] ~= tile_glue then
+			and self.tilemap_items[row][col] ~= tile_glue
+			and self.tilemap_items[row][col] ~= tile_key
+			and self.tilemap_items[row][col] ~= tile_door then
 				tilemap.set_tile(self.tilemap_level_url, "items", col, row, tile_empty)
 			end
 
@@ -236,6 +245,7 @@ local function load_level(self)
 	end
 	self.special_tiles = {}
 	self.trapdoor_tiles = {}
+	self.inventory = {}
 
 	msg.post(msg.url(nil, "gui", "level"), hash("update_moves"), { moves = self.moves })
 
@@ -253,15 +263,7 @@ local function reset_level(self)
 	self.movement = nil
 	self.teleporting = nil
 	msg.post(msg.url(nil, "gui", "level"), hash("update_moves"), { moves = self.moves })
-
-	if self.trapdoor_tiles then
-		for _, trapdoor in pairs(self.trapdoor_tiles) do
-			local trapdoor_url = msg.url(nil, trapdoor.id, "sprite")
-			go.set(trapdoor_url, "cursor", 0.0)
-			go.set(trapdoor_url, "playback_rate", 0.0)
-			trapdoor.is_open = false
-		end
-	end
+	load_level(self)
 
 	self.player_position.x = self.tilemap_position.x + (tile_size * self.player_start_tile_position.x - tile_size / 2)
 	self.player_position.y = self.tilemap_position.y + (tile_size * self.player_start_tile_position.y - tile_size / 2)
@@ -386,7 +388,7 @@ local function check_teleport(self, tile)
 	return true
 end
 
-local function check_solution(self)
+local function check_solution(self, pickup_sound_played)
 	local solved = false
 	if self.player_tile_position.x == self.exit_tile_position.x and self.player_tile_position.y == self.exit_tile_position.y then
 		solved = true
@@ -408,12 +410,13 @@ local function check_solution(self)
 			return
 		else
 			play_lost_animation(self)
+			return
 		end
 	end
 
 	if (not solved or not self.teleporting) and self.moves >= self.required_moves then
 		play_lost_animation(self)
-	else
+	elseif not pickup_sound_played then
 		sound.play(msg.url(nil, "sound", "impact" .. math.random(1, 5)))
 	end
 end
@@ -430,36 +433,6 @@ local function play_collision_animation(self)
 	end
 end
 
-local function check_collision_wall(self, x, y, check_oneway)
-	if self.tilemap_data[y] ~= nil and self.tilemap_data[y][x] ~= tile_empty then
-		return true
-	end
-
-	if self.tilemap_items[y] == nil then return true end
-
-	local item = self.tilemap_items[y][x] or tile_empty
-	local walls = {
-		[tile_oneway_up] = true,
-		[tile_oneway_down] = true,
-		[tile_oneway_left] = true,
-		[tile_oneway_right] = true
-	}
-
-	if self.movement then
-		if self.movement.x == 1 then
-			walls[tile_oneway_right] = false
-		elseif self.movement.x == -1 then
-			walls[tile_oneway_left] = false
-		elseif self.movement.y == 1 then
-			walls[tile_oneway_up] = false
-		elseif self.movement.y == -1 then
-			walls[tile_oneway_down] = false
-		end
-	end
-
-	return walls[item] or false
-end
-
 local function is_floor(self, x, y)
 	return self.tilemap_floor[y][x] ~= tile_empty and self.tilemap_floor[y][x] ~= tile_invisible
 end
@@ -468,6 +441,24 @@ local function is_glue(self, x, y)
 	if not self.glue and self.tilemap_items[y][x] == tile_glue then
 		self.glue = { x = x, y = y }
 	end
+end
+
+local function is_door(self, x, y, is_cursor)
+	if not is_cursor and (self.tilemap_items ~= nil and self.tilemap_items[y] ~= nil and self.tilemap_items[y][x] == tile_door) then
+		print("is door!")
+		if self.inventory[tile_key] ~= nil and self.inventory[tile_key] >= 1 then
+			self.tilemap_items[y][x] = tile_empty
+			tilemap.set_tile(self.tilemap_level_url, "items", x, y, tile_empty)
+			self.inventory[tile_key] = self.inventory[tile_key] - 1
+			if self.inventory[tile_key] <= 0 then
+				self.inventory[tile_key] = nil
+			end
+			return false
+		else
+			return true
+		end
+	end
+	return false
 end
 
 local function is_trapdoor(self, x, y)
@@ -499,6 +490,57 @@ local function stop_player(self, x, y)
 	end
 end
 
+local function check_collision_wall(self, x, y, check_oneway)
+	local is_cursor = false
+	if check_oneway ~= nil and check_oneway == false then
+		is_cursor = true
+	end
+	if (self.tilemap_data[y] ~= nil and self.tilemap_data[y][x] ~= tile_empty)
+	or is_door(self, x, y, is_cursor) then
+		return true
+	end
+
+	if self.tilemap_items[y] == nil then return true end
+
+	local item = self.tilemap_items[y][x] or tile_empty
+	local walls = {
+		[tile_oneway_up] = true,
+		[tile_oneway_down] = true,
+		[tile_oneway_left] = true,
+		[tile_oneway_right] = true
+	}
+
+	if self.movement then
+		if self.movement.x == 1 then
+			walls[tile_oneway_right] = false
+		elseif self.movement.x == -1 then
+			walls[tile_oneway_left] = false
+		elseif self.movement.y == 1 then
+			walls[tile_oneway_up] = false
+		elseif self.movement.y == -1 then
+			walls[tile_oneway_down] = false
+		end
+	end
+
+	return walls[item] or false
+end
+
+local function pickup_item(self, x, y)
+	local did_pickup_item = false
+	if self.tilemap_items[y][x] == tile_key then
+		if self.inventory[self.tilemap_items[y][x]] then
+			self.inventory[self.tilemap_items[y][x]] = self.inventory[self.tilemap_items[y][x]] + 1
+		else
+			self.inventory[self.tilemap_items[y][x]] = 1
+		end
+		self.tilemap_items[y][x] = tile_empty
+		tilemap.set_tile(self.tilemap_level_url, "items", x, y, tile_empty)
+		sound.play(msg.url(nil, "sound", "pickup_key"))
+		did_pickup_item = true
+	end
+	return did_pickup_item
+end
+
 local function check_bounds(self, player_position)
 	local px = math.floor((player_position.x + (self.movement.x * tile_size / 2) - self.tilemap_position.x) / tile_size) + 1
 	local py = math.floor((player_position.y + (self.movement.y * tile_size / 2) - self.tilemap_position.y) / tile_size) + 1
@@ -526,7 +568,8 @@ local function check_bounds(self, player_position)
 		self.speed = 0
 		msg.post(msg.url(nil, "gui", "level"), hash("update_moves"), { moves = self.moves })
 		if should_stop ~= stop_reason.trapdoor then
-			check_solution(self)
+			local pickup_sound_played = pickup_item(self, self.player_tile_position.x, self.player_tile_position.y)
+			check_solution(self, pickup_sound_played)
 		end
 	end
 

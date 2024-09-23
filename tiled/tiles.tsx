@@ -69,7 +69,13 @@
  </tile>
  <tile id="11">
   <properties>
-   <property name="type" value="trapdoor"/>
+   <property name="inventory" type="bool" value="true"/>
+   <property name="type" value="key"/>
+  </properties>
+ </tile>
+ <tile id="12">
+  <properties>
+   <property name="type" value="door"/>
   </properties>
  </tile>
 </tileset>
