@@ -1,5 +1,5 @@
 go.property("current_level", 1)
-go.property("max_levels", 17)
+go.property("max_levels", 27)
 
 local tile_size = 16
 
@@ -445,7 +445,6 @@ end
 
 local function is_door(self, x, y, is_cursor)
 	if not is_cursor and (self.tilemap_items ~= nil and self.tilemap_items[y] ~= nil and self.tilemap_items[y][x] == tile_door) then
-		print("is door!")
 		if self.inventory[tile_key] ~= nil and self.inventory[tile_key] >= 1 then
 			self.tilemap_items[y][x] = tile_empty
 			tilemap.set_tile(self.tilemap_level_url, "items", x, y, tile_empty)

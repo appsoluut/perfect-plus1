@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="Perfect+1" tilewidth="16" tileheight="16" tilecount="90" columns="10">
+<tileset version="1.10" tiledversion="1.11.0" name="Perfect+1" tilewidth="16" tileheight="16" tilecount="130" columns="10">
  <editorsettings>
   <export target="../game/levels/tileset.lua" format="lua"/>
  </editorsettings>
- <image source="../game/tiles.png" width="160" height="144"/>
+ <image source="../game/tiles.png" width="160" height="208"/>
  <tile id="0">
   <properties>
    <property name="type" value="exit"/>

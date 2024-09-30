@@ -11,7 +11,7 @@ return {
   columns = 10,
   image = "../tiles.png",
   imagewidth = 160,
-  imageheight = 144,
+  imageheight = 208,
   objectalignment = "unspecified",
   tilerendersize = "tile",
   fillmode = "stretch",
@@ -26,7 +26,7 @@ return {
   },
   properties = {},
   wangsets = {},
-  tilecount = 90,
+  tilecount = 130,
   tiles = {
     {
       id = 0,
