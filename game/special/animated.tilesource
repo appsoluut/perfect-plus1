@@ -39,7 +39,7 @@ animations {
 animations {
   id: "trapdoor"
   start_tile: 21
-  end_tile: 22
-  fps: 3
+  end_tile: 29
+  fps: 8
 }
 extrude_borders: 2

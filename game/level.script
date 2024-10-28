@@ -1,5 +1,5 @@
 go.property("current_level", 1)
-go.property("max_levels", 27)
+go.property("max_levels", 43)
 
 local tile_size = 16
 
@@ -149,6 +149,7 @@ local function load_tilemap(self)
 		}
 		msg.post(msg.url(nil, "gui", "level"), hash("update_required"), { required = self.required_moves })
 		msg.post(msg.url(nil, "gui", "level"), hash("update_levelname"), { level = self.current_level, level_name = self.level_name })
+		msg.post(msg.url(nil, "gui", "level"), hash("update_keys"), { amount = 0 })
 		for _, layer in ipairs(level_data.layers) do
 			for y = 1, layer.height do
 				for x = 1, layer.width do
@@ -181,7 +182,8 @@ local function init_tilemap_data(self)
 	self.player_start_tile_position = { x = 0, y = 0 }
 	self.tilemap_floor = tilemap.get_tiles(self.tilemap_level_url, "floor")
 	self.tilemap_items = tilemap.get_tiles(self.tilemap_level_url, "items")
-	
+	self.has_keys = false
+
 	for row = 1, #self.tilemap_items do
 		for col = 1, #self.tilemap_items[row] do
 			if self.tilemap_items[row][col] == tile_exit then
@@ -196,6 +198,10 @@ local function init_tilemap_data(self)
 			or self.tilemap_items[row][col] == tile_teleporter_purple
 			or self.tilemap_items[row][col] == tile_trapdoor then
 				spawn_special_tile(self, self.tilemap_items[row][col], col, row)
+			end
+
+			if self.tilemap_items[row][col] == tile_key then
+				self.has_keys = true
 			end
 
 			if self.tilemap_items[row][col] ~= tile_oneway_down
@@ -254,6 +260,8 @@ local function load_level(self)
 	init_tilemap_data(self)
 	init_player_position(self)
 	init_exit_position(self)
+
+	msg.post(msg.url(nil, "gui", "level"), hash("toggle_item"), { has_keys = self.has_keys })
 
 	play_idle_animation(self)
 end
@@ -336,6 +344,15 @@ end
 
 function final(self)
 	msg.post(".", "release_input_focus")
+end
+
+local function check_trapdoor(self, tile)
+	if tile == tile_trapdoor then
+		play_lost_animation(self, "victory")
+		return true
+	else
+		return false
+	end
 end
 
 local function check_teleport(self, tile)
@@ -433,6 +450,10 @@ local function play_collision_animation(self)
 	end
 end
 
+local function update_inventory(self)
+	msg.post(msg.url(nil, "gui", "level"), hash("update_keys"), { amount = self.inventory[tile_key] or 0 })
+end
+
 local function is_floor(self, x, y)
 	return self.tilemap_floor[y][x] ~= tile_empty and self.tilemap_floor[y][x] ~= tile_invisible
 end
@@ -452,6 +473,7 @@ local function is_door(self, x, y, is_cursor)
 			if self.inventory[tile_key] <= 0 then
 				self.inventory[tile_key] = nil
 			end
+			update_inventory(self)
 			return false
 		else
 			return true
@@ -467,7 +489,6 @@ local function is_trapdoor(self, x, y)
 				if not trapdoor.is_open then
 					local trapdoor_url = msg.url(nil, trapdoor.id, "sprite")
 					go.set(trapdoor_url, "playback_rate", 1.0)
-					sprite.play_flipbook(trapdoor_url, "trapdoor")
 					trapdoor.is_open = true
 					self.trapdoor = { x = x, y = y, id = trapdoor.id }
 				elseif not self.trapdoor then
@@ -535,6 +556,7 @@ local function pickup_item(self, x, y)
 		self.tilemap_items[y][x] = tile_empty
 		tilemap.set_tile(self.tilemap_level_url, "items", x, y, tile_empty)
 		sound.play(msg.url(nil, "sound", "pickup_key"))
+		update_inventory(self)
 		did_pickup_item = true
 	end
 	return did_pickup_item
@@ -544,14 +566,19 @@ local function check_bounds(self, player_position)
 	local px = math.floor((player_position.x + (self.movement.x * tile_size / 2) - self.tilemap_position.x) / tile_size) + 1
 	local py = math.floor((player_position.y + (self.movement.y * tile_size / 2) - self.tilemap_position.y) / tile_size) + 1
 
+	-- half offset level for pickup and trapdoor coords
+	local px_offset = math.floor((player_position.x + (self.movement.x * tile_size / 2) - self.tilemap_position.x - (self.movement.x * tile_size / 2)) / tile_size) + 1
+	local py_offset = math.floor((player_position.y + (self.movement.y * tile_size / 2) - self.tilemap_position.y - (self.movement.y * tile_size / 2)) / tile_size) + 1
+
 	is_glue(self, px, py)
-	is_trapdoor(self, px, py)
+	is_trapdoor(self, px_offset, py_offset)
+	local pickup_sound_played = pickup_item(self, px_offset, py_offset)
 	local should_stop = stop_player(self, px, py)
 
 	if should_stop ~= stop_reason.none or check_collision_wall(self, px, py) then
 		self.player_tile_position.x = px - self.movement.x
 		self.player_tile_position.y = py - self.movement.y
-		if not check_teleport(self, self.tilemap_items[self.player_tile_position.y][self.player_tile_position.x]) then
+		if not check_trapdoor(self, self.tilemap_items[self.player_tile_position.y][self.player_tile_position.x]) and not check_teleport(self, self.tilemap_items[self.player_tile_position.y][self.player_tile_position.x]) then
 			if should_stop == stop_reason.trapdoor then
 				play_lost_animation(self, "victory")
 			else
@@ -567,7 +594,6 @@ local function check_bounds(self, player_position)
 		self.speed = 0
 		msg.post(msg.url(nil, "gui", "level"), hash("update_moves"), { moves = self.moves })
 		if should_stop ~= stop_reason.trapdoor then
-			local pickup_sound_played = pickup_item(self, self.player_tile_position.x, self.player_tile_position.y)
 			check_solution(self, pickup_sound_played)
 		end
 	end

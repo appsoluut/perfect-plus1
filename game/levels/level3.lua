@@ -19,8 +19,7 @@ return {
     {
       name = "Perfect+1",
       firstgid = 1,
-      filename = "../../tiled/tiles.tsx",
-      exportfilename = "tileset.lua"
+      filename = "../../tiled/tiles.tsx"
     }
   },
   layers = {

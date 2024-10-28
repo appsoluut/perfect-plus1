@@ -3,6 +3,10 @@ fonts {
   name: "perfect-1"
   font: "/font/perfect-1.font"
 }
+textures {
+  name: "tiles"
+  texture: "/game/tiles.tilesource"
+}
 nodes {
   size {
     x: 1280.0
@@ -241,6 +245,97 @@ nodes {
   adjust_mode: ADJUST_MODE_ZOOM
   line_break: true
   parent: "sw_content"
+  inherit_alpha: true
+  text_tracking: 0.2
+}
+nodes {
+  position {
+    x: 1248.0
+    y: 720.0
+  }
+  size {
+    x: 16.0
+    y: 16.0
+  }
+  type: TYPE_BOX
+  id: "ne_anchor"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_NE
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "root"
+  inherit_alpha: true
+  visible: false
+}
+nodes {
+  position {
+    x: 16.0
+    y: -16.0
+  }
+  size {
+    x: 400.0
+    y: 100.0
+  }
+  color {
+    x: 0.102
+    y: 0.2
+    z: 0.6
+  }
+  type: TYPE_BOX
+  id: "nw_content1"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_NE
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "ne_anchor"
+  inherit_alpha: true
+  clipping_mode: CLIPPING_MODE_STENCIL
+  clipping_visible: false
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: -25.0
+    y: 3.0
+  }
+  scale {
+    x: 3.0
+    y: 3.0
+    z: 3.0
+  }
+  type: TYPE_BOX
+  texture: "tiles/key"
+  id: "img_item"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_NE
+  parent: "nw_content1"
+  inherit_alpha: true
+  clipping_visible: false
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: -11.0
+  }
+  scale {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+  }
+  size {
+    x: 28.0
+    y: 10.0
+  }
+  type: TYPE_TEXT
+  text: "0"
+  font: "perfect-1"
+  id: "item_amount"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_NE
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "nw_content1"
   inherit_alpha: true
   text_tracking: 0.2
 }

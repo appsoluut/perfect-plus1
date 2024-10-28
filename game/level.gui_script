@@ -1,3 +1,8 @@
+local function toggle_item(self, visible)
+	gui.set_visible(self.item_amount, visible)
+	gui.set_visible(self.img_item, visible)
+end
+
 function init(self)
 	self.move_node = gui.get_node("text_moves")
 	self.move_text = gui.get_text(self.move_node)
@@ -8,8 +13,14 @@ function init(self)
 
 	self.levelname_node = gui.get_node("text_name")
 
+	self.img_item = gui.get_node("img_item")
+	self.item_amount = gui.get_node("item_amount")
+
 	gui.set_text(self.move_node, self.move_text .. "0")
 	gui.set_text(self.required_node, self.required_text .. "0")
+
+	gui.set_text(self.item_amount, "0")
+	gui.play_flipbook(self.img_item, hash("key"))
 end
 
 function on_message(self, message_id, message, sender)
@@ -24,5 +35,9 @@ function on_message(self, message_id, message, sender)
 		gui.set_text(self.required_node, self.required_text .. (message.required - 1) .. "@#")
 	elseif message_id == hash("update_levelname") then
 		gui.set_text(self.levelname_node, string.format("%d: %s", message.level, message.level_name))
+	elseif message_id == hash("update_keys") then
+		gui.set_text(self.item_amount, math.min(9, message.amount))
+	elseif message_id == hash("toggle_item") then
+		toggle_item(self, message.has_keys or false)
 	end
 end
