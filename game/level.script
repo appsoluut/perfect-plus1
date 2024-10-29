@@ -1,5 +1,5 @@
 go.property("current_level", 1)
-go.property("max_levels", 43)
+go.property("max_levels", 48)
 
 local tile_size = 16
 
@@ -27,7 +27,7 @@ local tile_teleporter_pink = 12
 local tile_teleporter_red = 13
 local tile_glue = 14
 local tile_trapdoor = 15
-local tile_key = 16
+local tile_key = 16		
 local tile_door = 17
 
 local idle_animations = {

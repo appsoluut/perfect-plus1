@@ -46,3 +46,13 @@ embedded_instances {
     y: 720.0
   }
 }
+embedded_instances {
+  id: "levelselect"
+  data: "embedded_components {\n"
+  "  id: \"level\"\n"
+  "  type: \"factory\"\n"
+  "  data: \"prototype: \\\"/titlescreen/level.go\\\"\\n"
+  "\"\n"
+  "}\n"
+  ""
+}

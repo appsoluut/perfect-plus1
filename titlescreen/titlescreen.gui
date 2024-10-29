@@ -7,10 +7,6 @@ textures {
   name: "titlescreen"
   texture: "/titlescreen/titlescreen.atlas"
 }
-textures {
-  name: "player"
-  texture: "/game/player.tilesource"
-}
 nodes {
   size {
     x: 1280.0
@@ -18,10 +14,11 @@ nodes {
   }
   type: TYPE_BOX
   id: "root"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
   visible: false
 }
 nodes {
@@ -38,7 +35,7 @@ nodes {
   xanchor: XANCHOR_LEFT
   yanchor: YANCHOR_TOP
   pivot: PIVOT_N
-  adjust_mode: ADJUST_MODE_ZOOM
+  adjust_mode: ADJUST_MODE_STRETCH
   parent: "root"
   inherit_alpha: true
   visible: false
@@ -189,7 +186,7 @@ nodes {
 }
 nodes {
   type: TYPE_TEXT
-  text: "LEVEL SELECT: "
+  text: "LEVEL SELECT"
   id: "menu_item_levelselect/title"
   parent: "menu_item_levelselect"
   overridden_fields: 8
@@ -351,6 +348,68 @@ nodes {
   parent: "s_content"
   inherit_alpha: true
   text_tracking: 0.2
+}
+nodes {
+  position {
+    x: 440.0
+    y: 340.0
+  }
+  size {
+    x: 800.0
+    y: 480.0
+  }
+  type: TYPE_BOX
+  id: "e_anchor"
+  pivot: PIVOT_W
+  parent: "root"
+  inherit_alpha: true
+  visible: false
+}
+nodes {
+  position {
+    y: 240.0
+  }
+  size {
+    x: 800.0
+    y: 480.0
+  }
+  type: TYPE_BOX
+  id: "e_content"
+  pivot: PIVOT_NW
+  parent: "e_anchor"
+  clipping_mode: CLIPPING_MODE_STENCIL
+  alpha: 0.0
+}
+nodes {
+  position {
+    y: -38.0
+  }
+  type: TYPE_TEMPLATE
+  id: "level_select"
+  parent: "e_content"
+  template: "/titlescreen/pick_level_item.gui"
+}
+nodes {
+  type: TYPE_TEXT
+  id: "level_select/level"
+  parent: "level_select"
+  template_node_child: true
+}
+nodes {
+  position {
+    x: 35.0
+    y: -205.0
+  }
+  scale {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+  }
+  type: TYPE_BOX
+  texture: "titlescreen/selector"
+  id: "selector_level"
+  parent: "e_content"
+  size_mode: SIZE_MODE_AUTO
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

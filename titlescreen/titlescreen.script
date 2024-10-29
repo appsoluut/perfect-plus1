@@ -1,6 +1,25 @@
 local zoom = 4
 local sprite_size = 16
 
+local function load_tilemap(self, level, tilemap_id)
+	local data = sys.load_resource("/game/levels/level" .. level .. ".lua")
+	if data ~= nil then
+		local level_data = assert(loadstring(data))()
+		for _, layer in ipairs(level_data.layers) do
+			for y = 1, layer.height do
+				for x = 1, layer.width do
+					tilemap.set_tile(msg.url(nil, tilemap_id, "tilemap"), layer.name, x, layer.height + 1 - y, layer.data[(y - 1) * layer.width + x])
+				end
+			end
+		end
+	end
+end
+
+local function load_level(self, level)
+	self.tilemap_id = factory.create(msg.url(nil, "levelselect", "level"), vmath.vector3(self.width / 2 - 140, self.height / 2 - 60, 0.1))
+	load_tilemap(self, level, self.tilemap_id)
+end
+
 local function animate_background()
 	local size = go.get_scale("/scroll")
 	
@@ -12,7 +31,23 @@ end
 
 function init(self)
 	msg.post("@render:", "use_fixed_projection", { near = -1, far = 1, zoom = zoom })
+
+	self.width = sys.get_config_int("display.width")
+	self.height = sys.get_config_int("display.height")
+
 	animate_background()
+end
+
+function on_message(self, message_id, message)
+	if message_id == hash("show_tilemap") then
+		load_level(self, message.level or 1)
+	elseif message_id == hash("preview_level") and self.tilemap_id then
+		load_tilemap(self, message.level, self.tilemap_id)
+	elseif message_id == hash("hide_tilemap") then
+		if self.tilemap_id and go.exists(self.tilemap_id) then
+			go.delete(self.tilemap_id, true)
+		end
+	end
 end
 
 function on_input(self, action_id, action)

@@ -9,14 +9,6 @@ embedded_instances {
   ""
 }
 embedded_instances {
-  id: "level"
-  data: "components {\n"
-  "  id: \"tilemap\"\n"
-  "  component: \"/game/placeholder.tilemap\"\n"
-  "}\n"
-  ""
-}
-embedded_instances {
   id: "player"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
@@ -210,4 +202,12 @@ embedded_instances {
     x: 640.0
     y: 360.0
   }
+}
+embedded_instances {
+  id: "level"
+  data: "components {\n"
+  "  id: \"tilemap\"\n"
+  "  component: \"/game/placeholder.tilemap\"\n"
+  "}\n"
+  ""
 }

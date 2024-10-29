@@ -9,15 +9,14 @@ nodes {
     z: 2.0
   }
   size {
-    x: 200.0
+    x: 26.0
     y: 20.0
   }
   type: TYPE_TEXT
-  text: "NEW GAME"
+  text: "01"
   font: "perfect-1"
-  id: "title"
+  id: "level"
   pivot: PIVOT_W
-  inherit_alpha: true
   text_tracking: 0.2
 }
 material: "/builtins/materials/gui.material"
