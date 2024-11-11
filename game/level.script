@@ -2,6 +2,8 @@ go.property("current_level", 1)
 go.property("max_levels", 48)
 
 local tile_size = 16
+local max_tile_x = 12
+local max_tile_y = 12
 
 local defsave = require "defsave.defsave"
 local lume = require "libraries.lume"
@@ -135,6 +137,29 @@ local function load_tileset(self)
 	end
 end
 
+local function init_tilemap_position(self, tilemap_width, tilemap_height)
+	self.tilemap_position = go.get(self.tilemap_url, "position")
+
+	self.tilemap_x, self.tilemap_y, self.tilemap_width, self.tilemap_height = tilemap.get_bounds(self.tilemap_level_url)
+	self.tilemap_width = tilemap_width or self.tilemap_width
+	self.tilemap_height = tilemap_height or self.tilemap_height
+
+	print("--- Tilemap init size: " .. self.tilemap_width .. "x" .. self.tilemap_height)
+
+	self.tilemap_position.x = (self.width / 2) - (self.tilemap_width * tile_size) / 2
+	self.tilemap_position.y = self.height / 2 - (self.tilemap_height * tile_size) / 2
+
+	go.set(self.tilemap_url, "position", self.tilemap_position)
+end
+
+local function reset_tilemap_layer(self, layer)
+	for y = 1, max_tile_y do 
+		for x = 1, max_tile_x do
+			tilemap.set_tile(self.tilemap_level_url, layer, x, y, tile_empty)
+		end
+	end
+end
+
 local function load_tilemap(self)
 	local data = sys.load_resource("/game/levels/level" .. self.current_level .. ".lua")
 	if data ~= nil then
@@ -150,30 +175,26 @@ local function load_tilemap(self)
 		msg.post(msg.url(nil, "gui", "level"), hash("update_required"), { required = self.required_moves })
 		msg.post(msg.url(nil, "gui", "level"), hash("update_levelname"), { level = self.current_level, level_name = self.level_name })
 		msg.post(msg.url(nil, "gui", "level"), hash("update_keys"), { amount = 0 })
+		local tilemap_width = 0
+		local tilemap_height = 0
 		for _, layer in ipairs(level_data.layers) do
+			reset_tilemap_layer(self, layer.name)
+			tilemap_width = math.max(tilemap_width, layer.width)
+			tilemap_height = math.max(tilemap_height, layer.height)
 			for y = 1, layer.height do
 				for x = 1, layer.width do
 					tilemap.set_tile(self.tilemap_level_url, layer.name, x, layer.height + 1 - y, layer.data[(y - 1) * layer.width + x])
 				end
 			end
 		end
+		print("--- Tilemap size: " .. tilemap_width .. "x" .. tilemap_height)
+		init_tilemap_position(self, tilemap_width, tilemap_height)
 		defsave.set("settings", "level", self.current_level)
 		local max_level = math.max(defsave.get("settings", "max_level") or 1, self.current_level)
 		defsave.set("settings", "max_level", math.min(self.max_levels, max_level))
 	else
 		print("[ERROR] Level not found?")
 	end
-end
-
-local function init_tilemap_position(self)
-	self.tilemap_position = go.get(self.tilemap_url, "position")
-
-	self.tilemap_x, self.tilemap_y, self.tilemap_width, self.tilemap_height = tilemap.get_bounds(self.tilemap_level_url)
-
-	self.tilemap_position.x = (self.width / 2) - (self.tilemap_width * tile_size) / 2
-	self.tilemap_position.y = self.height / 2 - (self.tilemap_height * tile_size) / 2
-
-	go.set(self.tilemap_url, "position", self.tilemap_position)
 end
 
 local function init_tilemap_data(self)
@@ -256,7 +277,6 @@ local function load_level(self)
 	msg.post(msg.url(nil, "gui", "level"), hash("update_moves"), { moves = self.moves })
 
 	load_tilemap(self)
-	init_tilemap_position(self)
 	init_tilemap_data(self)
 	init_player_position(self)
 	init_exit_position(self)

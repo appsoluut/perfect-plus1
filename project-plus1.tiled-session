@@ -5,8 +5,8 @@
     },
     "activeFile": "tiled/level24.tmx",
     "expandedProjectPaths": [
-        ".",
-        "tiled"
+        "tiled",
+        "."
     ],
     "fileStates": {
         "": {
@@ -312,7 +312,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 96.1201501877347,
-                "y": 96.1201501877347
+                "y": 95.86720242408276
             }
         },
         "tiled/level42.tmx": {

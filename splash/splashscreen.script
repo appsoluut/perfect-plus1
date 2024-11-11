@@ -1,5 +1,5 @@
 local width = tonumber(sys.get_config("display.width"))
-local height = tonumber(sys.get_config("display.height"))
+local height = tonumber(sys.get_config("display.height"))	
 local zoom = 2
 
 function init(self)
