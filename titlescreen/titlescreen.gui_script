@@ -101,7 +101,7 @@ end
 
 function init(self)
 	local data = monarch.data("titlescreen")
-	
+
 	self.current_level = defsave.get("settings", "level") or 1
 	self.max_levels = defsave.get("settings", "max_level") or 1
 	self.level_selected = self.max_levels

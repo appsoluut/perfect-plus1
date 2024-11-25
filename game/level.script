@@ -144,8 +144,6 @@ local function init_tilemap_position(self, tilemap_width, tilemap_height)
 	self.tilemap_width = tilemap_width or self.tilemap_width
 	self.tilemap_height = tilemap_height or self.tilemap_height
 
-	print("--- Tilemap init size: " .. self.tilemap_width .. "x" .. self.tilemap_height)
-
 	self.tilemap_position.x = (self.width / 2) - (self.tilemap_width * tile_size) / 2
 	self.tilemap_position.y = self.height / 2 - (self.tilemap_height * tile_size) / 2
 
@@ -187,7 +185,6 @@ local function load_tilemap(self)
 				end
 			end
 		end
-		print("--- Tilemap size: " .. tilemap_width .. "x" .. tilemap_height)
 		init_tilemap_position(self, tilemap_width, tilemap_height)
 		defsave.set("settings", "level", self.current_level)
 		local max_level = math.max(defsave.get("settings", "max_level") or 1, self.current_level)

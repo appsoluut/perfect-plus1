@@ -360,6 +360,8 @@ nodes {
   }
   type: TYPE_BOX
   id: "e_anchor"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
   pivot: PIVOT_W
   parent: "root"
   inherit_alpha: true
