@@ -1,0 +1,64 @@
+local table = table
+
+local function update_cursor(self)
+	self.active_item = self.menu_items[self.active_index]
+
+	local position = gui.get_position(self.active_item)
+	local cursor = gui.get_position(self.select_node)
+	cursor.y = position.y + self.select_scale.y * 2
+	gui.set_position(self.select_node, cursor)
+end
+
+function init(self)
+	gui.set_render_order(1)
+
+	self.select_node = gui.get_node("select")
+	self.select_scale = gui.get_scale(self.select_node)
+
+	self.btn_hint_node = gui.get_node("btn_hint/title")
+	self.btn_skip_node = gui.get_node("btn_skip/title")
+	self.btn_quit_node = gui.get_node("btn_quit/title")
+
+	self.menu_items = {}
+	table.insert(self.menu_items, self.btn_hint_node)
+	table.insert(self.menu_items, self.btn_skip_node)
+	table.insert(self.menu_items, self.btn_quit_node)
+
+	self.active_index = 1
+	update_cursor(self)
+
+	msg.post(".", "acquire_input_focus")
+end
+
+function final(self)
+	msg.post(".", "release_input_focus")
+end
+
+function update(self, dt)
+end
+
+function on_message(self, message_id, message, sender)
+end
+
+function on_input(self, action_id, action)
+	if action.pressed then
+		if action_id == hash("start") then
+			msg.post(msg.url("proxy", "/loader", "script"), "popup_pause")
+		elseif action_id == hash("up") then
+			self.active_index = math.max(1, self.active_index - 1)
+			update_cursor(self)
+		elseif action_id == hash("down") then
+			self.active_index = math.min(#self.menu_items, self.active_index + 1)
+			update_cursor(self)
+		elseif action_id == hash("enter") then
+			if self.active_item == self.btn_quit_node then
+				msg.post(msg.url("proxy", "/loader", "script"), "popup_pause")
+				msg.post(msg.url("proxy", "/loader", "script"), "show_titlescreen")
+			elseif self.active_item == self.btn_hint_node then
+				print("[AD_BREAK] Show a hint of the level")
+			elseif self.active_item == self.btn_skip_node then
+				print("[AD_BREAK] Skip the level")
+			end
+		end
+	end
+end

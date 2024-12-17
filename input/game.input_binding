@@ -36,15 +36,19 @@ key_trigger {
 }
 key_trigger {
   input: KEY_SPACE
-  action: "touch"
+  action: "enter"
 }
 key_trigger {
   input: KEY_ENTER
-  action: "touch"
+  action: "enter"
 }
 key_trigger {
   input: KEY_ESC
   action: "back"
+}
+key_trigger {
+  input: KEY_P
+  action: "start"
 }
 mouse_trigger {
   input: MOUSE_BUTTON_1
@@ -88,11 +92,11 @@ gamepad_trigger {
 }
 gamepad_trigger {
   input: GAMEPAD_RPAD_DOWN
-  action: "touch"
+  action: "enter"
 }
 gamepad_trigger {
   input: GAMEPAD_START
-  action: "touch"
+  action: "start"
 }
 gamepad_trigger {
   input: GAMEPAD_BACK

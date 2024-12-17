@@ -340,7 +340,7 @@ nodes {
     y: 25.0
   }
   type: TYPE_TEXT
-  text: "< 2024 - QUARTER HOUR GAMES"
+  text: "< 2024 - HELL HOG GAMES"
   font: "perfect-1"
   id: "copyright"
   pivot: PIVOT_S

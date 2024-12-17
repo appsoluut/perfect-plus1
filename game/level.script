@@ -29,8 +29,9 @@ local tile_teleporter_pink = 12
 local tile_teleporter_red = 13
 local tile_glue = 14
 local tile_trapdoor = 15
-local tile_key = 16		
+local tile_key = 16
 local tile_door = 17
+local tile_number_4 = 120
 
 local idle_animations = {
 	[hash("idle")] = 4,
@@ -53,7 +54,7 @@ local function animate_background()
 	local scale = vmath.vector4(size.x / tile_size, size.y / tile_size, 0, 0)
 	go.set("/scroll#plane", "scale", scale)
 	go.set("/scroll#plane", "tint.w", 0.66)
-	go.animate("/scroll#plane", "animation_time.x", go.PLAYBACK_LOOP_FORWARD, scale.xy, go.EASING_LINEAR, 120 * scale.xy)
+	go.animate("/scroll#plane", "animation_time.x", go.PLAYBACK_LOOP_FORWARD, scale.xy, go.EASING_LINEAR, 		120 * scale.xy)
 end
 
 local function play_idle_animation(self)
@@ -256,6 +257,10 @@ local function init_exit_position(self)
 	self.exit_position.y = self.tilemap_position.y + (tile_size * self.exit_tile_position.y - tile_size / 2)
 	local id = factory.create(msg.url(nil, "special", "exit"), self.exit_position)
 	table.insert(self.special_tiles, id)
+	-- if self.current_level == 1 then
+	-- 	id = factory.create(msg.url(nil, "special", "number"), self.exit_position)
+	-- 	table.insert(self.special_tiles, id)
+	-- end
 end
 
 local function load_level(self)
@@ -317,6 +322,10 @@ local function on_window_event(self, event, data)
 	end
 end
 
+local function show_touch_controls(self, show)
+	msg.post(msg.url(nil, "gui", "level"), hash("touch_controls"), { show = show })
+end
+
 local function show_cursor(self, show)
 	if self.cursor_enabled ~= nil and show == self.cursor_enabled then return end
 
@@ -333,8 +342,9 @@ function init(self)
 	msg.post("@render:", "use_camera_projection")
 
 	local data = monarch.data("level")
-	if data ~= nil and data.current_level then
-		self.current_level = data.current_level
+	if data ~= nil then
+		self.current_level = data.current_level or 1
+		self.show_touch_controls = data.touch_mode or false
 	end
 
 	self.window_width, self.window_height = window.get_size()
@@ -352,6 +362,7 @@ function init(self)
 	window.set_listener(on_window_event)
 
 	show_cursor(self, false)
+	show_touch_controls(self, self.show_touch_controls)
 	animate_background()
 	load_tileset(self)
 	load_level(self)
@@ -688,20 +699,31 @@ local function move_right(self)
 	end
 end
 
+local function accept_input(self)
+	return not (self.movement ~= nil or self.teleporting ~= nil or self.resetting ~= nil)
+end
+
 function on_input(self, action_id, action)
-	if action_id == nil or action_id == hash("touch") and action.x and action.y then
-		show_cursor(self, true)
+	if not accept_input(self) then return end
+
+	if action_id == nil or action_id == hash("touch") then --and action.x and action.y then
+-- 		show_cursor(self, true)
 		local position = screen_to_world(self, action.x, action.y, 1, msg.url(nil, "/camera", "camera"))
 		local px = math.floor((position.x - self.tilemap_position.x) / tile_size) + 1
 		local py = math.floor((position.y - self.tilemap_position.y) / tile_size) + 1
 
+		local can_handle_touch = false
 		if not check_collision_wall(self, px, py, false) and is_floor(self, px, py) then
-			position.x = self.tilemap_position.x + (tile_size * px - tile_size / 2)
-			position.y = self.tilemap_position.y + (tile_size * py - tile_size / 2)
-			go.set_position(position, self.cursor_url)
+			can_handle_touch = true
 		end
 
-		if action_id == hash("touch") then
+-- 		if not check_collision_wall(self, px, py, false) and is_floor(self, px, py) then
+-- 			position.x = self.tilemap_position.x + (tile_size * px - tile_size / 2)
+-- 			position.y = self.tilemap_position.y + (tile_size * py - tile_size / 2)
+-- 			go.set_position(position, self.cursor_url)
+-- 		end
+
+		if can_handle_touch and action_id == hash("touch") then
 			if px == self.player_tile_position.x and py ~= self.player_tile_position.y or px ~= self.player_tile_position.x and py == self.player_tile_position.y then
 				if px < self.player_tile_position.x then
 					move_left(self)
@@ -712,29 +734,27 @@ function on_input(self, action_id, action)
 				elseif py > self.player_tile_position.y then
 					move_up(self)
 				end
-			else
-				local g = gesture.on_input(self, action_id, action)
-				if g then
-					if g.swipe_right then
-						move_right(self)
-					elseif g.swipe_left then
-						move_left(self)
-					elseif g.swipe_up then
-						move_up(self)
-					elseif g.swipe_down then
-						move_down(self)
-					end
-				end
+			-- else
+			-- 	local g = gesture.on_input(self, action_id, action)
+			-- 	if g then
+			-- 		if g.swipe_right then
+			-- 			move_right(self)
+			-- 		elseif g.swipe_left then
+			-- 			move_left(self)
+			-- 		elseif g.swipe_up then
+			-- 			move_up(self)
+			-- 		elseif g.swipe_down then
+			-- 			move_down(self)
+			-- 		end
+			-- 	end
 			end
 		end
 
 		return
-	else
-		show_cursor(self, false)
+	-- else
+	-- 	show_cursor(self, false)
 	end
 	
-	if self.movement ~= nil or self.teleporting ~= nil or self.resetting ~= nil then return end
-
 	if action_id == hash("left") and action.pressed then
 		move_left(self)
 	elseif action_id == hash("right") and action.pressed then
@@ -745,7 +765,27 @@ function on_input(self, action_id, action)
 		move_down(self)
 	elseif action_id == hash("key_r") and action.pressed then
 		reset_level(self)
+	elseif action_id == hash("start") and action.pressed then
+		msg.post(msg.url("proxy", "/loader", "script"), "popup_pause")
 	elseif action_id == hash("back") and action.released then
 		msg.post(msg.url("proxy", "/loader", "script"), "show_titlescreen")
+	end
+end
+
+function on_message(self, message_id, message)
+	if message_id == hash("reset_level") then
+		reset_level(self)
+	elseif message_id == hash("menu") then
+		msg.post(msg.url("proxy", "/loader", "script"), "show_titlescreen")
+	elseif message_id == hash("move") and accept_input(self) then
+		if message.movement == hash("left") then
+			move_left(self)
+		elseif message.movement == hash("right") then
+			move_right(self)
+		elseif message.movement == hash("up") then
+			move_up(self)
+		elseif message.movement == hash("down") then
+			move_down(self)
+		end
 	end
 end

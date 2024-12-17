@@ -167,6 +167,12 @@ embedded_instances {
   "  data: \"prototype: \\\"/game/special/trapdoor_tile.go\\\"\\n"
   "\"\n"
   "}\n"
+  "embedded_components {\n"
+  "  id: \"number\"\n"
+  "  type: \"factory\"\n"
+  "  data: \"prototype: \\\"/game/special/number_tile.go\\\"\\n"
+  "\"\n"
+  "}\n"
   ""
 }
 embedded_instances {

@@ -2,6 +2,12 @@ image: "/game/tiles.png"
 tile_width: 16
 tile_height: 16
 animations {
+  id: "4"
+  start_tile: 120
+  end_tile: 120
+  fps: 1
+}
+animations {
   id: "key"
   start_tile: 12
   end_tile: 12

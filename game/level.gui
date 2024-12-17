@@ -7,6 +7,10 @@ textures {
   name: "tiles"
   texture: "/game/tiles.tilesource"
 }
+textures {
+  name: "gui_overlay"
+  texture: "/game/gui_overlay.atlas"
+}
 nodes {
   size {
     x: 1280.0
@@ -203,7 +207,7 @@ nodes {
   }
   size {
     x: 400.0
-    y: 200.0
+    y: 400.0
   }
   color {
     x: 0.102
@@ -235,7 +239,7 @@ nodes {
   type: TYPE_TEXT
   text: "$%^&: MOVE\n"
   "WASD: MOVE\n"
-  "ESC: MENU\n"
+  "ESC: MAIN MENU\n"
   "R: RESET"
   font: "perfect-1"
   id: "text_controls"
@@ -247,6 +251,194 @@ nodes {
   parent: "sw_content"
   inherit_alpha: true
   text_tracking: 0.2
+}
+nodes {
+  position {
+    y: 148.0
+  }
+  size {
+    x: 400.0
+    y: 200.0
+  }
+  type: TYPE_BOX
+  id: "touch_controls"
+  pivot: PIVOT_SW
+  parent: "sw_content"
+  inherit_alpha: true
+  clipping_mode: CLIPPING_MODE_STENCIL
+  clipping_visible: false
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 100.0
+    y: 172.0
+  }
+  scale {
+    x: 2.0
+    y: 2.0
+  }
+  type: TYPE_TEMPLATE
+  id: "btn_reset"
+  parent: "touch_controls"
+  inherit_alpha: true
+  template: "/game/level_button.gui"
+}
+nodes {
+  size {
+    x: 100.0
+    y: 28.0
+  }
+  type: TYPE_BOX
+  id: "btn_reset/button"
+  parent: "btn_reset"
+  overridden_fields: 4
+  template_node_child: true
+}
+nodes {
+  size {
+    x: 100.0
+    y: 28.0
+  }
+  type: TYPE_TEXT
+  text: "RESET"
+  id: "btn_reset/label"
+  parent: "btn_reset/button"
+  overridden_fields: 4
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  position {
+    x: 100.0
+    y: 111.0
+  }
+  scale {
+    x: 2.0
+    y: 2.0
+  }
+  type: TYPE_TEMPLATE
+  id: "btn_menu"
+  parent: "touch_controls"
+  inherit_alpha: true
+  template: "/game/level_button.gui"
+}
+nodes {
+  size {
+    x: 100.0
+    y: 28.0
+  }
+  type: TYPE_BOX
+  id: "btn_menu/button"
+  parent: "btn_menu"
+  overridden_fields: 4
+  template_node_child: true
+}
+nodes {
+  size {
+    x: 100.0
+    y: 28.0
+  }
+  type: TYPE_TEXT
+  text: "MENU"
+  id: "btn_menu/label"
+  parent: "btn_menu/button"
+  overridden_fields: 4
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  position {
+    x: 101.0
+    y: 109.0
+  }
+  scale {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+  }
+  type: TYPE_BOX
+  texture: "gui_overlay/controller"
+  id: "dpad"
+  parent: "sw_content"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: 28.0
+  }
+  size {
+    x: 28.0
+    y: 28.0
+  }
+  type: TYPE_BOX
+  id: "up"
+  parent: "dpad"
+  inherit_alpha: true
+  clipping_mode: CLIPPING_MODE_STENCIL
+  clipping_visible: false
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: -28.0
+  }
+  size {
+    x: 28.0
+    y: 28.0
+  }
+  color {
+    x: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "left"
+  parent: "dpad"
+  inherit_alpha: true
+  clipping_mode: CLIPPING_MODE_STENCIL
+  clipping_visible: false
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: -28.0
+  }
+  size {
+    x: 28.0
+    y: 28.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+  }
+  type: TYPE_BOX
+  id: "down"
+  parent: "dpad"
+  inherit_alpha: true
+  clipping_mode: CLIPPING_MODE_STENCIL
+  clipping_visible: false
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 28.0
+  }
+  size {
+    x: 28.0
+    y: 28.0
+  }
+  color {
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "right"
+  parent: "dpad"
+  inherit_alpha: true
+  clipping_mode: CLIPPING_MODE_STENCIL
+  clipping_visible: false
+  size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {

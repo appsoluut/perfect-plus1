@@ -13,12 +13,12 @@ display_device_info = 0
 
 [android]
 input_method = HiddenInputField
-package = eu.qhgames.perfectplus1
+package = com.hellhoggames.perfectplus1
 
 [project]
 title = Perfect+1
 version = 1.0.1
-developer = Quarter Hour Games
+developer = Hell Hog Games
 custom_resources = /game/levels/
 dependencies#0 = https://github.com/britzl/monarch/archive/refs/tags/5.1.1.zip
 dependencies#1 = https://github.com/subsoap/defsave/archive/refs/tags/v1.2.6.zip
@@ -30,11 +30,11 @@ default_texture_min_filter = nearest
 default_texture_mag_filter = nearest
 
 [osx]
-bundle_identifier = eu.qhgames.perfect-plus1
+bundle_identifier = com.hellhoggames.perfect-plus1
 bundle_name = Perfect+1
 
 [ios]
-bundle_identifier = eu.qhgames.perfect-plus1
+bundle_identifier = com.hellhoggames.perfect-plus1
 bundle_name = Perfect+1
 
 [html5]

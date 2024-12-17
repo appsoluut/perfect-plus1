@@ -1,0 +1,142 @@
+script: "/game/pause/pause.gui_script"
+fonts {
+  name: "perfect-1"
+  font: "/font/perfect-1.font"
+}
+textures {
+  name: "gui_overlay"
+  texture: "/game/gui_overlay.atlas"
+}
+nodes {
+  position {
+    x: 640.0
+    y: 360.0
+  }
+  size {
+    x: 1280.0
+    y: 720.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "root"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  clipping_mode: CLIPPING_MODE_STENCIL
+  alpha: 0.66
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 640.0
+    y: 320.0
+  }
+  type: TYPE_BOX
+  id: "container"
+  parent: "root"
+  clipping_mode: CLIPPING_MODE_STENCIL
+  clipping_visible: false
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: -208.0
+  }
+  scale {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+  }
+  size {
+    x: 208.0
+    y: 80.0
+  }
+  type: TYPE_BOX
+  texture: "gui_overlay/pop-up"
+  id: "bg"
+  pivot: PIVOT_W
+  parent: "container"
+  slice9 {
+    x: 6.0
+    y: 6.0
+    z: 6.0
+    w: 6.0
+  }
+}
+nodes {
+  position {
+    x: -144.0
+    y: 38.0
+  }
+  type: TYPE_TEMPLATE
+  id: "btn_hint"
+  parent: "container"
+  template: "/titlescreen/menu_item.gui"
+}
+nodes {
+  type: TYPE_TEXT
+  text: "SHOW HINT ~"
+  id: "btn_hint/title"
+  parent: "btn_hint"
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  position {
+    x: -144.0
+    y: -2.0
+  }
+  type: TYPE_TEMPLATE
+  id: "btn_skip"
+  parent: "container"
+  template: "/titlescreen/menu_item.gui"
+}
+nodes {
+  type: TYPE_TEXT
+  text: "SKIP LEVEL ~"
+  id: "btn_skip/title"
+  parent: "btn_skip"
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  position {
+    x: -144.0
+    y: -42.0
+  }
+  type: TYPE_TEMPLATE
+  id: "btn_quit"
+  parent: "container"
+  template: "/titlescreen/menu_item.gui"
+}
+nodes {
+  type: TYPE_TEXT
+  text: "MAIN MENU"
+  id: "btn_quit/title"
+  parent: "btn_quit"
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  position {
+    x: -170.0
+    y: 42.0
+  }
+  scale {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+  }
+  type: TYPE_BOX
+  texture: "gui_overlay/selector"
+  id: "select"
+  parent: "container"
+  size_mode: SIZE_MODE_AUTO
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

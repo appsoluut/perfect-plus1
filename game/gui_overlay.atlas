@@ -1,0 +1,13 @@
+images {
+  image: "/game/button.png"
+}
+images {
+  image: "/game/controller.png"
+}
+images {
+  image: "/game/pop-up.png"
+}
+images {
+  image: "/titlescreen/selector.png"
+}
+extrude_borders: 2

@@ -4,7 +4,8 @@ local monarch = require "monarch.monarch"
 local screens = {
 	show_splashscreen = hash("show_splashscreen"),
 	show_level = hash("show_level"),
-	show_titlescreen = hash("show_titlescreen")
+	show_titlescreen = hash("show_titlescreen"),
+	popup_pause = hash("popup_pause")
 }
 local toggle_fullscreen = hash("toggle_fullscreen")
 
@@ -26,9 +27,18 @@ function final(self)
 	defsave.save_all()
 end
 
+local function toggle_pause(self)
+	self.paused = not self.paused
+	if self.paused then
+		monarch.show("popup_pause")
+	else
+		monarch.hide("popup_pause")
+	end
+end
+
 function on_message(self, message_id, message, sender)
 	if message_id == screens.show_level then
-		monarch.show("level", {}, { current_level = message.current_level or 1 })
+		monarch.show("level", {}, { current_level = message.current_level or 1, touch_mode = message.touch_mode or false })
 	elseif message_id == screens.show_splashscreen then
 		monarch.show("splashscreen")
 	elseif message_id == screens.show_titlescreen then
@@ -37,6 +47,8 @@ function on_message(self, message_id, message, sender)
 			self.music_playing = true
 		end
 		monarch.show("titlescreen", {}, { subscreen = message.subscreen or "menu" })
+	elseif message_id == screens.popup_pause then
+		toggle_pause(self)
 	elseif defos and message_id == toggle_fullscreen then
 		defos.toggle_fullscreen()
 	end

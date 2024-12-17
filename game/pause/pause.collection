@@ -1,0 +1,10 @@
+name: "pause"
+scale_along_z: 0
+embedded_instances {
+  id: "gui"
+  data: "components {\n"
+  "  id: \"pause\"\n"
+  "  component: \"/game/pause/pause.gui\"\n"
+  "}\n"
+  ""
+}

@@ -3,6 +3,12 @@ local function toggle_item(self, visible)
 	gui.set_visible(self.img_item, visible)
 end
 
+local function toggle_touch_controls(self, visible)
+	gui.set_visible(self.controls_text, not visible)
+	gui.set_visible(self.controls_touch, visible)
+	gui.set_visible(self.controls_dpad, visible)
+end
+
 function init(self)
 	self.move_node = gui.get_node("text_moves")
 	self.move_text = gui.get_text(self.move_node)
@@ -13,14 +19,48 @@ function init(self)
 
 	self.levelname_node = gui.get_node("text_name")
 
+	self.controls_text = gui.get_node("text_controls")
+	self.controls_touch = gui.get_node("touch_controls")
+	self.controls_dpad = gui.get_node("dpad")
+
 	self.img_item = gui.get_node("img_item")
 	self.item_amount = gui.get_node("item_amount")
+
+	self.btn_reset = gui.get_node("btn_reset/button")
+	self.btn_menu = gui.get_node("btn_menu/button")
+
+	self.btn_up = gui.get_node("up")
+	self.btn_down = gui.get_node("down")
+	self.btn_left = gui.get_node("left")
+	self.btn_right = gui.get_node("right")
+	
+	self.level_url = msg.url("game", "/script", "main")
 
 	gui.set_text(self.move_node, self.move_text .. "0")
 	gui.set_text(self.required_node, self.required_text .. "0")
 
 	gui.set_text(self.item_amount, "0")
 	gui.play_flipbook(self.img_item, hash("key"))
+
+	msg.post(".", "acquire_input_focus")
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("touch") and action.released then
+		if gui.pick_node(self.btn_reset, action.x, action.y) then
+			msg.post(self.level_url, "reset_level")
+		elseif gui.pick_node(self.btn_menu, action.x, action.y) then
+			msg.post(self.level_url, "menu")
+		elseif gui.pick_node(self.btn_up, action.x, action.y) then
+			msg.post(self.level_url, "move", { movement = hash("up") })
+		elseif gui.pick_node(self.btn_down, action.x, action.y) then
+			msg.post(self.level_url, "move",  { movement = hash("down") })
+		elseif gui.pick_node(self.btn_left, action.x, action.y) then
+			msg.post(self.level_url, "move", { movement = hash("left") })
+		elseif gui.pick_node(self.btn_right, action.x, action.y) then
+			msg.post(self.level_url, "move", { movement = hash("right") })
+		end
+	end
 end
 
 function on_message(self, message_id, message, sender)
@@ -39,5 +79,7 @@ function on_message(self, message_id, message, sender)
 		gui.set_text(self.item_amount, math.min(9, message.amount))
 	elseif message_id == hash("toggle_item") then
 		toggle_item(self, message.has_keys or false)
+	elseif message_id == hash("touch_controls") then
+		toggle_touch_controls(self, message.show)
 	end
 end

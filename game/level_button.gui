@@ -1,0 +1,45 @@
+fonts {
+  name: "perfect-1"
+  font: "/font/perfect-1.font"
+}
+textures {
+  name: "gui_overlay"
+  texture: "/game/gui_overlay.atlas"
+}
+nodes {
+  size {
+    x: 28.0
+    y: 28.0
+  }
+  type: TYPE_BOX
+  texture: "gui_overlay/button"
+  id: "button"
+  inherit_alpha: true
+  slice9 {
+    x: 6.0
+    y: 6.0
+    z: 6.0
+    w: 6.0
+  }
+}
+nodes {
+  position {
+    y: -2.0
+  }
+  size {
+    x: 28.0
+    y: 28.0
+  }
+  type: TYPE_TEXT
+  text: "X"
+  font: "perfect-1"
+  id: "label"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "button"
+  inherit_alpha: true
+  text_tracking: 0.2
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT
