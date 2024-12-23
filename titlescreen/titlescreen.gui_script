@@ -34,6 +34,9 @@ local function update_level_selector(self)
 end
 
 local function init_levels(self)
+	gui.set_enabled(self.btn_back_node, self.touch_mode or false)
+	gui.set_enabled(self.btn_play_node, self.touch_mode or false)
+
 	if self.level_nodes ~= nil and #self.level_nodes > 0 then return end
 
 	self.level_nodes = {}
@@ -59,6 +62,17 @@ local function init_levels(self)
 		})
 	end
 
+	local y = math.floor(#self.level_nodes / select_columns)
+
+	local size = gui.get_size(self.level_select_node)
+
+	local btn_size = gui.get_size(self.btn_back_node)
+	local spacing = 16
+	local offset = -28
+
+	gui.set_position(self.btn_back_node, vmath.vector3(offset + size.x / 2 - btn_size.x - spacing / 2, -60 + y * -60, 0))
+	gui.set_position(self.btn_play_node, vmath.vector3(offset + size.x / 2 + btn_size.x + spacing / 2, -60 + y * -60, 0))
+
 	update_level_selector(self)
 
 	gui.delete_node(self.pick_level_node)
@@ -66,20 +80,20 @@ end
 
 local function update_state(self)
 	if self.state == states.menu then
-		gui.set_visible(self.state_menu_node, true)
-		gui.set_visible(self.copyright_node, true)
-		gui.set_visible(self.state_credits_node, false)
-		gui.set_visible(self.level_select_node, false)
+		gui.set_enabled(self.state_menu_node, true)
+		gui.set_enabled(self.copyright_node, true)
+		gui.set_enabled(self.state_credits_node, false)
+		gui.set_enabled(self.level_select_node, false)
 		msg.post(msg.url("titlescreen", "/script", nil), hash("hide_tilemap"))
 	elseif self.state == states.credits then
-		gui.set_visible(self.state_menu_node, false)
-		gui.set_visible(self.copyright_node, false)
-		gui.set_visible(self.state_credits_node, true)
-		gui.set_visible(self.level_select_node, false)
+		gui.set_enabled(self.state_menu_node, false)
+		gui.set_enabled(self.copyright_node, false)
+		gui.set_enabled(self.state_credits_node, true)
+		gui.set_enabled(self.level_select_node, false)
 	elseif self.state == states.level_select then
-		gui.set_visible(self.state_menu_node, false)
-		gui.set_visible(self.copyright_node, false)
-		gui.set_visible(self.level_select_node, true)
+		gui.set_enabled(self.state_menu_node, false)
+		gui.set_enabled(self.copyright_node, false)
+		gui.set_enabled(self.level_select_node, true)
 		init_levels(self)
 		msg.post(msg.url("titlescreen", "/script", nil), hash("show_tilemap"), { level = self.level_selected or 1 })
 	end
@@ -136,6 +150,9 @@ function init(self)
 	self.levelselect_node = gui.get_node("menu_item_levelselect/title")
 	self.credits_node = gui.get_node("menu_item_credits/title")
 
+	self.btn_back_node = gui.get_node("btn_back/button")
+	self.btn_play_node = gui.get_node("btn_play/button")
+
 	self.button_size = gui.get_size(self.new_game_node)
 
 	self.proxy_url = msg.url("proxy", "/loader", "script")
@@ -145,7 +162,7 @@ function init(self)
 	if self.current_level > 1 then
 		table.insert(self.menu_items, self.continue_node)
 	else
-		gui.set_visible(self.continue_node, false)
+		gui.set_enabled(self.continue_node, false)
 	end
 
 	table.insert(self.menu_items, self.new_game_node)
@@ -153,7 +170,7 @@ function init(self)
 	-- 	update_fullscreen_text(self)
 	-- 	table.insert(self.menu_items, self.fullscreen_node)
 	-- else
-		gui.set_visible(self.fullscreen_node, false)
+		gui.set_enabled(self.fullscreen_node, false)
 		update_menu_position(self, self.levelselect_node)
 		update_menu_position(self, self.credits_node)
 	-- end
@@ -176,18 +193,18 @@ end
 function on_input(self, action_id, action)
 	if not action.released then return end
 
+	self.touch_mode = false
 	if self.state == states.menu then
 		if action_id == hash("enter") or action_id == hash("touch") then
-			local touch_mode = false
 			if action_id == hash("touch") then
-				touch_mode = true
+				self.touch_mode = true
 				if gui.pick_node(self.continue_node, action.x, action.y) then
 					self.active_item = self.continue_node
 				elseif gui.pick_node(self.levelselect_node, action.x, action.y) then
 					self.active_item = self.levelselect_node
 				elseif gui.pick_node(self.new_game_node, action.x, action.y) then
 					self.active_item = self.new_game_node
-				elseif gui.pick_node(self.fullscreen_node, action.x, action.y) then
+				elseif gui.is_enabled(self.fullscreen_node) and gui.pick_node(self.fullscreen_node, action.x, action.y) then
 					self.active_item = self.fullscreen_node
 				elseif gui.pick_node(self.credits_node, action.x, action.y) then
 					self.active_item = self.credits_node
@@ -195,12 +212,12 @@ function on_input(self, action_id, action)
 			end
 
 			if self.active_item == self.continue_node then
-				msg.post(self.proxy_url, "show_level", { current_level = self.current_level, touch_mode = touch_mode } )
+				msg.post(self.proxy_url, "show_level", { current_level = self.current_level, touch_mode = self.touch_mode } )
 			elseif self.active_item == self.levelselect_node then
 				self.state = states.level_select
 				update_state(self)
 			elseif self.active_item == self.new_game_node then
-				msg.post(self.proxy_url, "show_level", { touch_mode = touch_mode } )
+				msg.post(self.proxy_url, "show_level", { touch_mode = self.touch_mode } )
 			elseif self.active_item == self.fullscreen_node then
 				msg.post(self.proxy_url, "toggle_fullscreen")
 				self.fullscreen_state = not self.fullscreen_state
@@ -247,6 +264,22 @@ function on_input(self, action_id, action)
 		elseif action_id == hash("down") and self.max_levels > select_columns then
 			self.level_selected = math.min(self.max_levels, (self.level_selected + select_columns) % max_levels)
 			update_level_selector(self)
+		elseif action_id == hash("touch") then
+			self.touch_mode = true
+			if gui.pick_node(self.btn_back_node, action.x, action.y) then
+				self.state = states.menu
+				update_state(self)
+			elseif gui.pick_node(self.btn_play_node, action.x, action.y) then
+				msg.post(self.proxy_url, "show_level", { current_level = self.level_selected, touch_mode = self.touch_mode } )
+			else
+				for k, v in ipairs(self.level_nodes) do
+					if v.enabled and gui.pick_node(v.node, action.x, action.y) then
+						self.level_selected = v.level
+						update_level_selector(self)
+						break
+					end
+				end
+			end
 		elseif action_id == hash("enter") then
 			msg.post(self.proxy_url, "show_level", { current_level = self.level_selected } )
 		elseif action_id == hash("back") then

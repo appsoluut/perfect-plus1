@@ -46,7 +46,7 @@ nodes {
   }
   size {
     x: 960.0
-    y: 650.0
+    y: 660.0
   }
   color {
     x: 0.102
@@ -231,7 +231,7 @@ nodes {
 nodes {
   size {
     x: 960.0
-    y: 650.0
+    y: 660.0
   }
   type: TYPE_BOX
   id: "credits"
@@ -241,11 +241,10 @@ nodes {
   clipping_mode: CLIPPING_MODE_STENCIL
   clipping_visible: false
   size_mode: SIZE_MODE_AUTO
-  visible: false
 }
 nodes {
   position {
-    y: -96.0
+    y: -78.0
   }
   scale {
     x: 1.5
@@ -412,6 +411,88 @@ nodes {
   id: "selector_level"
   parent: "e_content"
   size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 28.0
+    y: -27.0
+  }
+  scale {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+  }
+  type: TYPE_TEMPLATE
+  id: "btn_back"
+  parent: "e_content"
+  template: "/game/level_button.gui"
+}
+nodes {
+  position {
+    x: 50.0
+  }
+  size {
+    x: 128.0
+    y: 28.0
+  }
+  type: TYPE_BOX
+  id: "btn_back/button"
+  parent: "btn_back"
+  overridden_fields: 1
+  overridden_fields: 4
+  template_node_child: true
+}
+nodes {
+  size {
+    x: 128.0
+    y: 28.0
+  }
+  type: TYPE_TEXT
+  text: "BACK"
+  id: "btn_back/label"
+  parent: "btn_back/button"
+  overridden_fields: 4
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  position {
+    x: 401.0
+    y: -27.0
+  }
+  scale {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+  }
+  type: TYPE_TEMPLATE
+  id: "btn_play"
+  parent: "e_content"
+  template: "/game/level_button.gui"
+}
+nodes {
+  size {
+    x: 128.0
+    y: 28.0
+  }
+  type: TYPE_BOX
+  id: "btn_play/button"
+  parent: "btn_play"
+  overridden_fields: 4
+  template_node_child: true
+}
+nodes {
+  size {
+    x: 128.0
+    y: 28.0
+  }
+  type: TYPE_TEXT
+  text: "PLAY"
+  id: "btn_play/label"
+  parent: "btn_play/button"
+  overridden_fields: 4
+  overridden_fields: 8
+  template_node_child: true
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT
