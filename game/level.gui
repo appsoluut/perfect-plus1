@@ -475,7 +475,7 @@ nodes {
   }
   type: TYPE_BOX
   id: "nw_content1"
-  xanchor: XANCHOR_LEFT
+  xanchor: XANCHOR_RIGHT
   yanchor: YANCHOR_TOP
   pivot: PIVOT_NE
   adjust_mode: ADJUST_MODE_STRETCH

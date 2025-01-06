@@ -1,16 +1,13 @@
 uniform highp mat4 view_proj;
 
 // positions are in world space
-attribute highp vec4 position;
-attribute mediump vec2 texcoord0;
-
-uniform mediump vec4 animation_time; // vertex constant set up in material as type user.
+attribute vec4 position;
+attribute vec2 texcoord0;
 
 varying mediump vec2 var_texcoord0;
 
 void main()
 {
 	gl_Position = view_proj * vec4(position.xyz, 1.0);
-	// var_texcoord0 = texcoord0;
-	var_texcoord0 = vec2(texcoord0.x + animation_time.x, texcoord0.y - animation_time.x); // Calculate var texcoord 1 uv offset on U(x) axis to fragment program 
+	var_texcoord0 = texcoord0;
 }
