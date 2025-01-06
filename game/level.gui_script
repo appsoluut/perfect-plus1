@@ -1,3 +1,5 @@
+local controls = require "input.controls"
+
 local function toggle_item(self, visible)
 	gui.set_visible(self.item_amount, visible)
 	gui.set_visible(self.img_item, visible)
@@ -7,6 +9,10 @@ local function toggle_touch_controls(self, visible)
 	gui.set_visible(self.controls_text, not visible)
 	gui.set_visible(self.controls_touch, visible)
 	gui.set_visible(self.controls_dpad, visible)
+end
+
+local function show_controller_controls(self)
+	gui.set_text(self.controls_text, controls.controller_control_scheme)
 end
 
 function init(self)
@@ -81,5 +87,7 @@ function on_message(self, message_id, message, sender)
 		toggle_item(self, message.has_keys or false)
 	elseif message_id == hash("touch_controls") then
 		toggle_touch_controls(self, message.show)
+	elseif message_id == hash("controller_controls") then
+		show_controller_controls(self)
 	end
 end

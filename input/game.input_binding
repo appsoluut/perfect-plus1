@@ -56,49 +56,53 @@ mouse_trigger {
 }
 gamepad_trigger {
   input: GAMEPAD_LSTICK_LEFT
-  action: "left"
+  action: "gp_left"
 }
 gamepad_trigger {
   input: GAMEPAD_LSTICK_RIGHT
-  action: "right"
+  action: "gp_right"
 }
 gamepad_trigger {
   input: GAMEPAD_LSTICK_UP
-  action: "up"
+  action: "gp_up"
 }
 gamepad_trigger {
   input: GAMEPAD_LSTICK_DOWN
-  action: "down"
+  action: "gp_down"
 }
 gamepad_trigger {
   input: GAMEPAD_LPAD_LEFT
-  action: "left"
+  action: "gp_left"
 }
 gamepad_trigger {
   input: GAMEPAD_LPAD_RIGHT
-  action: "right"
+  action: "gp_right"
 }
 gamepad_trigger {
   input: GAMEPAD_LPAD_UP
-  action: "up"
+  action: "gp_up"
 }
 gamepad_trigger {
   input: GAMEPAD_LPAD_DOWN
-  action: "down"
+  action: "gp_down"
 }
 gamepad_trigger {
   input: GAMEPAD_RPAD_UP
-  action: "key_r"
+  action: "gp_reset"
 }
 gamepad_trigger {
   input: GAMEPAD_RPAD_DOWN
-  action: "enter"
+  action: "gp_confirm"
 }
 gamepad_trigger {
   input: GAMEPAD_START
-  action: "start"
+  action: "gp_start"
 }
 gamepad_trigger {
   input: GAMEPAD_BACK
-  action: "back"
+  action: "gp_back"
+}
+gamepad_trigger {
+  input: GAMEPAD_RPAD_RIGHT
+  action: "gp_cancel"
 }

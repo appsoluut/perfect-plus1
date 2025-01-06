@@ -34,23 +34,17 @@ function final(self)
 	msg.post(".", "release_input_focus")
 end
 
-function update(self, dt)
-end
-
-function on_message(self, message_id, message, sender)
-end
-
 function on_input(self, action_id, action)
 	if action.pressed then
-		if action_id == hash("start") then
+		if action_id == hash("gp_start") or action_id == hash("gp_cancel") then
 			msg.post(msg.url("proxy", "/loader", "script"), "popup_pause")
-		elseif action_id == hash("up") then
+		elseif action_id == hash("gp_up") then
 			self.active_index = math.max(1, self.active_index - 1)
 			update_cursor(self)
-		elseif action_id == hash("down") then
+		elseif action_id == hash("gp_down") then
 			self.active_index = math.min(#self.menu_items, self.active_index + 1)
 			update_cursor(self)
-		elseif action_id == hash("enter") then
+		elseif action_id == hash("gp_confirm") then
 			if self.active_item == self.btn_quit_node then
 				msg.post(msg.url("proxy", "/loader", "script"), "popup_pause")
 				msg.post(msg.url("proxy", "/loader", "script"), "show_titlescreen")

@@ -206,7 +206,7 @@ nodes {
     y: 16.0
   }
   size {
-    x: 400.0
+    x: 500.0
     y: 400.0
   }
   color {
@@ -233,7 +233,7 @@ nodes {
     z: 2.0
   }
   size {
-    x: 200.0
+    x: 250.0
     y: 100.0
   }
   type: TYPE_TEXT

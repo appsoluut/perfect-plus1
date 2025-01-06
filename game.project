@@ -47,6 +47,6 @@ show_made_with_defold = 0
 subpixels = 0
 
 [input]
-gamepads = /builtins/input/default.gamepadsc
+gamepads = /input/default.gamepadsc
 use_accelerometer = 0
 

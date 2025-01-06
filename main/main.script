@@ -1,5 +1,6 @@
 local defsave = require "defsave.defsave"
 local monarch = require "monarch.monarch"
+local controls = require "input.controls"
 
 local screens = {
 	show_splashscreen = hash("show_splashscreen"),
@@ -38,7 +39,7 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == screens.show_level then
-		monarch.show("level", {}, { current_level = message.current_level or 1, touch_mode = message.touch_mode or false })
+		monarch.show("level", {}, { current_level = message.current_level or 1, control_mode = message.control_mode or controls.default_control_mode })
 	elseif message_id == screens.show_splashscreen then
 		monarch.show("splashscreen")
 	elseif message_id == screens.show_titlescreen then
