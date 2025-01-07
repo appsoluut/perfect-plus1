@@ -107,9 +107,9 @@ nodes {
     y: 100.0
   }
   type: TYPE_TEXT
-  text: "FIND THE SHORTEST PATH TO THE EXIT, AND THEN DO NOT TAKE IT.\n"
+  text: "DO NOT TAKE THE SHORTEST PATH TO THE EXIT. INSTEAD, FIND A PATH WITH EXACTLY 1 MORE MOVE OVER PERFECTION.\n"
   "\n"
-  "INSTEAD, FIND A PATH THAT REQUIRES JUST ONE MORE MOVE OVER PERFECTION."
+  "IF THE SHORTEST PATH IS 3 MOVES, FIND A PATH THAT TAKES 4. FIND PERFECT@#."
   font: "perfect-1"
   id: "text"
   pivot: PIVOT_N
@@ -121,7 +121,7 @@ nodes {
 nodes {
   position {
     x: -140.0
-    y: -316.0
+    y: -379.0
   }
   type: TYPE_TEMPLATE
   id: "menu_item_continue"
@@ -140,7 +140,7 @@ nodes {
 nodes {
   position {
     x: -140.0
-    y: -355.0
+    y: -418.0
   }
   type: TYPE_TEMPLATE
   id: "menu_item_newgame"
@@ -157,7 +157,7 @@ nodes {
 nodes {
   position {
     x: -140.0
-    y: -394.0
+    y: -457.0
   }
   type: TYPE_TEMPLATE
   id: "menu_item_fullscreen"
@@ -176,7 +176,7 @@ nodes {
 nodes {
   position {
     x: -140.0
-    y: -433.0
+    y: -496.0
   }
   type: TYPE_TEMPLATE
   id: "menu_item_levelselect"
@@ -195,7 +195,7 @@ nodes {
 nodes {
   position {
     x: -140.0
-    y: -474.0
+    y: -537.0
   }
   type: TYPE_TEMPLATE
   id: "menu_item_credits"
@@ -214,7 +214,7 @@ nodes {
 nodes {
   position {
     x: -164.0
-    y: -313.0
+    y: -376.0
   }
   scale {
     x: 2.0

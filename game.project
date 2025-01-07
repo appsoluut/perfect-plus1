@@ -39,7 +39,7 @@ bundle_name = Perfect+1
 
 [html5]
 cssfile = /builtins/manifests/web/dark_theme.css
-scale_mode = downscale_fit
+scale_mode = fit
 show_fullscreen_button = 0
 show_made_with_defold = 0
 

@@ -12,7 +12,7 @@ local function position_level(self)
 	local w = sprite_size * self.tilemap_width / zoom
 	local h = sprite_size * self.tilemap_height / zoom
 	local diff = (current_width - self.width) / zoom / 2
-	local offset = 100 + diff / 2
+	local offset = 86 + diff / 2
 	go.set_position(vmath.vector3(self.width / 2 - w - offset, self.height / 2 - h, 0.1), self.tilemap_id)
 end
 
@@ -61,7 +61,7 @@ local function animate_background()
 	
 	local scale = vmath.vector4(size.x / sprite_size, size.y / sprite_size, 0, 0)
 	go.set("/scroll#plane", "scale", scale)
-	go.set("/scroll#plane", "tint.w", 0.66)
+	go.set("/scroll#plane", "tint.w", 0.5)
 	go.animate("/scroll#plane", "animation_time.x", go.PLAYBACK_LOOP_FORWARD, scale.xy, go.EASING_LINEAR, 120 * scale.xy)
 end
 
