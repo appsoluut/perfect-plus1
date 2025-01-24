@@ -14,11 +14,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: buildjet/setup-java@v4
         with:
           distribution: 'zulu'
-          java-version: '17'
+          java-version: '21'
       - uses: dapetcu21/setup-defold@v3.0.2
-      - run: 'java -jar $BOB --variant debug build'
-      - run: 'dmengine_headless'
+      - run: 'java -jar $BOB --archive --platform x86_64-linux resolve distclean build bundle'
+      - name: Export Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: x86_64-linux
+          path: build/default/Perfect+1/
