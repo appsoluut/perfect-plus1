@@ -120,6 +120,18 @@ return {
       properties = {
         ["type"] = "trapdoor"
       }
+    },
+    {
+      id = 14,
+      properties = {
+        ["type"] = "elec_off"
+      }
+    },
+    {
+      id = 15,
+      properties = {
+        ["type"] = "elec_on"
+      }
     }
   }
 }

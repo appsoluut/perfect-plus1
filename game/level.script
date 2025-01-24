@@ -1,5 +1,5 @@
 go.property("current_level", 1)
-go.property("max_levels", 48)
+go.property("max_levels", 49)
 
 local tile_size = 16
 local max_tile_x = 12
@@ -33,6 +33,8 @@ local tile_trapdoor = 15
 local tile_key = 16
 local tile_door = 17
 local tile_number_4 = 120
+local tile_elec_off = 18
+local tile_elec_on = 19
 
 local idle_animations = {
 	[hash("idle")] = 4,
@@ -46,6 +48,7 @@ local idle_animations = {
 local stop_reason = {
 	glue = 1,
 	trapdoor = 2,
+	elec_on = 3,
 	none = 0
 }
 
@@ -132,6 +135,10 @@ local function load_tileset(self)
 				elseif tile.properties.color == "purple" then
 					tile_teleporter_purple = tile.id + 1
 				end
+			elseif tile.properties.type == "elec_off" then
+				tile_elec_off = tile.id + 1
+			elseif tile.properties.type == "elec_on" then
+				tile_elec_on = tile.id + 1
 			end
 		end
 	else
@@ -202,6 +209,7 @@ local function init_tilemap_data(self)
 	self.player_start_tile_position = { x = 0, y = 0 }
 	self.tilemap_floor = tilemap.get_tiles(self.tilemap_level_url, "floor")
 	self.tilemap_items = tilemap.get_tiles(self.tilemap_level_url, "items")
+	self.elec_tiles = {}
 	self.has_keys = false
 
 	for row = 1, #self.tilemap_items do
@@ -229,6 +237,8 @@ local function init_tilemap_data(self)
 			and self.tilemap_items[row][col] ~= tile_oneway_right
 			and self.tilemap_items[row][col] ~= tile_oneway_up
 			and self.tilemap_items[row][col] ~= tile_glue
+			and self.tilemap_items[row][col] ~= tile_elec_off
+			and self.tilemap_items[row][col] ~= tile_elec_on
 			and self.tilemap_items[row][col] ~= tile_key
 			and self.tilemap_items[row][col] ~= tile_door then
 				tilemap.set_tile(self.tilemap_level_url, "items", col, row, tile_empty)
@@ -236,6 +246,11 @@ local function init_tilemap_data(self)
 
 			if self.tilemap_items[row][col] == tile_trapdoor then
 				tilemap.set_tile(self.tilemap_level_url, "floor", col, row, tile_empty)
+			end
+
+			if self.tilemap_items[row][col] == tile_elec_off
+			or self.tilemap_items[row][col] == tile_elec_on then
+				table.insert(self.elec_tiles, { x = col, y = row, tile = self.tilemap_items[row][col] })
 			end
 		end
 	end
@@ -443,6 +458,20 @@ local function check_teleport(self, tile)
 	return true
 end
 
+local function toggle_elec_tiles(self)
+	if self.elec_tiles == nil then return end
+
+	for k, v in ipairs(self.elec_tiles) do
+		if v.tile == tile_elec_off then
+			v.tile = tile_elec_on
+		else
+			v.tile = tile_elec_off
+		end
+		self.tilemap_items[v.y][v.x] = v.tile
+		tilemap.set_tile(self.tilemap_level_url, "items", v.x, v.y, v.tile)
+	end
+end
+
 local function check_solution(self, pickup_sound_played)
 	local solved = false
 	if self.player_tile_position.x == self.exit_tile_position.x and self.player_tile_position.y == self.exit_tile_position.y then
@@ -471,8 +500,11 @@ local function check_solution(self, pickup_sound_played)
 
 	if (not solved or not self.teleporting) and self.moves >= self.required_moves then
 		play_lost_animation(self)
-	elseif not pickup_sound_played then
-		sound.play(msg.url(nil, "sound", "impact" .. math.random(1, 5)))
+	else
+		toggle_elec_tiles(self)
+		if not pickup_sound_played then
+			sound.play(msg.url(nil, "sound", "impact" .. math.random(1, 5)))
+		end
 	end
 end
 
@@ -501,6 +533,13 @@ local function is_glue(self, x, y)
 		self.glue = { x = x, y = y }
 	end
 end
+
+local function is_elec_on(self, x, y)
+	if not self.elec_on and self.tilemap_items[y][x] == tile_elec_on then
+		self.elec_on = { x = x, y = y }
+	end
+end
+
 
 local function is_door(self, x, y, is_cursor)
 	if not is_cursor and (self.tilemap_items ~= nil and self.tilemap_items[y] ~= nil and self.tilemap_items[y][x] == tile_door) then
@@ -541,6 +580,8 @@ end
 local function stop_player(self, x, y)
 	if (self.glue ~= nil and (self.glue.x ~= x or self.glue.y ~= y)) then
 		return stop_reason.glue
+	elseif (self.elec_on ~= nil and not self.elec_on.id and (self.elec_on.x ~= x or self.elec_on.y ~= y)) then
+		return stop_reason.elec_on	
 	elseif (self.trapdoor ~= nil and not self.trapdoor.id and (self.trapdoor.x ~= x or self.trapdoor.y ~= y)) then
 		return stop_reason.trapdoor
 	else
@@ -609,6 +650,7 @@ local function check_bounds(self, player_position)
 	local py_offset = math.floor((player_position.y + (self.movement.y * tile_size / 2) - self.tilemap_position.y - (self.movement.y * tile_size / 2)) / tile_size) + 1
 
 	is_glue(self, px, py)
+	is_elec_on(self, px, py)
 	is_trapdoor(self, px_offset, py_offset)
 	local pickup_sound_played = pickup_item(self, px_offset, py_offset)
 	local should_stop = stop_player(self, px, py)
@@ -619,6 +661,8 @@ local function check_bounds(self, player_position)
 		if not check_trapdoor(self, self.tilemap_items[self.player_tile_position.y][self.player_tile_position.x]) and not check_teleport(self, self.tilemap_items[self.player_tile_position.y][self.player_tile_position.x]) then
 			if should_stop == stop_reason.trapdoor then
 				play_lost_animation(self, "victory")
+			elseif should_stop == stop_reason.elec_on then
+				play_lost_animation(self, "electrocute")
 			else
 				play_collision_animation(self)
 			end
@@ -627,11 +671,12 @@ local function check_bounds(self, player_position)
 		player_position.y = self.tilemap_position.y + ((self.player_tile_position.y - 1) * tile_size) + tile_size / 2
 		self.glue = nil
 		self.trapdoor = nil
+		self.elec_on = nil
 		self.moves = self.moves + 1
 		self.movement = nil
 		self.speed = 0
 		msg.post(msg.url(nil, "gui", "level"), hash("update_moves"), { moves = self.moves })
-		if should_stop ~= stop_reason.trapdoor then
+		if should_stop ~= stop_reason.trapdoor and should_stop ~= stop_reason.elec_on then
 			check_solution(self, pickup_sound_played)
 		end
 	end

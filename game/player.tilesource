@@ -33,6 +33,12 @@ animations {
   fps: 2
 }
 animations {
+  id: "electrocute"
+  start_tile: 42
+  end_tile: 53
+  fps: 8
+}
+animations {
   id: "idle"
   start_tile: 1
   end_tile: 1

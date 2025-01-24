@@ -3,11 +3,12 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "tiled/level1.tmx",
+    "activeFile": "tiled/level49.tmx",
     "expandedProjectPaths": [
         "tiled",
         "."
     ],
+    "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "": {
             "scaleInDock": 1
@@ -24,11 +25,11 @@
             "scaleInDock": 1
         },
         "tiled/level1.tmx": {
-            "scale": 2,
-            "selectedLayer": 0,
+            "scale": 4,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 64.5,
-                "y": 95.5
+                "x": 64,
+                "y": 64.125
             }
         },
         "tiled/level1.tmx#tiles": {
@@ -159,8 +160,8 @@
             "scale": 3.953385416666666,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 96.12015018773468,
-                "y": 96.12015018773468
+                "x": 96.1201501877347,
+                "y": 95.99367630590872
             }
         },
         "tiled/level25.tmx": {
@@ -311,16 +312,16 @@
             "scale": 3.953385416666666,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 56.91324682168501,
-                "y": 104.97332191555236
+                "x": 55.90145576707728,
+                "y": 50.716026612212644
             }
         },
         "tiled/level42.tmx": {
             "scale": 3.953385416666666,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 96.12015018773468,
-                "y": 96.12015018773468
+                "x": 96.1201501877347,
+                "y": 95.99367630590872
             }
         },
         "tiled/level43.tmx": {
@@ -328,15 +329,15 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 72.09011264080101,
-                "y": 72.09011264080101
+                "y": 71.96363875897505
             }
         },
         "tiled/level44.tmx": {
             "scale": 3.953385416666666,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 96.12015018773468,
-                "y": 96.12015018773468
+                "x": 96.1201501877347,
+                "y": 95.99367630590872
             }
         },
         "tiled/level45.tmx": {
@@ -344,15 +345,15 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 72.09011264080101,
-                "y": 88.02582175087284
+                "y": 87.89934786904685
             }
         },
         "tiled/level46.tmx": {
             "scale": 3.953385416666666,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 96.12015018773468,
-                "y": 96.12015018773468
+                "x": 96.1201501877347,
+                "y": 95.99367630590872
             }
         },
         "tiled/level47.tmx": {
@@ -360,7 +361,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 72.09011264080101,
-                "y": 79.93149331401095
+                "y": 80.05796719583692
             }
         },
         "tiled/level48.tmx": {
@@ -368,7 +369,15 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 88.02582175087282,
-                "y": 88.02582175087284
+                "y": 87.89934786904685
+            }
+        },
+        "tiled/level49.tmx": {
+            "scale": 5.4624999999999995,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 63.98169336384441,
+                "y": 55.926773455377585
             }
         },
         "tiled/level5.tmx": {
@@ -453,7 +462,9 @@
         "tiled/level47.tmx",
         "tiled/level48.tmx",
         "tiled/level24.tmx",
-        "tiled/level1.tmx"
+        "tiled/level1.tmx",
+        "tiled/tiles.tsx",
+        "tiled/level49.tmx"
     ],
     "project": "project-plus1.tiled-project",
     "property.type": "bool",
@@ -468,8 +479,8 @@
         "tiled/level48.tmx",
         "tiled/level24.tmx",
         "tiled/level1.tmx",
-        "tiled/level14.tmx",
-        "tiled/level9.tmx"
+        "tiled/tiles.tsx",
+        "tiled/level49.tmx"
     ],
     "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",

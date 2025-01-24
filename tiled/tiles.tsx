@@ -80,4 +80,14 @@
    <property name="type" value="trapdoor"/>
   </properties>
  </tile>
+ <tile id="14">
+  <properties>
+   <property name="type" value="elec_off"/>
+  </properties>
+ </tile>
+ <tile id="15">
+  <properties>
+   <property name="type" value="elec_on"/>
+  </properties>
+ </tile>
 </tileset>
