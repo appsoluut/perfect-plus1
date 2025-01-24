@@ -1,0 +1,24 @@
+name: Build
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  build:
+    name: Build
+    runs-on: buildjet-4vcpu-ubuntu-2204
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Set up JDK 17
+        uses: buildjet/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - uses: dapetcu21/setup-defold@v3.0.2
+      - run: 'java -jar $BOB --variant debug build'
+      - run: 'dmengine_headless'
