@@ -4,7 +4,7 @@ local controls = require "input.controls"
 
 local table = table
 local srep = string.rep
-local max_levels = 49
+local max_levels = 50
 local select_columns = 8
 
 local states = {
