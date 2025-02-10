@@ -1,5 +1,5 @@
 go.property("current_level", 1)
-go.property("max_levels", 50)
+go.property("max_levels", 48)
 
 local tile_size = 16
 local max_tile_x = 12
