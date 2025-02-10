@@ -1,7 +1,7 @@
 images {
-  image: "/splash/pixel_logo.png"
+  image: "/splash/defold_splash.png"
 }
 images {
-  image: "/splash/defold_splash.png"
+  image: "/splash/hell_hog_logo.png"
 }
 extrude_borders: 2
