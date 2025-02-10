@@ -1,0 +1,59 @@
+script: "/tutorial/tutorial.gui_script"
+fonts {
+  name: "perfect-1"
+  font: "/font/perfect-1.font"
+}
+nodes {
+  scale {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+  }
+  size {
+    x: 640.0
+    y: 360.0
+  }
+  type: TYPE_BOX
+  id: "container"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
+  pivot: PIVOT_SW
+  clipping_mode: CLIPPING_MODE_STENCIL
+  clipping_visible: false
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 320.0
+    y: 180.0
+  }
+  size {
+    x: 600.0
+    y: 320.0
+  }
+  type: TYPE_TEXT
+  text: "HOW TO PLAY?\n"
+  "\n"
+  "\n"
+  "DO NOT TAKE THE SHORTEST PATH TO THE EXIT.\n"
+  "\n"
+  "INSTEAD, FIND A PATH WITH EXACTLY 1 MORE MOVE OVER PERFECTION.\n"
+  "\n"
+  "IF THE SHORTEST PATH IS 3 MOVES, FIND A PATH THAT TAKES 4.\n"
+  "\n"
+  "FIND PERFECT+1.\n"
+  "\n"
+  "\n"
+  "PRESS ANY KEY TO CONTINUE"
+  font: "perfect-1"
+  id: "text"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  line_break: true
+  parent: "container"
+  inherit_alpha: true
+  text_leading: 1.2
+  text_tracking: 0.2
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

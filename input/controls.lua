@@ -10,12 +10,11 @@ M.default_control_mode = M.control_modes.keyboard
 
 M.keyboard_control_scheme = [[$%^&: MOVE
 WASD: MOVE
-ESC: MAIN MENU
+ESC: MENU
 R: RESET]]
 
 M.controller_control_scheme = [[$%^&: MOVE
-START: PAUSE MENU
-BACK: MAIN MENU
+START: MENU
 {: RESET]]
 
 return M

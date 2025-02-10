@@ -12,8 +12,8 @@ local function position_level(self)
 	local w = sprite_size * self.tilemap_width / zoom
 	local h = sprite_size * self.tilemap_height / zoom
 	local diff = (current_width - self.width) / zoom / 2
-	local offset = 86 + diff / 2
-	go.set_position(vmath.vector3(self.width / 2 - w - offset, self.height / 2 - h, 0.1), self.tilemap_id)
+	local offset = 102 + diff / 2
+	go.set_position(vmath.vector3(self.width / 2 - w - offset, -8 + self.height / 2 - h, 0.1), self.tilemap_id)
 end
 
 local function window_callback(self, event, data)

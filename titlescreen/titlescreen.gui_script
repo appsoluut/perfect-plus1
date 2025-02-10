@@ -85,16 +85,19 @@ local function update_state(self)
 		gui.set_enabled(self.copyright_node, true)
 		gui.set_enabled(self.state_credits_node, false)
 		gui.set_enabled(self.level_select_node, false)
+		gui.set_scale(self.logo, vmath.vector4(4))
 		msg.post(msg.url("titlescreen", "/script", nil), hash("hide_tilemap"))
 	elseif self.state == states.credits then
 		gui.set_enabled(self.state_menu_node, false)
 		gui.set_enabled(self.copyright_node, false)
 		gui.set_enabled(self.state_credits_node, true)
 		gui.set_enabled(self.level_select_node, false)
+		gui.set_scale(self.logo, vmath.vector4(2))
 	elseif self.state == states.level_select then
 		gui.set_enabled(self.state_menu_node, false)
 		gui.set_enabled(self.copyright_node, false)
 		gui.set_enabled(self.level_select_node, true)
+		gui.set_scale(self.logo, vmath.vector4(4))
 		init_levels(self)
 		msg.post(msg.url("titlescreen", "/script", nil), hash("show_tilemap"), { level = self.level_selected or 1 })
 	end
@@ -132,6 +135,7 @@ function init(self)
 	self.copyright_node = gui.get_node("copyright")
 	self.level_select_node = gui.get_node("e_content")
 	self.pick_level_node = gui.get_node("level_select/level")
+	self.logo = gui.get_node("logo")
 
 	self.selector_level_node = gui.get_node("selector_level")
 	self.selector_level_scale = gui.get_scale(self.selector_level_node)
@@ -220,7 +224,7 @@ function on_input(self, action_id, action)
 				self.state = states.level_select
 				update_state(self)
 			elseif self.active_item == self.new_game_node then
-				msg.post(self.proxy_url, "show_level", { control_mode = self.control_mode } )
+				msg.post(self.proxy_url, "show_tutorial", { control_mode = self.control_mode } )
 			elseif self.active_item == self.fullscreen_node then
 				msg.post(self.proxy_url, "toggle_fullscreen")
 				self.fullscreen_state = not self.fullscreen_state

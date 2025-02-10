@@ -6,13 +6,14 @@ local screens = {
 	show_splashscreen = hash("show_splashscreen"),
 	show_level = hash("show_level"),
 	show_titlescreen = hash("show_titlescreen"),
+	show_tutorial = hash("show_tutorial"),
 	popup_pause = hash("popup_pause")
 }
 local toggle_fullscreen = hash("toggle_fullscreen")
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
-	msg.post("#", screens.show_titlescreen)
+	msg.post("#", screens.show_splashscreen)
 	msg.post("@render:", "clear_color", { color = vmath.vector4(0, 0, 0, 1) } )
 	defsave.set_appname("perfect_1")
 	defsave.use_serialize = true
@@ -43,6 +44,8 @@ function on_message(self, message_id, message, sender)
 		monarch.show("level", {}, { current_level = message.current_level or 1, control_mode = message.control_mode or controls.default_control_mode })
 	elseif message_id == screens.show_splashscreen then
 		monarch.show("splashscreen")
+	elseif message_id == screens.show_tutorial then
+		monarch.show("tutorial", {}, { control_mode = message.control_mode })
 	elseif message_id == screens.show_titlescreen then
 		if not self.music_playing then
 			sound.play(msg.url(nil, "sound", "music"))

@@ -821,7 +821,8 @@ function on_input(self, action_id, action)
 	elseif (action_id == hash("key_r") or action_id == hash("gp_reset")) and action.pressed then
 		reset_level(self)
 	elseif (action_id == hash("start") or action_id == hash("gp_start")) and action.pressed then
-		msg.post(msg.url("proxy", "/loader", "script"), "popup_pause")
+		-- msg.post(msg.url("proxy", "/loader", "script"), "popup_pause")
+		msg.post(msg.url("proxy", "/loader", "script"), "show_titlescreen")
 	elseif (action_id == hash("back") or action_id == hash("gp_back")) and action.released then
 		msg.post(msg.url("proxy", "/loader", "script"), "show_titlescreen")
 	end

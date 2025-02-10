@@ -10,8 +10,9 @@ function init(self)
 
 	self.defold_logo_size = go.get(self.defold_logo_url, "size")
 	self.qhg_logo_size = go.get(self.qhg_logo_url, "size")
+	self.qhg_logo_scale = go.get(self.qhg_logo_url, "scale")
 
-	local qhg_logo_position = vmath.vector3(width / 2 - self.qhg_logo_size.x / 2, height / 2 - self.qhg_logo_size.y / 2, 0)
+	local qhg_logo_position = vmath.vector3(width / 2 - (self.qhg_logo_size.x * self.qhg_logo_scale.x) / 2, height / 2 - (self.qhg_logo_size.y * self.qhg_logo_scale.y) / 2, 0)
 	go.set_position(qhg_logo_position, msg.url(nil, "qhg", nil))
 	go.set(self.qhg_logo_url, "tint.w", 0)
 

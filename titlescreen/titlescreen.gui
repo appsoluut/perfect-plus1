@@ -67,9 +67,9 @@ nodes {
 }
 nodes {
   scale {
-    x: 2.0
-    y: 2.0
-    z: 2.0
+    x: 4.0
+    y: 4.0
+    z: 4.0
   }
   type: TYPE_BOX
   texture: "titlescreen/perfect+1_logo"
@@ -95,33 +95,8 @@ nodes {
 }
 nodes {
   position {
-    y: -96.0
-  }
-  scale {
-    x: 2.0
-    y: 2.0
-    z: 2.0
-  }
-  size {
-    x: 480.0
-    y: 100.0
-  }
-  type: TYPE_TEXT
-  text: "DO NOT TAKE THE SHORTEST PATH TO THE EXIT. INSTEAD, FIND A PATH WITH EXACTLY 1 MORE MOVE OVER PERFECTION.\n"
-  "\n"
-  "IF THE SHORTEST PATH IS 3 MOVES, FIND A PATH THAT TAKES 4. FIND PERFECT@#."
-  font: "perfect-1"
-  id: "text"
-  pivot: PIVOT_N
-  line_break: true
-  parent: "menu"
-  inherit_alpha: true
-  text_tracking: 0.2
-}
-nodes {
-  position {
     x: -140.0
-    y: -379.0
+    y: -271.0
   }
   type: TYPE_TEMPLATE
   id: "menu_item_continue"
@@ -140,7 +115,7 @@ nodes {
 nodes {
   position {
     x: -140.0
-    y: -418.0
+    y: -310.0
   }
   type: TYPE_TEMPLATE
   id: "menu_item_newgame"
@@ -157,7 +132,7 @@ nodes {
 nodes {
   position {
     x: -140.0
-    y: -457.0
+    y: -349.0
   }
   type: TYPE_TEMPLATE
   id: "menu_item_fullscreen"
@@ -176,7 +151,7 @@ nodes {
 nodes {
   position {
     x: -140.0
-    y: -496.0
+    y: -388.0
   }
   type: TYPE_TEMPLATE
   id: "menu_item_levelselect"
@@ -195,7 +170,7 @@ nodes {
 nodes {
   position {
     x: -140.0
-    y: -537.0
+    y: -429.0
   }
   type: TYPE_TEMPLATE
   id: "menu_item_credits"
@@ -368,7 +343,7 @@ nodes {
 }
 nodes {
   position {
-    y: 240.0
+    y: 197.0
   }
   size {
     x: 800.0
@@ -383,7 +358,7 @@ nodes {
 }
 nodes {
   position {
-    y: -38.0
+    y: -72.0
   }
   type: TYPE_TEMPLATE
   id: "level_select"
@@ -399,7 +374,7 @@ nodes {
 nodes {
   position {
     x: 35.0
-    y: -205.0
+    y: -239.0
   }
   scale {
     x: 2.0
@@ -415,7 +390,7 @@ nodes {
 nodes {
   position {
     x: 28.0
-    y: -27.0
+    y: -61.0
   }
   scale {
     x: 2.0
@@ -458,7 +433,7 @@ nodes {
 nodes {
   position {
     x: 401.0
-    y: -27.0
+    y: -61.0
   }
   scale {
     x: 2.0
