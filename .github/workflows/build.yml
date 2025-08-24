@@ -10,7 +10,7 @@ on:
 
 env:
   ITCH_USERNAME: hellhog
-  ITCH_GAME_ID: perfect1-beta
+  ITCH_GAME_ID: perfect-plus1
 
 jobs:
   build:
@@ -30,15 +30,32 @@ jobs:
           java-version: '21'
       - uses: dapetcu21/setup-defold@v3.0.3
       - run: 'java -jar $BOB --archive --platform ${{ matrix.platform }} resolve distclean build bundle'
+      - name: Set buildChannel based on platform
+        id: set_build_channel
+        run: |
+          case "${{ matrix.platform }}" in
+            js-web)
+              echo "buildChannel=html" >> $GITHUB_OUTPUT
+              ;;
+            x86_64-linux)
+              echo "buildChannel=linux" >> $GITHUB_OUTPUT
+              ;;
+            x86_64-win32)
+              echo "buildChannel=windows" >> $GITHUB_OUTPUT
+              ;;
+            *)
+              echo "buildChannel=default" >> $GITHUB_OUTPUT
+              ;;
+          esac
       - name: Deploy to Itch.io
-        if: ${{ matrix.platform == 'js-web' }}
+        # if: ${{ matrix.platform == 'js-web' }}
         uses: KikimoraGames/itch-publish@v0.0.3
         with:
           butlerApiKey: ${{ secrets.BUTLER_API_KEY }}
           gameData: build/default/Perfect+1/
           itchUsername: ${{ env.ITCH_USERNAME }}
           itchGameId: ${{ env.ITCH_GAME_ID }}
-          buildChannel: 'html'
+          buildChannel: ${{ steps.set_build_channel.outputs.buildChannel }}
           buildNumber: ${{ needs.version.outputs.version_hash }}
       - name: Export artifact
         uses: actions/upload-artifact@v4
