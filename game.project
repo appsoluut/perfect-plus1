@@ -51,3 +51,6 @@ subpixels = 0
 gamepads = /input/default.gamepadsc
 use_accelerometer = 0
 
+[sound]
+sample_frame_count = 2048
+
