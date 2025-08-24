@@ -75,12 +75,6 @@ load_level = function(self, level)
 	self.tilemap_level_url = msg.url(nil, self.tilemap_id, "tilemap")
 end
 
-local function window_callback(self, event, data)
-	if event == window.WINDOW_EVENT_RESIZED then
-		position_level(self)
-	end
-end
-
 local function animate_background()
 	local size = go.get_scale("/scroll")
 	local scale = vmath.vector4(size.x / sprite_size, size.y / sprite_size, 0, 0)
@@ -92,8 +86,6 @@ end
 function init(self)
 	msg.post("/camera#camera", "enable")
 	msg.post("@render:", "use_camera_projection")
-
-	window.set_listener(window_callback)
 
 	self.width = sys.get_config_int("display.width")
 	self.height = sys.get_config_int("display.height")
