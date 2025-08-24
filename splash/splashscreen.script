@@ -1,6 +1,6 @@
 local width = tonumber(sys.get_config("display.width"))
 local height = tonumber(sys.get_config("display.height"))	
-local zoom = 2
+local zoom = 2 * window.get_display_scale()
 
 function init(self)
 	msg.post("@render:", "use_fixed_projection", { near = -1, far = 1, zoom = zoom })

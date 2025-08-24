@@ -353,8 +353,30 @@ nodes {
   id: "e_content"
   pivot: PIVOT_NW
   parent: "e_anchor"
-  clipping_mode: CLIPPING_MODE_STENCIL
   alpha: 0.0
+}
+nodes {
+  position {
+    x: -201.0
+    y: -205.0
+  }
+  scale {
+    y: 0.710912
+  }
+  size {
+    x: 400.0
+    y: 480.0
+  }
+  type: TYPE_BOX
+  id: "preview_level"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "e_content"
+  alpha: 0.34
+  size_mode: SIZE_MODE_AUTO
+  enabled: false
+  visible: false
 }
 nodes {
   position {

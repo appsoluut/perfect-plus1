@@ -1,33 +1,53 @@
-local zoom = 4
-
-local sprite_size = 16
+local sprite_size = 8
 local max_tile_x = 12
 local max_tile_y = 12
 local tile_empty = 0
 
-local function position_level(self)
-	if self.tilemap_width == nil then return end
-
-	local current_width, _ = window.get_size()
-	local w = sprite_size * self.tilemap_width / zoom
-	local h = sprite_size * self.tilemap_height / zoom
-	local diff = (current_width - self.width) / zoom / 2
-	local offset = 102 + diff / 2
-	go.set_position(vmath.vector3(self.width / 2 - w - offset, -8 + self.height / 2 - h, 0.1), self.tilemap_id)
-end
-
-local function window_callback(self, event, data)
-	if event == window.WINDOW_EVENT_RESIZED then
-		position_level(self)
-	end
-end
+local load_level
 
 local function reset_tilemap_layer(self, layer)
-	for y = 1, max_tile_y do 
+	for y = 1, max_tile_y do
 		for x = 1, max_tile_x do
 			tilemap.set_tile(self.tilemap_level_url, layer, x, y, tile_empty)
 		end
 	end
+end
+
+local function gui_to_world(gui_pos, screen_width, screen_height)
+	-- Convert GUI pixel position to normalized device coordinates (-1 to 1)
+	local nx = (gui_pos.x / screen_width) * 2 - 1
+	local ny = (gui_pos.y / screen_height) * 2 - 1
+
+	-- Point in camera space (z=0, w=1)
+	local camera_space_point = vmath.vector4(nx, ny, 0, 1)
+
+	local view = camera.get_view("/camera#camera")
+	local proj = camera.get_projection("/camera#camera")
+
+	-- Invert the camera view matrix
+	local inv_view = vmath.inv(proj * view)
+
+	-- Transform from camera space to world space
+	local world_space_point = inv_view * camera_space_point
+
+	-- Return vector3 world position
+	return vmath.vector3(world_space_point.x, world_space_point.y, world_space_point.z)
+end
+
+local function position_level(self)
+	if self.tilemap_width == nil then return end
+
+	local current_width, current_height = window.get_size()
+	local pos = self.preview_position or vmath.vector3()
+	local world_pos = gui_to_world(pos, current_width, current_height)
+
+	-- Offset for your tilemap
+	local w = sprite_size * self.tilemap_width
+	local h = sprite_size * self.tilemap_height
+	world_pos.x = world_pos.x - w / 2
+	world_pos.y = world_pos.y - h / 2
+
+	go.set_position(world_pos, self.tilemap_id)
 end
 
 local function load_tilemap(self, level)
@@ -50,15 +70,19 @@ local function load_tilemap(self, level)
 	end
 end
 
-local function load_level(self, level)
+load_level = function(self, level)
 	self.tilemap_id = factory.create(msg.url(nil, "levelselect", "level"), vmath.vector3(self.width / 2, self.height / 2, 0.1))
 	self.tilemap_level_url = msg.url(nil, self.tilemap_id, "tilemap")
-	load_tilemap(self, level)
+end
+
+local function window_callback(self, event, data)
+	if event == window.WINDOW_EVENT_RESIZED then
+		position_level(self)
+	end
 end
 
 local function animate_background()
 	local size = go.get_scale("/scroll")
-	
 	local scale = vmath.vector4(size.x / sprite_size, size.y / sprite_size, 0, 0)
 	go.set("/scroll#plane", "scale", scale)
 	go.set("/scroll#plane", "tint.w", 0.5)
@@ -81,6 +105,7 @@ function on_message(self, message_id, message)
 	if message_id == hash("show_tilemap") then
 		load_level(self, message.level or 1)
 	elseif message_id == hash("preview_level") and self.tilemap_id then
+		self.preview_position = message.preview_position
 		load_tilemap(self, message.level)
 	elseif message_id == hash("hide_tilemap") then
 		if self.tilemap_id and go.exists(self.tilemap_id) then

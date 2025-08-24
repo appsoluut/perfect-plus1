@@ -22,8 +22,9 @@ developer = Hell Hog Games
 custom_resources = /game/levels/
 dependencies#0 = https://github.com/britzl/monarch/archive/refs/tags/5.1.1.zip
 dependencies#1 = https://github.com/subsoap/defsave/archive/refs/tags/v1.2.6.zip
-dependencies#2 = https://github.com/subsoap/defos/archive/refs/tags/v2.7.1.zip
+dependencies#2 = https://github.com/subsoap/defos/archive/refs/tags/v2.8.3.zip
 dependencies#3 = https://github.com/britzl/defold-input/archive/refs/tags/4.6.2.zip
+dependencies#4 = https://github.com/aglitchman/defold-arm64-disabled-libdecor/archive/refs/tags/1.0.0.zip
 
 [graphics]
 default_texture_min_filter = nearest
