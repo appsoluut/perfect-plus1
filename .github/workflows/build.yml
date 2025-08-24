@@ -1,4 +1,5 @@
 name: Build
+
 on:
   workflow_dispatch:
   push:
@@ -6,23 +7,41 @@ on:
       - main
   pull_request:
     types: [opened, synchronize, reopened]
+
+env:
+  ITCH_USERNAME: hellhog
+  ITCH_GAME_ID: perfect1-beta
+
 jobs:
   build:
     name: Build
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: ['x86_64-linux', 'js-web', 'x86_64-win32']
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: Set up JDK 21
-        uses: buildjet/setup-java@v4
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '21'
-      - uses: dapetcu21/setup-defold@v3.0.2
-      - run: 'java -jar $BOB --archive --platform x86_64-linux resolve distclean build bundle'
-      - name: Export Release APK
+      - uses: dapetcu21/setup-defold@v3.0.3
+      - run: 'java -jar $BOB --archive --platform ${{ matrix.platform }} resolve distclean build bundle'
+      - name: Deploy to Itch.io
+        if: ${{ matrix.platform == 'js-web' }}
+        uses: KikimoraGames/itch-publish@v0.0.3
+        with:
+          butlerApiKey: ${{ secrets.BUTLER_API_KEY }}
+          gameData: build/default/Perfect+1/
+          itchUsername: ${{ env.ITCH_USERNAME }}
+          itchGameId: ${{ env.ITCH_GAME_ID }}
+          buildChannel: 'html'
+          buildNumber: ${{ needs.version.outputs.version_hash }}
+      - name: Export artifact
         uses: actions/upload-artifact@v4
         with:
-          name: x86_64-linux
+          name: ${{ matrix.platform }}
           path: build/default/Perfect+1/
