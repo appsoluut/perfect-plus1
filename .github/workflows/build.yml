@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        platform: ['x86_64-linux', 'js-web', 'x86_64-win32']
+        platform: ['x86_64-linux', 'js-web', 'x86_64-win32', 'x86_64-macos']
     steps:
       - uses: actions/checkout@v5
         with:
@@ -33,6 +33,7 @@ jobs:
       - name: Set buildChannel based on platform
         id: set_build_channel
         run: |
+          echo "gameData=build/default/Perfect+1/" >> $GITHUB_OUTPUT
           case "${{ matrix.platform }}" in
             js-web)
               echo "buildChannel=html" >> $GITHUB_OUTPUT
@@ -43,6 +44,10 @@ jobs:
             x86_64-win32)
               echo "buildChannel=windows" >> $GITHUB_OUTPUT
               ;;
+            x86_64-macos)
+              echo "buildChannel=mac" >> $GITHUB_OUTPUT
+              echo "gameData=build/default/Perfect+1.app" >> $GITHUB_OUTPUT
+              ;;
             *)
               echo "buildChannel=default" >> $GITHUB_OUTPUT
               ;;
@@ -52,7 +57,7 @@ jobs:
         uses: KikimoraGames/itch-publish@v0.0.3
         with:
           butlerApiKey: ${{ secrets.BUTLER_API_KEY }}
-          gameData: build/default/Perfect+1/
+          gameData: ${{ steps.set_build_channel.outputs.gameData }}
           itchUsername: ${{ env.ITCH_USERNAME }}
           itchGameId: ${{ env.ITCH_GAME_ID }}
           buildChannel: ${{ steps.set_build_channel.outputs.buildChannel }}
@@ -61,4 +66,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.platform }}
-          path: build/default/Perfect+1/
+          path: ${{ steps.set_build_channel.outputs.gameData }}
