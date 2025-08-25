@@ -16,7 +16,7 @@ function final(self)
 end
 
 function on_input(self, action_id, action)
-	if action_id and action ~= nil and action.released then
+	if action_id and action ~= nil and action.pressed then
 		msg.post(self.proxy_url, "show_level", { control_mode = self.control_mode } )
 	end
 end
